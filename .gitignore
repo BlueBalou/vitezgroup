@@ -1,0 +1,23 @@
+# Images and media (optional - only if they are large)
+*.psd
+*.ai
+*.sketch
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+*:Zone.Identifier
+
+# Editor folders
+.vscode/
+.idea/
+
+# Node (if you ever use any build tools)
+node_modules/
+dist/
+.env
+
+# ruffle too big 23MB
+ruffle/

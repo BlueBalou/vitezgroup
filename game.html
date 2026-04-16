@@ -1,0 +1,47 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Flash Game</title>
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            autoplay: "on",
+        };
+    </script>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    <style>
+        body {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <object
+            data="Lander Deluxe10 - Cossacksversion.swf"
+            width="800"
+            height="600"
+            type="application/x-shockwave-flash">
+        </object>
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="
+                margin-bottom: 8px;
+                font-size: 16px;
+                opacity: 0.8;
+                color: white;
+                font-family: 'Stardos Stencil', sans-serif;
+            ">
+                Touch Controls
+            </p>
+            <img src="instructions.jpg"
+                 style="width: 200px; opacity: 0.85; border: 1px solid white; border-radius: 6px;">
+        </div>
+    </div>
+</body>
+</html>
