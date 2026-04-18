@@ -6,44 +6,24 @@
 <title>EDiMSK 2027 — Study Plan</title>
 <style>
   :root {
-    --bg: #fafaf8;
-    --surface: #ffffff;
-    --surface2: #f4f3ef;
-    --border: #e2e0d8;
-    --border2: #cac8be;
-    --text: #1a1917;
-    --text2: #6b6860;
-    --text3: #9c9a93;
-    --green: #1a7a52;
-    --green-bg: #e8f5ee;
-    --blue: #1a5c8a;
-    --blue-bg: #e8f2fa;
-    --amber: #8a5a10;
-    --amber-bg: #fdf3e0;
-    --red: #8a2020;
-    --red-bg: #fde8e8;
-    --accent: #2d6a4f;
-    --radius: 8px;
-    --radius-lg: 12px;
+    --bg: #fafaf8; --surface: #ffffff; --surface2: #f4f3ef;
+    --border: #e2e0d8; --border2: #cac8be;
+    --text: #1a1917; --text2: #6b6860; --text3: #9c9a93;
+    --green: #1a7a52; --green-bg: #e8f5ee;
+    --blue: #1a5c8a; --blue-bg: #e8f2fa;
+    --amber: #8a5a10; --amber-bg: #fdf3e0;
+    --red: #8a2020; --red-bg: #fde8e8;
+    --accent: #2d6a4f; --radius: 8px; --radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #141412;
-      --surface: #1e1d1b;
-      --surface2: #262522;
-      --border: #2e2c28;
-      --border2: #3a3835;
-      --text: #f0ede6;
-      --text2: #9c9a93;
-      --text3: #6b6860;
-      --green: #4ade9a;
-      --green-bg: #0d2e1f;
-      --blue: #60a5e8;
-      --blue-bg: #0d2035;
-      --amber: #e0a840;
-      --amber-bg: #2a1e08;
-      --red: #e07070;
-      --red-bg: #2a0d0d;
+      --bg: #141412; --surface: #1e1d1b; --surface2: #262522;
+      --border: #2e2c28; --border2: #3a3835;
+      --text: #f0ede6; --text2: #9c9a93; --text3: #6b6860;
+      --green: #4ade9a; --green-bg: #0d2e1f;
+      --blue: #60a5e8; --blue-bg: #0d2035;
+      --amber: #e0a840; --amber-bg: #2a1e08;
+      --red: #e07070; --red-bg: #2a0d0d;
       --accent: #4ade9a;
     }
   }
@@ -88,12 +68,14 @@
   .phase-toggle { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
   .phase-body { display: flex; flex-direction: column; gap: 8px; }
   .phase-body.collapsed { display: none; }
-  .item { display: flex; align-items: flex-start; gap: 12px; padding: 0.85rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
-  .item:hover { border-color: var(--border2); }
-  .item.done { opacity: 0.5; }
-  .item.done .item-title { text-decoration: line-through; }
+  /* Parent items */
+  .item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.15s; }
   .item.conditional { border-style: dashed; }
-  .cb { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; border: 1.5px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+  .item-header { display: flex; align-items: flex-start; gap: 12px; padding: 0.85rem 1rem; cursor: pointer; }
+  .item-header:hover { background: var(--surface2); border-radius: var(--radius); }
+  .item.done > .item-header { opacity: 0.5; }
+  .item.done > .item-header .item-title { text-decoration: line-through; }
+  .cb { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; border: 1.5px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; cursor: pointer; }
   .cb.checked { background: var(--accent); border-color: var(--accent); }
   .cb svg { display: none; }
   .cb.checked svg { display: block; }
@@ -110,6 +92,27 @@
   .item-note { font-size: 0.8rem; color: var(--text2); margin-top: 5px; line-height: 1.5; font-family: 'Georgia', serif; }
   .item-link { font-size: 0.78rem; color: var(--accent); margin-top: 3px; display: block; word-break: break-all; }
   .item-link:hover { text-decoration: underline; }
+  /* Video progress bar */
+  .video-progress { margin-top: 6px; }
+  .video-progress-label { font-family: 'Courier New', monospace; font-size: 0.72rem; color: var(--text3); margin-bottom: 3px; }
+  .video-track { height: 3px; background: var(--border); border-radius: 2px; }
+  .video-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  /* Expand toggle */
+  .expand-toggle { font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--text3); margin-left: auto; white-space: nowrap; flex-shrink: 0; padding-left: 8px; }
+  /* Subitems */
+  .subitems { border-top: 1px solid var(--border); padding: 0.5rem 0.75rem 0.75rem; display: flex; flex-direction: column; gap: 5px; }
+  .subitems.collapsed { display: none; }
+  .subitem { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  .sub-cb { width: 13px; height: 13px; flex-shrink: 0; border: 1.5px solid var(--border2); border-radius: 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .sub-cb.checked { background: var(--accent); border-color: var(--accent); }
+  .sub-cb svg { display: none; }
+  .sub-cb.checked svg { display: block; }
+  .sub-label { font-size: 0.8rem; color: var(--text2); font-family: 'Courier New', monospace; flex-shrink: 0; min-width: 60px; }
+  .sub-note { flex: 1; font-size: 0.78rem; color: var(--text2); background: none; border: none; border-bottom: 1px solid transparent; font-family: 'Georgia', serif; outline: none; width: 100%; cursor: text; }
+  .sub-note:focus { border-bottom-color: var(--border2); }
+  .sub-note::placeholder { color: var(--text3); font-style: italic; }
+  .sub-note.has-value { color: var(--text); }
+  /* Footer */
   .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text3); font-family: 'Courier New', monospace; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
   @media (max-width: 600px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -120,7 +123,6 @@
 </head>
 <body>
 <div class="page">
-
   <div class="masthead">
     <div class="masthead-top">
       <h1>EDiMSK 2027 — Study Plan</h1>
@@ -128,12 +130,10 @@
     </div>
     <div class="masthead-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior to congress &nbsp;·&nbsp; 40 MCQ + oral cases</div>
   </div>
-
   <div class="sync-bar">
     <div class="sync-dot loading" id="sync-dot"></div>
     <span id="sync-label">connecting...</span>
   </div>
-
   <div class="action-banner" id="action-banner">
     <div class="action-banner-body">
       <strong>Administrative — do now</strong>
@@ -141,7 +141,6 @@
     </div>
     <button class="action-done-btn" id="action-btn" onclick="toggleAction()">Mark done</button>
   </div>
-
   <div class="stats-grid">
     <div class="stat"><div class="stat-label">Total hours</div><div class="stat-value" id="s-total">0</div></div>
     <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div></div>
@@ -149,73 +148,125 @@
     <div class="stat"><div class="stat-label">Progress</div><div class="stat-value" id="s-pct">0%</div></div>
   </div>
   <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
-
   <div class="schedule">
     <div class="schedule-title">Study time budget</div>
     <div class="schedule-grid">
-      <div class="sched-block"><div class="sched-label">Phase 1 · Q2 2026</div><div class="sched-hours">~44 h</div><div class="sched-note">4 h/week · Mon + weekend</div></div>
+      <div class="sched-block"><div class="sched-label">Phase 1 · Q2 2026</div><div class="sched-hours">~44 h</div><div class="sched-note">4 h/week · mid-Apr – Jun</div></div>
       <div class="sched-block"><div class="sched-label">Phase 2 · Q3 2026</div><div class="sched-hours">~78 h</div><div class="sched-note">6 h/week · Thu + weekend</div></div>
       <div class="sched-block"><div class="sched-label">Phase 3 · Oct–Nov 2026</div><div class="sched-hours">~54 h</div><div class="sched-note">6 h/week · Mon + weekend</div></div>
       <div class="sched-block"><div class="sched-label">Phase 4 · Dec–Mar 2027</div><div class="sched-hours">~114 h</div><div class="sched-note">8 h/week + Jan study week (42 h)</div></div>
     </div>
   </div>
-
   <div id="phases-container"></div>
-
   <div class="footer">
     <span>Last updated: April 2026</span>
     <span id="footer-stats"></span>
   </div>
 </div>
-
 <script>
+const RCL_VIDEOS = [
+  {label:'AI-01', title:'MR Acceleration Via Deep Learning — Recht'},
+  {label:'TR-01', title:'Upper Extremity Injuries: Importance of Radiographs — Gyftopoulos'},
+  {label:'TR-02', title:'Pelvis and Hip Trauma — Blankenbaker'},
+  {label:'TR-03', title:'Key Lower Extremity Injuries — Resnik'},
+  {label:'TR-04', title:'Skeletal Trauma: Axial Skeleton — Pathria'},
+  {label:'TR-05', title:'Pediatric Fractures — Laor'},
+  {label:'TR-06', title:'Normal Fracture Healing — Rubin'},
+  {label:'TR-07', title:'Abnormal Fracture Healing — Rubin'},
+  {label:'TR-08', title:'Stress Injuries of Bone — Anderson'},
+  {label:'TR-09', title:'Orthopaedic Imaging: Principles of Fracture Fixation — Weissman'},
+  {label:'AR-01', title:'Target Area Approach to Arthritis — Resnick'},
+  {label:'AR-02', title:'Osteoarthritis — Rubin'},
+  {label:'AR-03', title:'Crystal Arthropathy: Gout, CPPD and HADD — Murphey'},
+  {label:'AR-04', title:'Degenerative and Inflammatory Disorders of Vertebral Column — Resnick'},
+  {label:'AR-05', title:'Connective Tissue Disorders — Bredella'},
+  {label:'AR-06', title:'Renal Osteodystrophy — Lenchik'},
+  {label:'AR-07', title:"Paget's Disease of Bone — Fayad"},
+  {label:'AR-08', title:'Osteoporosis — Petchprapa'},
+  {label:'AR-09', title:'Radiographic Analysis of the Prosthetic Hip — Miller'},
+  {label:'AR-10', title:'Crystal Deposition Disease — Klein'},
+  {label:'TU-01', title:'Approach to Bone Tumours — (SSR/ISS faculty)'},
+  {label:'TU-02', title:'Benign Bone Tumours — (SSR/ISS faculty)'},
+  {label:'TU-03', title:'Malignant Bone Tumours — (SSR/ISS faculty)'},
+  {label:'TU-04', title:'Bone Marrow Disorders — (SSR/ISS faculty)'},
+  {label:'TU-05', title:'Soft Tissue Tumours — (SSR/ISS faculty)'},
+  {label:'IN-01', title:'Musculoskeletal Infection — (SSR/ISS faculty)'},
+  {label:'IN-02', title:'Septic Arthritis and Osteomyelitis — (SSR/ISS faculty)'},
+  {label:'MR-01', title:'Basic Principles of MSK MRI — (SSR/ISS faculty)'},
+  {label:'MR-02', title:'Shoulder MRI: Rotator Cuff — (SSR/ISS faculty)'},
+  {label:'MR-03', title:'Shoulder MRI: Instability — (SSR/ISS faculty)'},
+  {label:'MR-04', title:'Knee MRI: Menisci — (SSR/ISS faculty)'},
+  {label:'MR-05', title:'Knee MRI: Ligaments — (SSR/ISS faculty)'},
+  {label:'MR-06', title:'Hip MRI — (SSR/ISS faculty)'},
+  {label:'MR-07', title:'Ankle and Foot MRI — (SSR/ISS faculty)'},
+  {label:'MR-08', title:'Wrist and Hand MRI — (SSR/ISS faculty)'},
+  {label:'MR-09', title:'Elbow MRI — (SSR/ISS faculty)'},
+  {label:'SP-01', title:'Spine: Basics of Spine Surgery — (SSR/ISS faculty)'},
+  {label:'SP-02', title:'Spine: Disc Disease and Stenosis — (SSR/ISS faculty)'},
+  {label:'US-01', title:'MSK Ultrasound: Principles — (SSR/ISS faculty)'},
+  {label:'US-02', title:'MSK Ultrasound: Tendons and Soft Tissue — (SSR/ISS faculty)'},
+  {label:'PD-01', title:'Paediatric MSK: Congenital Disorders — (SSR/ISS faculty)'},
+  {label:'PD-02', title:'Paediatric MSK: Metabolic and Developmental — (SSR/ISS faculty)'}
+];
+
+function makeVideoSlots(count, prefix) {
+  return Array.from({length: count}, (_, i) => ({
+    label: prefix + '-' + String(i+1).padStart(2,'0'),
+    title: ''
+  }));
+}
+
 const PHASES = [
   {
-    id:'p1',num:'Phase 1',name:'Foundations & orientation',
-    period:'Q2 2026 · mid-Apr – Jun · ~44 h available · 4 h/week',tag:'tag-green',tagLabel:'Phase 1',
+    id:'p1', num:'Phase 1', name:'Foundations & orientation',
+    period:'Q2 2026 · mid-Apr – Jun · ~44 h available · 4 h/week',
+    tag:'tag-green', tagLabel:'Phase 1',
     items:[
-      {id:'p1-action',title:'Read the three official ESSR exam preparation articles',hours:3,note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), and webinar programme paper. Free PDFs at essr.org/diploma/ — the most important thing to read first.',link:'https://www.essr.org/diploma/',done:false},
-      {id:'p1-etcsr',title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)',hours:2,note:'Defines the 27 topic areas tested. Use as your master checklist — every study item maps back to it.',link:'https://www.myesr.org/education/training-curricula/',done:false},
-      {id:'p1-anki',title:'Set up Anki deck structure — one subdeck per ETCSR topic area',hours:1,note:'Create 27 subdecks before adding any cards. Prevents a disorganised backlog. Add cards continuously from Phase 1 through Phase 3.',done:false},
-      {id:'p1-elearn',title:'ESSR e-learning platform — complete all available lectures',hours:20,note:'Structured library at essr.org/e-learning/ organised by subcommittee domain. Free for active ESSR members. More systematically organised than the webinar archive — start here. Generate Anki cards throughout.',link:'https://www.essr.org/e-learning/',done:false},
-      {id:'p1-webinars',title:'ESSR webinar archive — systematic sweep by subcommittee',hours:15,note:'Recordings of live webinars covering additional ground. Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions. Flag sessions needing a second pass.',link:'https://www.essr.org/education/webinars/',done:false},
-      {id:'p1-samples',title:'Work through the 10 official sample MCQs and 10 sample oral cases',hours:2,note:'From the official prep articles at essr.org/diploma/. Already completed from a previous cycle — mark done if content has not changed since.',link:'https://www.essr.org/diploma/',done:true}
+      {id:'p1-action', title:'Read the three official ESSR exam preparation articles', hours:3, note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), and webinar programme paper. Free PDFs at essr.org/diploma/ — the most important thing to read first.', link:'https://www.essr.org/diploma/', done:false},
+      {id:'p1-etcsr', title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)', hours:2, note:'Defines the 27 topic areas tested. Use as your master checklist — every study item maps back to it.', link:'https://www.myesr.org/education/training-curricula/', done:false},
+      {id:'p1-anki', title:'Set up Anki deck structure — one subdeck per ETCSR topic area', hours:1, note:'Create 27 subdecks before adding any cards. Prevents a disorganised backlog. Add cards continuously from Phase 1 through Phase 3.', done:false},
+      {id:'p1-elearn', title:'ESSR e-learning platform — complete selected lectures', hours:20, note:'Structured library at essr.org/e-learning/ organised by subcommittee domain. Free for active ESSR members. Start here. Generate Anki cards throughout.', link:'https://www.essr.org/e-learning/', done:false, videos: makeVideoSlots(20, 'EL')},
+      {id:'p1-webinars', title:'ESSR webinar archive — systematic sweep by subcommittee', hours:15, note:'Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions.', link:'https://www.essr.org/education/webinars/', done:false, videos: makeVideoSlots(15, 'WB')},
+      {id:'p1-samples', title:'Work through the 10 official sample MCQs and 10 sample oral cases', hours:2, note:'From the official prep articles at essr.org/diploma/. Already completed from a previous cycle — mark done if content has not changed since.', link:'https://www.essr.org/diploma/', done:true}
     ]
   },
   {
-    id:'p2',num:'Phase 2',name:'Video content — targeted by curriculum gap',
-    period:'Q3 2026 · Jul – Sep · ~78 h available · 6 h/week',tag:'tag-blue',tagLabel:'Phase 2',
+    id:'p2', num:'Phase 2', name:'Video content — targeted by curriculum gap',
+    period:'Q3 2026 · Jul – Sep · ~78 h available · 6 h/week',
+    tag:'tag-blue', tagLabel:'Phase 2',
     items:[
-      {id:'p2-corelec',title:'Radiology Core Lectures MSK — complete lecture series',hours:15,note:'42–50 open-access lectures by SSR/ISS faculty, each 15–20 min. Topics: trauma, arthritis, tumours, metabolic bone, infection, MRI internal derangement, orthopaedic imaging, spine. Free. Use ETCSR topic list to prioritise gaps not covered in Phase 1.',link:'https://radiologycorelectures.org/msk/',done:false},
-      {id:'p2-radiopaedia',title:'Radiopaedia MSK courses — bone lesions pathway + spine courses',hours:8,note:'Matt Skalski video lectures with interactive case content. Strong on bone lesion approach and spine. Some content free, courses require subscription.',link:'https://radiopaedia.org/courses/official-courses',done:false},
-      {id:'p2-essr2025',title:'ESSR Annual Congress 2025 VoD — MSK educational sessions',hours:12,note:'Via ESR Connect. Prioritise educational and case-based sessions over pure research. Cross-reference against ETCSR to identify which sessions fill remaining gaps from Phase 1.',link:'https://connect.myesr.org/',done:false},
-      {id:'p2-davos',title:'Davos Radiology 2026 VoD — MSK and sports imaging content',hours:10,note:'Historically strong on MSK MRI and sports imaging. Access may require congress registration. Prioritise by ETCSR gap rather than watching systematically.',done:false},
-      {id:'p2-ecr2025',title:'ECR 2025 VoD — MSK sessions (E³ Advanced Courses and Refresher Courses)',hours:8,note:'Via ESR Connect (ESR Premium Education Package required for post-congress access). The E³ Advanced Courses are most directly aligned with Level III curriculum objectives.',link:'https://connect.myesr.org/',done:false},
-      {id:'p2-issr',title:'ISS / SSR core lecture videos — tumour and metabolic bone content',hours:6,note:'Free, via skeletalrad.org and ISS website. Strong on bone tumour classification and metabolic bone disease — complements ESSR webinars for these domains.',link:'https://skeletalrad.org/msk-core-lecture-series',done:false}
+      {id:'p2-corelec', title:'Radiology Core Lectures MSK — selected lectures', hours:15, note:'42 open-access lectures by SSR/ISS faculty. All listed below — pick 15 based on ETCSR gaps from Phase 1. Free at radiologycorelectures.org/msk/', link:'https://radiologycorelectures.org/msk/', done:false, videos: RCL_VIDEOS},
+      {id:'p2-radiopaedia', title:'Radiopaedia MSK courses — bone lesions pathway + spine courses', hours:8, note:'Matt Skalski video lectures with interactive case content. Strong on bone lesion approach and spine.', link:'https://radiopaedia.org/courses/official-courses', done:false, videos: makeVideoSlots(8, 'RP')},
+      {id:'p2-essr2025', title:'ESSR Annual Congress 2025 VoD — MSK educational sessions', hours:12, note:'Via ESR Connect. Prioritise educational and case-based sessions. Cross-reference against ETCSR gaps from Phase 1.', link:'https://connect.myesr.org/', done:false, videos: makeVideoSlots(12, 'ES')},
+      {id:'p2-davos', title:'Davos Radiology 2026 VoD — MSK and sports imaging content', hours:10, note:'Historically strong on MSK MRI and sports imaging. Prioritise by ETCSR gap rather than watching systematically.', done:false, videos: makeVideoSlots(10, 'DV')},
+      {id:'p2-ecr2025', title:'ECR 2025 VoD — MSK sessions (E³ Advanced Courses and Refresher Courses)', hours:8, note:'Via ESR Connect (ESR Premium Education Package required). The E³ Advanced Courses are most directly aligned with Level III curriculum objectives.', link:'https://connect.myesr.org/', done:false, videos: makeVideoSlots(8, 'EC')},
+      {id:'p2-issr', title:'ISS / SSR core lecture videos — tumour and metabolic bone content', hours:6, note:'Free, via skeletalrad.org and ISS website. Strong on bone tumour classification and metabolic bone disease.', link:'https://skeletalrad.org/msk-core-lecture-series', done:false, videos: makeVideoSlots(6, 'IS')}
     ]
   },
   {
-    id:'p3',num:'Phase 3',name:'Case-based work & reading',
-    period:'Oct – Nov 2026 · ~54 h available · 6 h/week',tag:'tag-amber',tagLabel:'Phase 3',
+    id:'p3', num:'Phase 3', name:'Case-based work & reading',
+    period:'Oct – Nov 2026 · ~54 h available · 6 h/week',
+    tag:'tag-amber', tagLabel:'Phase 3',
     items:[
-      {id:'p3-auntminnie',title:'Aunt Minnie MSK cases — systematic case review',hours:10,note:'Pattern recognition for classic presentations. Simulate exam conditions — commit to one diagnosis before checking the answer. High-value pre-oral exam practice.',link:'https://www.auntminnie.com/',done:false},
-      {id:'p3-radassist',title:'Radiology Assistant — MSK modules',hours:6,note:'Free, European-authored, expert-level. Particularly strong on arthritis patterns, knee MRI, and orthopaedic hardware — areas the ESSR subcommittees emphasise.',link:'https://www.radiologyassistant.nl/musculoskeletal',done:false},
-      {id:'p3-crack',title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)',hours:12,note:'US board-oriented but the MSK chapter is highly efficient for MCQ trivia: percentages, associations, classification systems, eponyms. Complement to video work, not a substitute for ETCSR-level depth.',done:false},
-      {id:'p3-sports',title:'ESSR MRI Guidelines for Sports Injuries — full read',hours:3,note:'Official ESSR document. Directly relevant to oral exam cases given the prominence of the Sports Imaging subcommittee.',link:'https://www.essr.org/',done:false},
-      {id:'p3-resnick',title:'Resnick & Kransdorf — targeted chapter review',hours:8,note:'Use only if a specific ETCSR domain is not adequately covered by video resources and Radiology Assistant. Most useful for: metabolic bone disease, crystal arthropathies, soft tissue tumours. Check ETCSR gaps from Anki miss-rate before investing time here.',conditional:true,done:false},
-      {id:'p3-helms',title:'Helms et al. Musculoskeletal MRI — targeted joint chapters',hours:5,note:'Selective use only. Useful if specific joint MRI topics remain weak after Phase 2. Prioritise whichever joints have the lowest Anki accuracy.',conditional:true,done:false}
+      {id:'p3-auntminnie', title:'Aunt Minnie MSK cases — systematic case review', hours:10, note:'Pattern recognition for classic presentations. Simulate exam conditions — commit to one diagnosis before checking the answer.', link:'https://www.auntminnie.com/', done:false},
+      {id:'p3-radassist', title:'Radiology Assistant — MSK modules', hours:6, note:'Free, European-authored. Particularly strong on arthritis patterns, knee MRI, and orthopaedic hardware.', link:'https://www.radiologyassistant.nl/musculoskeletal', done:false},
+      {id:'p3-crack', title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)', hours:12, note:'Efficient for MCQ trivia: percentages, associations, classification systems, eponyms. Complement to video work.', done:false},
+      {id:'p3-sports', title:'ESSR MRI Guidelines for Sports Injuries — full read', hours:3, note:'Official ESSR document. Directly relevant to oral exam cases given the prominence of the Sports Imaging subcommittee.', link:'https://www.essr.org/', done:false},
+      {id:'p3-resnick', title:'Resnick & Kransdorf — targeted chapter review', hours:8, note:'Use only if a specific ETCSR domain is not adequately covered by video resources. Most useful for: metabolic bone disease, crystal arthropathies, soft tissue tumours.', conditional:true, done:false},
+      {id:'p3-helms', title:'Helms et al. Musculoskeletal MRI — targeted joint chapters', hours:5, note:'Selective use only. Useful if specific joint MRI topics remain weak after Phase 2.', conditional:true, done:false}
     ]
   },
   {
-    id:'p4',num:'Phase 4',name:'Consolidation & exam simulation',
-    period:'Dec 2026 – Mar 2027 · ~114 h available · 8 h/week + Jan study week (42 h)',tag:'tag-red',tagLabel:'Phase 4',
+    id:'p4', num:'Phase 4', name:'Consolidation & exam simulation',
+    period:'Dec 2026 – Mar 2027 · ~114 h available · 8 h/week + Jan study week (42 h)',
+    tag:'tag-red', tagLabel:'Phase 4',
     items:[
-      {id:'p4-anki',title:'Anki intensive review — daily, increasing to 45–60 min/day',hours:20,note:'Running throughout all phases on non-block days. In Phase 4: increase to 45–60 min/day. Filter by lapse count to focus on persistent gaps. Do not skip more than 2 days — the review burden compounds quickly.',done:false},
-      {id:'p4-gaps',title:'Second-pass video or reading on weak ETCSR domains',hours:15,note:'Identify which ETCSR subdecks have the highest Anki miss-rate. Return to the most targeted ESSR webinar, Radiology Core Lecture, or Radiology Assistant module for those specific domains only.',done:false},
-      {id:'p4-oral',title:'Oral case practice — structured case presentations aloud',hours:10,note:'Practice presenting cases to a colleague or recording yourself. Use ESSR sample cases plus Aunt Minnie. Structure: modality → findings → diagnosis → differential → management principle.',done:false},
-      {id:'p4-janweek',title:'January 2027 dedicated study week — 6 h/day, 7 days (42 h)',hours:42,note:'Days 1–3: Anki intensive and gap identification. Days 4–5: oral case simulation. Days 6–7: final MCQ practice and weak-area reading. Keep the structure — resist starting new resources this late.',done:false},
-      {id:'p4-written',title:'Final written exam simulation — timed MCQ practice',hours:3,note:'In the final 2 weeks before the written exam: two timed 60-minute sessions of 40 MCQs. Identify any last systematic gaps. The written exam is online, ~3 weeks before the congress.',done:false},
-      {id:'p4-logistics',title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel',hours:1,note:'Confirm both exam dates on essr.org/diploma/ once ECR 2027 dates are published. Book accommodation early — Vienna during ECR fills quickly.',link:'https://www.essr.org/diploma/',done:false}
+      {id:'p4-anki', title:'Anki intensive review — daily, increasing to 45–60 min/day', hours:20, note:'In Phase 4: increase to 45–60 min/day. Filter by lapse count to focus on persistent gaps. Do not skip more than 2 days.', done:false},
+      {id:'p4-gaps', title:'Second-pass video or reading on weak ETCSR domains', hours:15, note:'Identify which ETCSR subdecks have the highest Anki miss-rate. Return to the most targeted resource for those domains only.', done:false},
+      {id:'p4-oral', title:'Oral case practice — structured case presentations aloud', hours:10, note:'Practice presenting cases to a colleague or recording yourself. Structure: modality → findings → diagnosis → differential → management principle.', done:false},
+      {id:'p4-janweek', title:'January 2027 dedicated study week — 6 h/day, 7 days (42 h)', hours:42, note:'Days 1–3: Anki intensive and gap identification. Days 4–5: oral case simulation. Days 6–7: final MCQ practice and weak-area reading.', done:false},
+      {id:'p4-written', title:'Final written exam simulation — timed MCQ practice', hours:3, note:'Two timed 60-minute sessions of 40 MCQs in the final 2 weeks before the written exam.', done:false},
+      {id:'p4-logistics', title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel', hours:1, note:'Confirm both exam dates on essr.org/diploma/ once ECR 2027 dates are published. Book accommodation early.', link:'https://www.essr.org/diploma/', done:false}
     ]
   }
 ];
@@ -224,15 +275,15 @@ let state = {};
 let saveTimeout = null;
 
 async function loadState() {
-  setSyncStatus('loading', 'loading...');
+  setSyncStatus('loading','loading...');
   try {
     const res = await fetch('/state');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error('HTTP '+res.status);
     state = await res.json();
-    setSyncStatus('ok', 'synced');
+    setSyncStatus('ok','synced');
   } catch(e) {
-    setSyncStatus('err', 'offline — changes saved locally');
-    try { state = JSON.parse(localStorage.getItem('edimsk_fallback') || '{}'); } catch(x) { state = {}; }
+    setSyncStatus('err','offline — changes saved locally');
+    try { state = JSON.parse(localStorage.getItem('edimsk_fallback')||'{}'); } catch(x) { state={}; }
   }
   applyState();
   updateStats();
@@ -241,42 +292,71 @@ async function loadState() {
 async function saveState() {
   try {
     localStorage.setItem('edimsk_fallback', JSON.stringify(state));
-    const res = await fetch('/state', { method: 'POST', body: JSON.stringify(state), headers: {'Content-Type':'application/json'} });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    setSyncStatus('ok', 'saved ' + new Date().toLocaleTimeString());
+    const res = await fetch('/state', {method:'POST', body:JSON.stringify(state), headers:{'Content-Type':'application/json'}});
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    setSyncStatus('ok','saved '+new Date().toLocaleTimeString());
   } catch(e) {
-    setSyncStatus('err', 'save failed — stored locally');
+    setSyncStatus('err','save failed — stored locally');
   }
 }
 
 function debouncedSave() {
   clearTimeout(saveTimeout);
-  setSyncStatus('loading', 'saving...');
+  setSyncStatus('loading','saving...');
   saveTimeout = setTimeout(saveState, 800);
 }
 
 function setSyncStatus(type, label) {
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + type;
-  lbl.textContent = label;
+  document.getElementById('sync-dot').className = 'sync-dot '+type;
+  document.getElementById('sync-label').textContent = label;
+}
+
+function getItemDone(item) {
+  return state[item.id] !== undefined ? state[item.id] : item.done;
 }
 
 function applyState() {
   PHASES.forEach(phase => {
     phase.items.forEach(item => {
-      const el = document.getElementById('item-' + item.id);
+      const el = document.getElementById('item-'+item.id);
       if (!el) return;
-      const cb = el.querySelector('.cb');
-      const isDone = state[item.id] !== undefined ? state[item.id] : item.done;
-      if (isDone) { el.classList.add('done'); cb.classList.add('checked'); }
-      else { el.classList.remove('done'); cb.classList.remove('checked'); }
+      const cb = el.querySelector('.item-header .cb');
+      const isDone = getItemDone(item);
+      isDone ? el.classList.add('done') : el.classList.remove('done');
+      isDone ? cb.classList.add('checked') : cb.classList.remove('checked');
+      if (item.videos) {
+        item.videos.forEach((v, i) => {
+          const sid = item.id+'-v'+i;
+          const scb = document.getElementById('scb-'+sid);
+          const snote = document.getElementById('snote-'+sid);
+          if (scb) {
+            const vdone = state[sid] || false;
+            vdone ? scb.classList.add('checked') : scb.classList.remove('checked');
+          }
+          if (snote) {
+            const txt = state['note-'+sid] || '';
+            snote.value = txt;
+            txt ? snote.classList.add('has-value') : snote.classList.remove('has-value');
+          }
+        });
+        updateVideoBar(item);
+      }
     });
   });
   const btn = document.getElementById('action-btn');
   const banner = document.getElementById('action-banner');
-  if (state._action) { btn.classList.add('done'); btn.textContent = 'Done ✓'; banner.style.opacity = '0.5'; }
-  else { btn.classList.remove('done'); btn.textContent = 'Mark done'; banner.style.opacity = '1'; }
+  if (state._action) { btn.classList.add('done'); btn.textContent='Done ✓'; banner.style.opacity='0.5'; }
+  else { btn.classList.remove('done'); btn.textContent='Mark done'; banner.style.opacity='1'; }
+}
+
+function updateVideoBar(item) {
+  if (!item.videos) return;
+  const watched = item.videos.filter((_,i) => state[item.id+'-v'+i]).length;
+  const total = item.videos.length;
+  const labelEl = document.getElementById('vbar-label-'+item.id);
+  const fillEl = document.getElementById('vbar-fill-'+item.id);
+  if (labelEl) labelEl.textContent = watched+' / '+total+' videos watched';
+  if (fillEl) fillEl.style.width = (total > 0 ? Math.round(watched/total*100) : 0)+'%';
 }
 
 function toggleAction() {
@@ -286,42 +366,64 @@ function toggleAction() {
 }
 
 function toggleItem(id) {
-  const phase = PHASES.flatMap(p => p.items).find(i => i.id === id);
-  const current = state[id] !== undefined ? state[id] : (phase ? phase.done : false);
-  state[id] = !current;
-  const el = document.getElementById('item-' + id);
-  const cb = el.querySelector('.cb');
-  if (state[id]) { el.classList.add('done'); cb.classList.add('checked'); }
-  else { el.classList.remove('done'); cb.classList.remove('checked'); }
+  const item = PHASES.flatMap(p=>p.items).find(i=>i.id===id);
+  state[id] = !getItemDone(item);
+  applyState();
   updateStats();
   debouncedSave();
 }
 
+function toggleSubitem(itemId, idx) {
+  const sid = itemId+'-v'+idx;
+  state[sid] = !(state[sid]||false);
+  const scb = document.getElementById('scb-'+sid);
+  state[sid] ? scb.classList.add('checked') : scb.classList.remove('checked');
+  const item = PHASES.flatMap(p=>p.items).find(i=>i.id===itemId);
+  updateVideoBar(item);
+  debouncedSave();
+}
+
+function saveNote(itemId, idx, val) {
+  const sid = 'note-'+itemId+'-v'+idx;
+  state[sid] = val;
+  const snote = document.getElementById('snote-'+itemId+'-v'+idx);
+  if (snote) val ? snote.classList.add('has-value') : snote.classList.remove('has-value');
+  debouncedSave();
+}
+
+function toggleSubitems(itemId) {
+  const el = document.getElementById('subitems-'+itemId);
+  const tog = document.getElementById('expand-'+itemId);
+  if (!el) return;
+  const collapsed = el.classList.toggle('collapsed');
+  tog.textContent = collapsed ? '[ + videos ]' : '[ − videos ]';
+}
+
 function updateStats() {
-  const items = PHASES.flatMap(p => p.items);
-  const total = items.reduce((a, i) => a + i.hours, 0);
-  const doneItems = items.filter(i => (state[i.id] !== undefined ? state[i.id] : i.done));
-  const doneHours = doneItems.reduce((a, i) => a + i.hours, 0);
+  const items = PHASES.flatMap(p=>p.items);
+  const total = items.reduce((a,i)=>a+i.hours,0);
+  const doneItems = items.filter(i=>getItemDone(i));
+  const doneHours = doneItems.reduce((a,i)=>a+i.hours,0);
   const remaining = items.length - doneItems.length;
-  const pct = total > 0 ? Math.round(doneHours / total * 100) : 0;
+  const pct = total > 0 ? Math.round(doneHours/total*100) : 0;
   document.getElementById('s-total').textContent = total;
   document.getElementById('s-done').textContent = doneHours;
-  document.getElementById('s-items').textContent = remaining + ' items';
-  document.getElementById('s-pct').textContent = pct + '%';
-  document.getElementById('prog').style.width = pct + '%';
-  document.getElementById('footer-stats').textContent = doneItems.length + ' of ' + items.length + ' items · ' + doneHours + ' of ' + total + ' h';
+  document.getElementById('s-items').textContent = remaining+' items';
+  document.getElementById('s-pct').textContent = pct+'%';
+  document.getElementById('prog').style.width = pct+'%';
+  document.getElementById('footer-stats').textContent = doneItems.length+' of '+items.length+' items · '+doneHours+' of '+total+' h';
   PHASES.forEach(phase => {
-    const phaseDone = phase.items.filter(i => (state[i.id] !== undefined ? state[i.id] : i.done)).length;
-    const metaEl = document.querySelector('#phase-meta-' + phase.id);
-    if (metaEl) metaEl.textContent = phase.period + ' · ' + phaseDone + '/' + phase.items.length + ' done';
+    const pd = phase.items.filter(i=>getItemDone(i)).length;
+    const m = document.getElementById('phase-meta-'+phase.id);
+    if (m) m.textContent = phase.period+' · '+pd+'/'+phase.items.length+' done';
   });
 }
 
-function togglePhase(phaseId) {
-  const body = document.getElementById('phase-body-' + phaseId);
-  const toggle = document.getElementById('phase-toggle-' + phaseId);
-  const collapsed = body.classList.toggle('collapsed');
-  toggle.textContent = collapsed ? '[ + expand ]' : '[ − collapse ]';
+function togglePhase(id) {
+  const body = document.getElementById('phase-body-'+id);
+  const tog = document.getElementById('phase-toggle-'+id);
+  const c = body.classList.toggle('collapsed');
+  tog.textContent = c ? '[ + expand ]' : '[ − collapse ]';
 }
 
 function renderPhases() {
@@ -336,24 +438,48 @@ function renderPhases() {
     phaseEl.appendChild(header);
     const body = document.createElement('div');
     body.className = 'phase-body';
-    body.id = 'phase-body-' + phase.id;
+    body.id = 'phase-body-'+phase.id;
     phase.items.forEach(item => {
       const el = document.createElement('div');
-      el.className = 'item' + (item.conditional ? ' conditional' : '');
-      el.id = 'item-' + item.id;
-      el.onclick = () => toggleItem(item.id);
-      el.innerHTML = `
-        <div class="cb"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      el.className = 'item'+(item.conditional?' conditional':'');
+      el.id = 'item-'+item.id;
+      const hasVideos = item.videos && item.videos.length > 0;
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'item-header';
+      headerDiv.innerHTML = `
+        <div class="cb" onclick="event.stopPropagation();toggleItem('${item.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="item-body">
           <div class="item-title">${item.title}</div>
           <div class="item-row">
             <span class="item-hours">${item.hours}h</span>
-            <span class="tag ${item.conditional ? 'tag-optional' : phase.tag}">${item.conditional ? 'optional' : phase.tagLabel}</span>
-            ${item.conditional ? '<span class="tag tag-optional">use if needed</span>' : ''}
+            <span class="tag ${item.conditional?'tag-optional':phase.tag}">${item.conditional?'optional':phase.tagLabel}</span>
+            ${item.conditional?'<span class="tag tag-optional">use if needed</span>':''}
           </div>
-          ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
-          ${item.link ? `<a class="item-link" href="${item.link}" onclick="event.stopPropagation()" target="_blank">${item.link}</a>` : ''}
-        </div>`;
+          ${item.note?`<div class="item-note">${item.note}</div>`:''}
+          ${item.link?`<a class="item-link" href="${item.link}" onclick="event.stopPropagation()" target="_blank">${item.link}</a>`:''}
+          ${hasVideos?`<div class="video-progress"><div class="video-progress-label" id="vbar-label-${item.id}">0 / ${item.videos.length} videos watched</div><div class="video-track"><div class="video-fill" id="vbar-fill-${item.id}" style="width:0%"></div></div></div>`:''}
+        </div>
+        ${hasVideos?`<span class="expand-toggle" id="expand-${item.id}" onclick="event.stopPropagation();toggleSubitems('${item.id}')">[ + videos ]</span>`:''}
+      `;
+      if (!hasVideos) headerDiv.onclick = () => toggleItem(item.id);
+      el.appendChild(headerDiv);
+      if (hasVideos) {
+        const subDiv = document.createElement('div');
+        subDiv.className = 'subitems collapsed';
+        subDiv.id = 'subitems-'+item.id;
+        item.videos.forEach((v, i) => {
+          const sid = item.id+'-v'+i;
+          const row = document.createElement('div');
+          row.className = 'subitem';
+          row.innerHTML = `
+            <div class="sub-cb" id="scb-${sid}" onclick="toggleSubitem('${item.id}',${i})"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="sub-label">${v.label}</span>
+            <input class="sub-note" id="snote-${sid}" type="text" placeholder="${v.title||'note the video you watched...'}" value="" onclick="event.stopPropagation()" onchange="saveNote('${item.id}',${i},this.value)" oninput="saveNote('${item.id}',${i},this.value)">
+          `;
+          subDiv.appendChild(row);
+        });
+        el.appendChild(subDiv);
+      }
       body.appendChild(el);
     });
     phaseEl.appendChild(body);
