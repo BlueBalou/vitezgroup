@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDiMSK 2027 — Study Plan</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f4f3ef;
+    --border: #e2e0d8;
+    --border2: #cac8be;
+    --text: #1a1917;
+    --text2: #6b6860;
+    --text3: #9c9a93;
+    --green: #1a7a52;
+    --green-bg: #e8f5ee;
+    --blue: #1a5c8a;
+    --blue-bg: #e8f2fa;
+    --amber: #8a5a10;
+    --amber-bg: #fdf3e0;
+    --red: #8a2020;
+    --red-bg: #fde8e8;
+    --accent: #2d6a4f;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141412;
+      --surface: #1e1d1b;
+      --surface2: #262522;
+      --border: #2e2c28;
+      --border2: #3a3835;
+      --text: #f0ede6;
+      --text2: #9c9a93;
+      --text3: #6b6860;
+      --green: #4ade9a;
+      --green-bg: #0d2e1f;
+      --blue: #60a5e8;
+      --blue-bg: #0d2035;
+      --amber: #e0a840;
+      --amber-bg: #2a1e08;
+      --red: #e07070;
+      --red-bg: #2a0d0d;
+      --accent: #4ade9a;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+  .page { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .masthead { border-bottom: 2px solid var(--text); padding-bottom: 1.25rem; margin-bottom: 2rem; }
+  .masthead-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
+  .masthead h1 { font-size: 1.75rem; font-weight: normal; letter-spacing: -0.02em; color: var(--text); }
+  .masthead-sub { font-size: 0.85rem; color: var(--text2); font-family: 'Courier New', monospace; margin-top: 0.35rem; }
+  .exam-date { font-family: 'Courier New', monospace; font-size: 0.8rem; background: var(--text); color: var(--bg); padding: 0.3rem 0.75rem; border-radius: 3px; white-space: nowrap; }
+  .sync-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
+  .sync-dot.ok { background: var(--green); }
+  .sync-dot.err { background: var(--red); }
+  .sync-dot.loading { background: var(--amber); }
+  .action-banner { background: var(--amber-bg); border: 1px solid var(--amber); border-radius: var(--radius); padding: 0.9rem 1.1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+  .action-banner-body { flex: 1; }
+  .action-banner strong { font-size: 0.9rem; color: var(--amber); display: block; margin-bottom: 0.2rem; font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+  .action-banner p { font-size: 0.85rem; color: var(--text2); }
+  .action-done-btn { background: none; border: 1px solid var(--amber); color: var(--amber); font-size: 0.78rem; padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer; font-family: 'Courier New', monospace; white-space: nowrap; flex-shrink: 0; margin-top: 0.15rem; }
+  .action-done-btn.done { opacity: 0.4; text-decoration: line-through; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .stat { background: var(--surface2); border-radius: var(--radius); padding: 0.85rem 1rem; }
+  .stat-label { font-size: 0.72rem; color: var(--text3); font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .stat-value { font-size: 1.5rem; color: var(--text); font-weight: normal; }
+  .progress-track { height: 3px; background: var(--border); margin-bottom: 2rem; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s ease; }
+  .schedule { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 2rem; }
+  .schedule-title { font-size: 0.75rem; color: var(--text3); font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.85rem; }
+  .schedule-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .sched-block { background: var(--surface2); border-radius: var(--radius); padding: 0.7rem 0.85rem; }
+  .sched-label { font-size: 0.72rem; font-family: 'Courier New', monospace; color: var(--text3); margin-bottom: 0.25rem; }
+  .sched-hours { font-size: 1.1rem; color: var(--text); }
+  .sched-note { font-size: 0.7rem; color: var(--text3); margin-top: 0.2rem; }
+  .phase { margin-bottom: 2.5rem; }
+  .phase-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; margin-bottom: 1rem; cursor: pointer; user-select: none; }
+  .phase-header:hover .phase-name { color: var(--accent); }
+  .phase-num { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
+  .phase-name { font-size: 1.05rem; font-weight: normal; color: var(--text); flex: 1; }
+  .phase-meta { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text2); }
+  .phase-toggle { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
+  .phase-body { display: flex; flex-direction: column; gap: 8px; }
+  .phase-body.collapsed { display: none; }
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 0.85rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .item:hover { border-color: var(--border2); }
+  .item.done { opacity: 0.5; }
+  .item.done .item-title { text-decoration: line-through; }
+  .item.conditional { border-style: dashed; }
+  .cb { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; border: 1.5px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+  .cb.checked { background: var(--accent); border-color: var(--accent); }
+  .cb svg { display: none; }
+  .cb.checked svg { display: block; }
+  .item-body { flex: 1; min-width: 0; }
+  .item-title { font-size: 0.9rem; color: var(--text); line-height: 1.45; }
+  .item-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+  .item-hours { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
+  .tag { font-size: 0.68rem; padding: 2px 7px; border-radius: 3px; font-family: 'Courier New', monospace; letter-spacing: 0.03em; }
+  .tag-green { background: var(--green-bg); color: var(--green); }
+  .tag-blue { background: var(--blue-bg); color: var(--blue); }
+  .tag-amber { background: var(--amber-bg); color: var(--amber); }
+  .tag-red { background: var(--red-bg); color: var(--red); }
+  .tag-optional { background: var(--surface2); color: var(--text3); }
+  .item-note { font-size: 0.8rem; color: var(--text2); margin-top: 5px; line-height: 1.5; font-family: 'Georgia', serif; }
+  .item-link { font-size: 0.78rem; color: var(--accent); margin-top: 3px; display: block; word-break: break-all; }
+  .item-link:hover { text-decoration: underline; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text3); font-family: 'Courier New', monospace; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+    .masthead-top { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-top">
+      <h1>EDiMSK 2027 — Study Plan</h1>
+      <span class="exam-date">ECR · Vienna · Feb/Mar 2027</span>
+    </div>
+    <div class="masthead-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior to congress &nbsp;·&nbsp; 40 MCQ + oral cases</div>
+  </div>
+
+  <div class="sync-bar">
+    <div class="sync-dot loading" id="sync-dot"></div>
+    <span id="sync-label">connecting...</span>
+  </div>
+
+  <div class="action-banner" id="action-banner">
+    <div class="action-banner-body">
+      <strong>Administrative — do now</strong>
+      <p>Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</p>
+    </div>
+    <button class="action-done-btn" id="action-btn" onclick="toggleAction()">Mark done</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-label">Total hours</div><div class="stat-value" id="s-total">0</div></div>
+    <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div></div>
+    <div class="stat"><div class="stat-label">Remaining</div><div class="stat-value" id="s-items">0</div></div>
+    <div class="stat"><div class="stat-label">Progress</div><div class="stat-value" id="s-pct">0%</div></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="schedule">
+    <div class="schedule-title">Study time budget</div>
+    <div class="schedule-grid">
+      <div class="sched-block"><div class="sched-label">Phase 1 · Q2 2026</div><div class="sched-hours">~52 h</div><div class="sched-note">4 h/week · Mon + weekend</div></div>
+      <div class="sched-block"><div class="sched-label">Phase 2 · Q3 2026</div><div class="sched-hours">~78 h</div><div class="sched-note">6 h/week · Thu + weekend</div></div>
+      <div class="sched-block"><div class="sched-label">Phase 3 · Oct–Nov 2026</div><div class="sched-hours">~54 h</div><div class="sched-note">6 h/week · Mon + weekend</div></div>
+      <div class="sched-block"><div class="sched-label">Phase 4 · Dec–Mar 2027</div><div class="sched-hours">~114 h</div><div class="sched-note">8 h/week + Jan study week (42 h)</div></div>
+    </div>
+  </div>
+
+  <div id="phases-container"></div>
+
+  <div class="footer">
+    <span>Last updated: April 2026</span>
+    <span id="footer-stats"></span>
+  </div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id:'p1',num:'Phase 1',name:'Foundations & orientation',
+    period:'Q2 2026 · Apr – Jun · ~52 h available · 4 h/week',tag:'tag-green',tagLabel:'Phase 1',
+    items:[
+      {id:'p1-action',title:'Read the three official ESSR exam preparation articles',hours:3,note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), and webinar programme paper. Free PDFs at essr.org/diploma/ — the most important thing to read first.',link:'https://www.essr.org/diploma/',done:false},
+      {id:'p1-etcsr',title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)',hours:2,note:'Defines the 27 topic areas tested. Use as your master checklist — every study item maps back to it.',link:'https://www.myesr.org/education/training-curricula/',done:false},
+      {id:'p1-anki',title:'Set up Anki deck structure — one subdeck per ETCSR topic area',hours:1,note:'Create 27 subdecks before adding any cards. Prevents a disorganised backlog. Add cards continuously from Phase 1 through Phase 3.',done:false},
+      {id:'p1-elearn',title:'ESSR e-learning platform — complete all available lectures',hours:20,note:'Structured library at essr.org/e-learning/ organised by subcommittee domain. Free for active ESSR members. More systematically organised than the webinar archive — start here. Generate Anki cards throughout.',link:'https://www.essr.org/e-learning/',done:false},
+      {id:'p1-webinars',title:'ESSR webinar archive — systematic sweep by subcommittee',hours:15,note:'Recordings of live webinars covering additional ground. Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions. Flag sessions needing a second pass.',link:'https://www.essr.org/education/webinars/',done:false},
+      {id:'p1-samples',title:'Work through the 10 official sample MCQs and 10 sample oral cases',hours:2,note:'From the official prep articles at essr.org/diploma/. Already completed from a previous cycle — mark done if content has not changed since.',link:'https://www.essr.org/diploma/',done:true}
+    ]
+  },
+  {
+    id:'p2',num:'Phase 2',name:'Video content — targeted by curriculum gap',
+    period:'Q3 2026 · Jul – Sep · ~78 h available · 6 h/week',tag:'tag-blue',tagLabel:'Phase 2',
+    items:[
+      {id:'p2-corelec',title:'Radiology Core Lectures MSK — complete lecture series',hours:15,note:'42–50 open-access lectures by SSR/ISS faculty, each 15–20 min. Topics: trauma, arthritis, tumours, metabolic bone, infection, MRI internal derangement, orthopaedic imaging, spine. Free. Use ETCSR topic list to prioritise gaps not covered in Phase 1.',link:'https://radiologycorelectures.org/msk/',done:false},
+      {id:'p2-radiopaedia',title:'Radiopaedia MSK courses — bone lesions pathway + spine courses',hours:8,note:'Matt Skalski video lectures with interactive case content. Strong on bone lesion approach and spine. Some content free, courses require subscription.',link:'https://radiopaedia.org/courses/official-courses',done:false},
+      {id:'p2-essr2025',title:'ESSR Annual Congress 2025 VoD — MSK educational sessions',hours:12,note:'Via ESR Connect. Prioritise educational and case-based sessions over pure research. Cross-reference against ETCSR to identify which sessions fill remaining gaps from Phase 1.',link:'https://connect.myesr.org/',done:false},
+      {id:'p2-davos',title:'Davos Radiology 2026 VoD — MSK and sports imaging content',hours:10,note:'Historically strong on MSK MRI and sports imaging. Access may require congress registration. Prioritise by ETCSR gap rather than watching systematically.',done:false},
+      {id:'p2-ecr2025',title:'ECR 2025 VoD — MSK sessions (E³ Advanced Courses and Refresher Courses)',hours:8,note:'Via ESR Connect (ESR Premium Education Package required for post-congress access). The E³ Advanced Courses are most directly aligned with Level III curriculum objectives.',link:'https://connect.myesr.org/',done:false},
+      {id:'p2-issr',title:'ISS / SSR core lecture videos — tumour and metabolic bone content',hours:6,note:'Free, via skeletalrad.org and ISS website. Strong on bone tumour classification and metabolic bone disease — complements ESSR webinars for these domains.',link:'https://skeletalrad.org/msk-core-lecture-series',done:false}
+    ]
+  },
+  {
+    id:'p3',num:'Phase 3',name:'Case-based work & reading',
+    period:'Oct – Nov 2026 · ~54 h available · 6 h/week',tag:'tag-amber',tagLabel:'Phase 3',
+    items:[
+      {id:'p3-auntminnie',title:'Aunt Minnie MSK cases — systematic case review',hours:10,note:'Pattern recognition for classic presentations. Simulate exam conditions — commit to one diagnosis before checking the answer. High-value pre-oral exam practice.',link:'https://www.auntminnie.com/',done:false},
+      {id:'p3-radassist',title:'Radiology Assistant — MSK modules',hours:6,note:'Free, European-authored, expert-level. Particularly strong on arthritis patterns, knee MRI, and orthopaedic hardware — areas the ESSR subcommittees emphasise.',link:'https://www.radiologyassistant.nl/musculoskeletal',done:false},
+      {id:'p3-crack',title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)',hours:12,note:'US board-oriented but the MSK chapter is highly efficient for MCQ trivia: percentages, associations, classification systems, eponyms. Complement to video work, not a substitute for ETCSR-level depth.',done:false},
+      {id:'p3-sports',title:'ESSR MRI Guidelines for Sports Injuries — full read',hours:3,note:'Official ESSR document. Directly relevant to oral exam cases given the prominence of the Sports Imaging subcommittee.',link:'https://www.essr.org/',done:false},
+      {id:'p3-resnick',title:'Resnick & Kransdorf — targeted chapter review',hours:8,note:'Use only if a specific ETCSR domain is not adequately covered by video resources and Radiology Assistant. Most useful for: metabolic bone disease, crystal arthropathies, soft tissue tumours. Check ETCSR gaps from Anki miss-rate before investing time here.',conditional:true,done:false},
+      {id:'p3-helms',title:'Helms et al. Musculoskeletal MRI — targeted joint chapters',hours:5,note:'Selective use only. Useful if specific joint MRI topics remain weak after Phase 2. Prioritise whichever joints have the lowest Anki accuracy.',conditional:true,done:false}
+    ]
+  },
+  {
+    id:'p4',num:'Phase 4',name:'Consolidation & exam simulation',
+    period:'Dec 2026 – Mar 2027 · ~114 h available · 8 h/week + Jan study week (42 h)',tag:'tag-red',tagLabel:'Phase 4',
+    items:[
+      {id:'p4-anki',title:'Anki intensive review — daily, increasing to 45–60 min/day',hours:20,note:'Running throughout all phases on non-block days. In Phase 4: increase to 45–60 min/day. Filter by lapse count to focus on persistent gaps. Do not skip more than 2 days — the review burden compounds quickly.',done:false},
+      {id:'p4-gaps',title:'Second-pass video or reading on weak ETCSR domains',hours:15,note:'Identify which ETCSR subdecks have the highest Anki miss-rate. Return to the most targeted ESSR webinar, Radiology Core Lecture, or Radiology Assistant module for those specific domains only.',done:false},
+      {id:'p4-oral',title:'Oral case practice — structured case presentations aloud',hours:10,note:'Practice presenting cases to a colleague or recording yourself. Use ESSR sample cases plus Aunt Minnie. Structure: modality → findings → diagnosis → differential → management principle.',done:false},
+      {id:'p4-janweek',title:'January 2027 dedicated study week — 6 h/day, 7 days (42 h)',hours:42,note:'Days 1–3: Anki intensive and gap identification. Days 4–5: oral case simulation. Days 6–7: final MCQ practice and weak-area reading. Keep the structure — resist starting new resources this late.',done:false},
+      {id:'p4-written',title:'Final written exam simulation — timed MCQ practice',hours:3,note:'In the final 2 weeks before the written exam: two timed 60-minute sessions of 40 MCQs. Identify any last systematic gaps. The written exam is online, ~3 weeks before the congress.',done:false},
+      {id:'p4-logistics',title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel',hours:1,note:'Confirm both exam dates on essr.org/diploma/ once ECR 2027 dates are published. Book accommodation early — Vienna during ECR fills quickly.',link:'https://www.essr.org/diploma/',done:false}
+    ]
+  }
+];
+
+let state = {};
+let saveTimeout = null;
+
+async function loadState() {
+  setSyncStatus('loading', 'loading...');
+  try {
+    const res = await fetch('/state');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    state = await res.json();
+    setSyncStatus('ok', 'synced');
+  } catch(e) {
+    setSyncStatus('err', 'offline — changes saved locally');
+    try { state = JSON.parse(localStorage.getItem('edimsk_fallback') || '{}'); } catch(x) { state = {}; }
+  }
+  applyState();
+  updateStats();
+}
+
+async function saveState() {
+  try {
+    localStorage.setItem('edimsk_fallback', JSON.stringify(state));
+    const res = await fetch('/state', { method: 'POST', body: JSON.stringify(state), headers: {'Content-Type':'application/json'} });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    setSyncStatus('ok', 'saved ' + new Date().toLocaleTimeString());
+  } catch(e) {
+    setSyncStatus('err', 'save failed — stored locally');
+  }
+}
+
+function debouncedSave() {
+  clearTimeout(saveTimeout);
+  setSyncStatus('loading', 'saving...');
+  saveTimeout = setTimeout(saveState, 800);
+}
+
+function setSyncStatus(type, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + type;
+  lbl.textContent = label;
+}
+
+function applyState() {
+  PHASES.forEach(phase => {
+    phase.items.forEach(item => {
+      const el = document.getElementById('item-' + item.id);
+      if (!el) return;
+      const cb = el.querySelector('.cb');
+      const isDone = state[item.id] !== undefined ? state[item.id] : item.done;
+      if (isDone) { el.classList.add('done'); cb.classList.add('checked'); }
+      else { el.classList.remove('done'); cb.classList.remove('checked'); }
+    });
+  });
+  const btn = document.getElementById('action-btn');
+  const banner = document.getElementById('action-banner');
+  if (state._action) { btn.classList.add('done'); btn.textContent = 'Done ✓'; banner.style.opacity = '0.5'; }
+  else { btn.classList.remove('done'); btn.textContent = 'Mark done'; banner.style.opacity = '1'; }
+}
+
+function toggleAction() {
+  state._action = !state._action;
+  applyState();
+  debouncedSave();
+}
+
+function toggleItem(id) {
+  const phase = PHASES.flatMap(p => p.items).find(i => i.id === id);
+  const current = state[id] !== undefined ? state[id] : (phase ? phase.done : false);
+  state[id] = !current;
+  const el = document.getElementById('item-' + id);
+  const cb = el.querySelector('.cb');
+  if (state[id]) { el.classList.add('done'); cb.classList.add('checked'); }
+  else { el.classList.remove('done'); cb.classList.remove('checked'); }
+  updateStats();
+  debouncedSave();
+}
+
+function updateStats() {
+  const items = PHASES.flatMap(p => p.items);
+  const total = items.reduce((a, i) => a + i.hours, 0);
+  const doneItems = items.filter(i => (state[i.id] !== undefined ? state[i.id] : i.done));
+  const doneHours = doneItems.reduce((a, i) => a + i.hours, 0);
+  const remaining = items.length - doneItems.length;
+  const pct = total > 0 ? Math.round(doneHours / total * 100) : 0;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent = doneHours;
+  document.getElementById('s-items').textContent = remaining + ' items';
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('footer-stats').textContent = doneItems.length + ' of ' + items.length + ' items · ' + doneHours + ' of ' + total + ' h';
+  PHASES.forEach(phase => {
+    const phaseDone = phase.items.filter(i => (state[i.id] !== undefined ? state[i.id] : i.done)).length;
+    const metaEl = document.querySelector('#phase-meta-' + phase.id);
+    if (metaEl) metaEl.textContent = phase.period + ' · ' + phaseDone + '/' + phase.items.length + ' done';
+  });
+}
+
+function togglePhase(phaseId) {
+  const body = document.getElementById('phase-body-' + phaseId);
+  const toggle = document.getElementById('phase-toggle-' + phaseId);
+  const collapsed = body.classList.toggle('collapsed');
+  toggle.textContent = collapsed ? '[ + expand ]' : '[ − collapse ]';
+}
+
+function renderPhases() {
+  const container = document.getElementById('phases-container');
+  PHASES.forEach(phase => {
+    const phaseEl = document.createElement('div');
+    phaseEl.className = 'phase';
+    const header = document.createElement('div');
+    header.className = 'phase-header';
+    header.onclick = () => togglePhase(phase.id);
+    header.innerHTML = `<span class="phase-num">${phase.num}</span><span class="phase-name">${phase.name}</span><span class="phase-meta" id="phase-meta-${phase.id}">${phase.period}</span><span class="phase-toggle" id="phase-toggle-${phase.id}">[ − collapse ]</span>`;
+    phaseEl.appendChild(header);
+    const body = document.createElement('div');
+    body.className = 'phase-body';
+    body.id = 'phase-body-' + phase.id;
+    phase.items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'item' + (item.conditional ? ' conditional' : '');
+      el.id = 'item-' + item.id;
+      el.onclick = () => toggleItem(item.id);
+      el.innerHTML = `
+        <div class="cb"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-body">
+          <div class="item-title">${item.title}</div>
+          <div class="item-row">
+            <span class="item-hours">${item.hours}h</span>
+            <span class="tag ${item.conditional ? 'tag-optional' : phase.tag}">${item.conditional ? 'optional' : phase.tagLabel}</span>
+            ${item.conditional ? '<span class="tag tag-optional">use if needed</span>' : ''}
+          </div>
+          ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+          ${item.link ? `<a class="item-link" href="${item.link}" onclick="event.stopPropagation()" target="_blank">${item.link}</a>` : ''}
+        </div>`;
+      body.appendChild(el);
+    });
+    phaseEl.appendChild(body);
+    container.appendChild(phaseEl);
+  });
+}
+
+renderPhases();
+loadState();
+</script>
+</body>
+</html>
