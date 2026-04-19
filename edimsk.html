@@ -10,17 +10,27 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 .page{max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem}
+/* masthead */
 .masthead{border-bottom:2px solid var(--text);padding-bottom:1.25rem;margin-bottom:1.5rem}
 .masthead-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem}
 .masthead h1{font-size:1.75rem;font-weight:normal;letter-spacing:-.02em}
 .masthead-sub{font-size:.85rem;color:var(--text2);font-family:'Courier New',monospace;margin-top:.35rem}
 .exam-date{font-family:'Courier New',monospace;font-size:.8rem;background:var(--text);color:var(--bg);padding:.3rem .75rem;border-radius:3px;white-space:nowrap}
+/* editable masthead fields */
+.mast-title-input{font-size:1.75rem;font-weight:normal;letter-spacing:-.02em;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Georgia',serif;color:var(--text);display:none}
+.mast-sub-input{font-size:.85rem;color:var(--text2);font-family:'Courier New',monospace;margin-top:.35rem;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;display:none}
+.exam-date-input{font-family:'Courier New',monospace;font-size:.8rem;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:.25rem .5rem;outline:none;color:var(--text);display:none}
+.edit-mode .mast-title-input{display:block}.edit-mode .masthead h1{display:none}
+.edit-mode .mast-sub-input{display:block}.edit-mode .masthead-sub{display:none}
+.edit-mode .exam-date-input{display:block}.edit-mode .exam-date{display:none}
+/* topbar */
 .topbar{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
 .sync-bar{display:flex;align-items:center;gap:.5rem;font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3)}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
 .sync-dot.ok{background:var(--green)}.sync-dot.err{background:var(--red)}.sync-dot.loading{background:var(--amber)}
 .edit-toggle-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.25rem .65rem;border:1px solid var(--border2);border-radius:3px;background:none;color:var(--text2);cursor:pointer;margin-left:auto}
 .edit-toggle-btn.active{border-color:var(--amber);color:var(--amber)}
+/* timeline */
 .timeline-bar{border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1.5rem}
 .tl-top{display:flex;align-items:baseline;gap:1rem;margin-bottom:.6rem;flex-wrap:wrap}
 .tl-title{font-family:'Courier New',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
@@ -31,18 +41,23 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 .tl-expected{position:absolute;top:0;left:0;height:100%;background:var(--border2);border-radius:2px;transition:width .4s}
 .tl-actual{position:absolute;top:0;left:0;height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
 .tl-labels{display:flex;justify-content:space-between;font-family:'Courier New',monospace;font-size:.68rem;color:var(--text3)}
+/* action */
 .action-banner{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--r);padding:.9rem 1.1rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:.75rem}
 .action-banner-body{flex:1}
 .action-banner strong{font-size:.9rem;color:var(--amber);display:block;margin-bottom:.2rem;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.05em}
 .action-banner p{font-size:.85rem;color:var(--text2)}
 .action-done-btn{background:none;border:1px solid var(--amber);color:var(--amber);font-size:.78rem;padding:.3rem .7rem;border-radius:4px;cursor:pointer;font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0;margin-top:.15rem}
 .action-done-btn.done{opacity:.4;text-decoration:line-through}
+.action-text-input{font-size:.85rem;color:var(--text2);background:none;border:none;border-bottom:1px solid var(--amber);outline:none;width:100%;font-family:'Georgia',serif;resize:none;display:none;margin-top:2px}
+.edit-mode .action-banner p{display:none}.edit-mode .action-text-input{display:block}
+/* stats */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem}
 .stat{background:var(--surface2);border-radius:var(--r);padding:.85rem 1rem}
 .stat-label{font-size:.72rem;color:var(--text3);font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
 .stat-value{font-size:1.5rem;color:var(--text)}
 .progress-track{height:3px;background:var(--border);margin-bottom:2rem}
 .progress-fill{height:100%;background:var(--accent);transition:width .4s}
+/* schedule */
 .schedule{border:1px solid var(--border);border-radius:var(--rl);padding:1.1rem 1.25rem;margin-bottom:2rem}
 .schedule-title{font-size:.75rem;color:var(--text3);font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.85rem}
 .schedule-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -56,35 +71,37 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 .phase-header:hover .phase-name{color:var(--accent)}
 .phase-num{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0}
 .phase-name{font-size:1.05rem;font-weight:normal;color:var(--text);flex:1}
+.phase-name-input{font-size:1.05rem;font-weight:normal;color:var(--text);flex:1;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;font-family:'Georgia',serif;display:none;cursor:text}
+.edit-mode .phase-name{display:none}.edit-mode .phase-name-input{display:block}
 .phase-toggle{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0}
-.phase-budget{font-family:'Courier New',monospace;font-size:.72rem;padding:.2rem 0 .5rem}
-.phase-budget.ok{color:var(--green)}.phase-budget.warn{color:var(--amber)}.phase-budget.over{color:var(--red)}
-/* phase config editor — edit mode only */
-.phase-config{display:none;background:var(--surface2);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.75rem;gap:1rem;flex-wrap:wrap;align-items:flex-end}
+.phase-budget{font-family:'Courier New',monospace;font-size:.72rem;padding:.2rem 0 .4rem}
+.phase-budget.ok{color:var(--green)}.phase-budget.over{color:var(--red)}
+/* phase config */
+.phase-config{display:none;background:var(--surface2);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.75rem;gap:.75rem 1.25rem;flex-wrap:wrap;align-items:flex-end}
 .edit-mode .phase-config{display:flex}
 .cfg-field{display:flex;flex-direction:column;gap:3px}
 .cfg-label{font-family:'Courier New',monospace;font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
-.cfg-input{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text);background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:.2rem .5rem;outline:none;width:70px}
+.cfg-input{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text);background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:.2rem .5rem;outline:none;width:80px}
+.cfg-input[type=date]{width:130px}
 .cfg-input:focus{border-color:var(--accent)}
 .cfg-derived{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text2);align-self:flex-end;padding-bottom:.25rem}
+/* items */
 .phase-body{display:flex;flex-direction:column;gap:8px}
 .phase-body.collapsed{display:none}
 .phase-add-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.35rem .75rem;border:1px dashed var(--border2);border-radius:var(--r);background:none;color:var(--text3);cursor:pointer;text-align:left;display:none}
 .phase-add-btn:hover{color:var(--accent);border-color:var(--accent)}
 .edit-mode .phase-add-btn{display:block}
-/* items */
 .item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
-.item.conditional{border-style:dashed}
 .item-header{display:flex;align-items:flex-start;gap:8px;padding:.85rem 1rem}
-.item-header:hover{background:var(--surface2);border-radius:var(--r)}
-.cb{width:17px;height:17px;flex-shrink:0;margin-top:2px;border:1.5px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s}
+/* checkbox — only the box itself is clickable, cursor:pointer only on .cb */
+.cb{width:17px;height:17px;flex-shrink:0;margin-top:3px;border:1.5px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s}
 .cb.checked{background:var(--accent);border-color:var(--accent)}
 .cb.partial{background:var(--border2);border-color:var(--border2)}
 .cb svg{display:none}.cb.checked svg,.cb.partial svg{display:block}
-.item-body{flex:1;min-width:0}
-.item-title{font-size:.9rem;color:var(--text);line-height:1.45}
+.item-body{flex:1;min-width:0;cursor:default}
 .field-display{}.field-input{display:none!important}
 .edit-mode .field-display{display:none!important}.edit-mode .field-input{display:block!important}
+.item-title{font-size:.9rem;color:var(--text);line-height:1.45}
 .item-title-input{font-size:.9rem;color:var(--text);background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Georgia',serif;line-height:1.45}
 .item-row{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
 .item-hours-display{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3)}
@@ -92,7 +109,6 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 .tag{font-size:.68rem;padding:2px 7px;border-radius:3px;font-family:'Courier New',monospace;letter-spacing:.03em}
 .tag-green{background:var(--green-bg);color:var(--green)}.tag-blue{background:var(--blue-bg);color:var(--blue)}
 .tag-amber{background:var(--amber-bg);color:var(--amber)}.tag-red{background:var(--red-bg);color:var(--red)}
-.tag-optional{background:var(--surface2);color:var(--text3)}
 .item-note{font-size:.8rem;color:var(--text2);margin-top:5px;line-height:1.5}
 .item-note-input{font-size:.8rem;color:var(--text2);margin-top:5px;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Georgia',serif}
 .item-link{font-size:.78rem;color:var(--accent);margin-top:3px;display:block;word-break:break-all}
@@ -103,12 +119,10 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 .sub-track{height:3px;background:var(--border);border-radius:2px}
 .sub-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
 .expand-toggle{font-family:'Courier New',monospace;font-size:.7rem;color:var(--text3);white-space:nowrap;flex-shrink:0;padding-left:4px;cursor:pointer;align-self:flex-start;margin-top:4px}
-/* order arrows */
-.order-btns{display:none;flex-direction:column;gap:2px;flex-shrink:0;margin-top:1px}
+.order-btns{display:none;flex-direction:column;gap:2px;flex-shrink:0;margin-top:2px}
 .edit-mode .order-btns{display:flex}
 .order-btn{font-family:'Courier New',monospace;font-size:.65rem;background:none;border:1px solid var(--border2);border-radius:2px;color:var(--text3);cursor:pointer;padding:0 4px;line-height:1.4}
-.order-btn:hover{color:var(--text);border-color:var(--text2)}
-/* edit controls */
+.order-btn:hover{color:var(--text)}
 .item-edit-controls{display:none;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
 .edit-mode .item-edit-controls{display:flex}
 .edit-btn{font-family:'Courier New',monospace;font-size:.68rem;padding:2px 8px;border:1px solid var(--border2);border-radius:3px;background:none;color:var(--text3);cursor:pointer}
@@ -143,14 +157,23 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 </head>
 <body>
 <div class="page">
+
 <div class="masthead">
-  <div class="masthead-top"><h1>EDiMSK 2027 — Study Plan</h1><span class="exam-date">ECR · Vienna · Feb/Mar 2027</span></div>
-  <div class="masthead-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior &nbsp;·&nbsp; 40 MCQ + oral cases</div>
+  <div class="masthead-top">
+    <h1 id="mast-title">EDiMSK 2027 — Study Plan</h1>
+    <input class="mast-title-input" id="mast-title-input" value="EDiMSK 2027 — Study Plan" oninput="editMeta('title',this.value)">
+    <span class="exam-date" id="exam-date">ECR · Vienna · Feb/Mar 2027</span>
+    <input class="exam-date-input" id="exam-date-input" value="ECR · Vienna · Feb/Mar 2027" oninput="editMeta('examDate',this.value)">
+  </div>
+  <div class="masthead-sub" id="mast-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior &nbsp;·&nbsp; 40 MCQ + oral cases</div>
+  <input class="mast-sub-input" id="mast-sub-input" value="European Diploma in Musculoskeletal Radiology · Written exam ~3 weeks prior · 40 MCQ + oral cases" oninput="editMeta('subtitle',this.value)">
 </div>
+
 <div class="topbar">
   <div class="sync-bar"><div class="sync-dot loading" id="sync-dot"></div><span id="sync-label">connecting...</span></div>
   <button class="edit-toggle-btn" id="edit-toggle-btn" onclick="toggleEditMode()">Edit plan</button>
 </div>
+
 <div class="timeline-bar">
   <div class="tl-top">
     <span class="tl-title">Timeline</span>
@@ -161,15 +184,18 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
     <div class="tl-expected" id="tl-expected" style="width:0%"></div>
     <div class="tl-actual" id="tl-actual" style="width:0%"></div>
   </div>
-  <div class="tl-labels"><span>Apr 19 2026</span><span>Jun 30</span><span>Sep 30</span><span>Nov 30</span><span>Mar 7 2027</span></div>
+  <div class="tl-labels" id="tl-labels"></div>
 </div>
+
 <div class="action-banner" id="action-banner">
   <div class="action-banner-body">
     <strong>Administrative — do now</strong>
-    <p>Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</p>
+    <p id="action-text">Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</p>
+    <textarea class="action-text-input" id="action-text-input" rows="3" oninput="editMeta('actionText',this.value)">Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</textarea>
   </div>
   <button class="action-done-btn" id="action-btn" onclick="toggleAction()">Mark done</button>
 </div>
+
 <div class="stats-grid">
   <div class="stat"><div class="stat-label">Total hours</div><div class="stat-value" id="s-total">0</div></div>
   <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div></div>
@@ -177,40 +203,38 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
   <div class="stat"><div class="stat-label">Progress</div><div class="stat-value" id="s-pct">0%</div></div>
 </div>
 <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
 <div class="schedule">
   <div class="schedule-title">Study time budget</div>
   <div class="schedule-grid" id="schedule-grid"></div>
 </div>
+
 <div id="phases-container"></div>
-<div class="footer"><span>Last updated: April 2026</span><span id="footer-stats"></span></div>
+<div class="footer"><span id="footer-date">Last updated: April 2026</span><span id="footer-stats"></span></div>
 </div>
+
 <script>
-const TL_START = new Date('2026-04-19');
-const TL_END   = new Date('2027-03-07');
+function makeSubs(n,prefix,h){return Array.from({length:n},(_,i)=>({id:prefix+'-s'+i,label:prefix.replace(/[^a-z0-9]/gi,'').toUpperCase().slice(0,2)+'-'+String(i+1).padStart(2,'0'),note:'',hours:h}));}
 
-// Phase date boundaries for expected hours calculation
-const PHASE_DATES = [
-  {start:new Date('2026-04-19'), end:new Date('2026-06-30')},
-  {start:new Date('2026-07-01'), end:new Date('2026-09-30')},
-  {start:new Date('2026-10-01'), end:new Date('2026-11-30')},
-  {start:new Date('2026-12-01'), end:new Date('2027-03-07')}
-];
-
-function makeSubs(n, prefix, h) {
-  return Array.from({length:n},(_,i)=>({id:prefix+'-s'+i,label:prefix.replace(/[^a-z0-9]/gi,'').toUpperCase().slice(0,2)+'-'+String(i+1).padStart(2,'0'),note:'',hours:h}));
-}
+const DEFAULT_META = {
+  title:'EDiMSK 2027 — Study Plan',
+  subtitle:'European Diploma in Musculoskeletal Radiology · Written exam ~3 weeks prior · 40 MCQ + oral cases',
+  examDate:'ECR · Vienna · Feb/Mar 2027',
+  actionText:'Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.'
+};
 
 const DEFAULT_PHASE_CONFIGS = [
-  {hpw:4,  dedicatedDays:0, hoursPerDay:6},
-  {hpw:6,  dedicatedDays:0, hoursPerDay:6},
-  {hpw:6,  dedicatedDays:0, hoursPerDay:6},
-  {hpw:8,  dedicatedDays:7, hoursPerDay:6}
+  {hpw:4, dedicatedDays:0, hoursPerDay:6, start:'2026-04-19', end:'2026-06-30', name:'Foundations & orientation'},
+  {hpw:6, dedicatedDays:0, hoursPerDay:6, start:'2026-07-01', end:'2026-09-30', name:'Video content — targeted by curriculum gap'},
+  {hpw:6, dedicatedDays:0, hoursPerDay:6, start:'2026-10-01', end:'2026-11-30', name:'Case-based work & reading'},
+  {hpw:8, dedicatedDays:7, hoursPerDay:6, start:'2026-12-01', end:'2027-03-07', name:'Consolidation & exam simulation'}
 ];
 
 const DEFAULT_PLAN = {
+  meta: JSON.parse(JSON.stringify(DEFAULT_META)),
   phaseConfigs: JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS)),
   phases:[
-  {id:'p1',num:'Phase 1',name:'Foundations & orientation',period:'Q2 2026 · mid-Apr – Jun',items:[
+  {id:'p1',num:'Phase 1',items:[
     {id:'p1-action',title:'Read the three official ESSR exam preparation articles',hours:3,note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), webinar programme paper. Free PDFs at essr.org/diploma/',link:'https://www.essr.org/diploma/',done:false,subs:[]},
     {id:'p1-etcsr',title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)',hours:2,note:'Defines the 27 topic areas tested. Use as your master checklist.',link:'https://www.myesr.org/education/training-curricula/',done:false,subs:[]},
     {id:'p1-anki',title:'Set up Anki deck structure — one subdeck per ETCSR topic area',hours:1,note:'Create 27 subdecks before adding any cards. Add cards continuously from Phase 1 through Phase 3.',done:false,subs:[]},
@@ -218,7 +242,7 @@ const DEFAULT_PLAN = {
     {id:'p1-webinars',title:'ESSR webinar archive — sweep by subcommittee',hours:15,note:'Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions.',link:'https://www.essr.org/education/webinars/',done:false,subs:makeSubs(15,'wb',1)},
     {id:'p1-samples',title:'Work through the 10 official sample MCQs and 10 sample oral cases',hours:2,note:'Already completed from a previous cycle — mark done if content has not changed since.',link:'https://www.essr.org/diploma/',done:true,subs:[]}
   ]},
-  {id:'p2',num:'Phase 2',name:'Video content — targeted by curriculum gap',period:'Q3 2026 · Jul – Sep',items:[
+  {id:'p2',num:'Phase 2',items:[
     {id:'p2-corelec',title:'Radiology Core Lectures MSK — selected lectures',hours:15,note:'42 open-access lectures by SSR/ISS faculty. Pick ~15 based on ETCSR gaps from Phase 1.',link:'https://radiologycorelectures.org/msk/',done:false,subs:[
       {id:'p2-corelec-s0', label:'AI-01',note:'MR Acceleration Via Deep Learning — Recht',hours:1},
       {id:'p2-corelec-s1', label:'TR-01',note:'Upper Extremity Injuries: Radiographs — Gyftopoulos',hours:1},
@@ -269,7 +293,7 @@ const DEFAULT_PLAN = {
     {id:'p2-ecr2025',title:'ECR 2025 VoD — E³ Advanced Courses and Refresher Courses',hours:8,note:'Via ESR Connect (ESR Premium Education Package required).',link:'https://connect.myesr.org/',done:false,subs:makeSubs(8,'ec',1)},
     {id:'p2-issr',title:'ISS / SSR core lecture videos — tumour and metabolic bone content',hours:6,note:'Free, via skeletalrad.org. Strong on bone tumours and metabolic bone disease.',link:'https://skeletalrad.org/msk-core-lecture-series',done:false,subs:makeSubs(6,'is',1)}
   ]},
-  {id:'p3',num:'Phase 3',name:'Case-based work & reading',period:'Oct – Nov 2026',items:[
+  {id:'p3',num:'Phase 3',items:[
     {id:'p3-auntminnie',title:'Aunt Minnie MSK cases — systematic case review',hours:10,note:'Pattern recognition for classic presentations. Simulate exam conditions.',link:'https://www.auntminnie.com/',done:false,subs:[]},
     {id:'p3-radassist',title:'Radiology Assistant — MSK modules',hours:6,note:'Free, European-authored. Strong on arthritis patterns, knee MRI, orthopaedic hardware.',link:'https://www.radiologyassistant.nl/musculoskeletal',done:false,subs:[]},
     {id:'p3-crack',title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)',hours:12,note:'Efficient for MCQ trivia: percentages, associations, classification systems, eponyms.',done:false,subs:[]},
@@ -277,105 +301,94 @@ const DEFAULT_PLAN = {
     {id:'p3-resnick',title:'Resnick & Kransdorf — targeted chapter review',hours:8,note:'Use only if ETCSR domains not covered by video resources. Most useful for: metabolic bone, crystal arthropathies, soft tissue tumours.',done:false,subs:[]},
     {id:'p3-helms',title:'Helms et al. Musculoskeletal MRI — targeted joint chapters',hours:5,note:'Selective use only if joint MRI topics remain weak after Phase 2.',done:false,subs:[]}
   ]},
-  {id:'p4',num:'Phase 4',name:'Consolidation & exam simulation',period:'Dec 2026 – Mar 2027',items:[
+  {id:'p4',num:'Phase 4',items:[
     {id:'p4-buffer',title:'Buffer — unallocated study time',hours:26,note:'Placeholder for unallocated budget hours. Reduce as new items are added; remove when fully allocated.',done:false,subs:[]},
     {id:'p4-anki',title:'Anki intensive review — daily, increasing to 45–60 min/day',hours:20,note:'Filter by lapse count. Do not skip more than 2 days.',done:false,subs:[]},
     {id:'p4-gaps',title:'Second-pass video or reading on weak ETCSR domains',hours:15,note:'Use Anki miss-rate by subdeck to identify which domains need reinforcement.',done:false,subs:[]},
     {id:'p4-oral',title:'Oral case practice — structured case presentations aloud',hours:10,note:'Structure: modality → findings → diagnosis → differential → management principle.',done:false,subs:[]},
-    {id:'p4-janweek',title:'January 2027 dedicated study week — 6 h/day × 7 days (42 h)',hours:42,note:'Days 1–3: Anki and gap identification. Days 4–5: oral case simulation. Days 6–7: MCQ practice.',done:false,subs:[]},
+    {id:'p4-janweek',title:'January 2027 dedicated study week',hours:42,note:'Days 1–3: Anki and gap identification. Days 4–5: oral case simulation. Days 6–7: MCQ practice.',done:false,subs:[]},
     {id:'p4-written',title:'Final written exam simulation — timed MCQ practice',hours:3,note:'Two timed 60-minute sessions of 40 MCQs in the final 2 weeks before the written exam.',done:false,subs:[]},
     {id:'p4-logistics',title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel',hours:1,note:'Book accommodation early — Vienna during ECR fills quickly.',link:'https://www.essr.org/diploma/',done:false,subs:[]}
   ]}
 ]};
 
-// ── State & plan ────────────────────────────────────────────────────────────
-let plan = {}, state = {}, editMode = false;
-let saveStateTO = null, savePlanTO = null;
+// ── State ────────────────────────────────────────────────────────────────────
+let plan={}, state={}, editMode=false;
+let saveStateTO=null, savePlanTO=null;
 function uid(){return Math.random().toString(36).slice(2,8);}
 
-// ── Hours helpers ────────────────────────────────────────────────────────────
-function itemEffectiveHours(item){
-  if(item.subs&&item.subs.length>0) return item.subs.reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
-  return parseFloat(item.hours)||0;
+// ── Config accessors ─────────────────────────────────────────────────────────
+function pCfg(i){return plan.phaseConfigs&&plan.phaseConfigs[i]?plan.phaseConfigs[i]:DEFAULT_PHASE_CONFIGS[i];}
+function tlStart(){return new Date(pCfg(0).start);}
+function tlEnd(){return new Date(pCfg(3).end);}
+function phaseBudget(i){
+  const c=pCfg(i);
+  const s=new Date(c.start),e=new Date(c.end);
+  const weeks=(e-s)/(7*24*3600*1000);
+  return Math.round((weeks*c.hpw+c.dedicatedDays*c.hoursPerDay)*10)/10;
 }
-function itemCompletedHours(item){
-  if(item.subs&&item.subs.length>0) return item.subs.filter(s=>state['sub-'+s.id]).reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
+function totalBudget(){return [0,1,2,3].reduce((a,i)=>a+phaseBudget(i),0);}
+
+// ── Hours ────────────────────────────────────────────────────────────────────
+function itemEffH(item){return item.subs&&item.subs.length?item.subs.reduce((a,s)=>a+(parseFloat(s.hours)||0),0):parseFloat(item.hours)||0;}
+function itemDoneH(item){
+  if(item.subs&&item.subs.length) return item.subs.filter(s=>state['sub-'+s.id]).reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
   return getItemDone(item)?(parseFloat(item.hours)||0):0;
 }
-function totalPlannedHours(){return (plan.phases||[]).flatMap(p=>p.items).reduce((a,i)=>a+itemEffectiveHours(i),0);}
-function totalCompletedHours(){return (plan.phases||[]).flatMap(p=>p.items).reduce((a,i)=>a+itemCompletedHours(i),0);}
+function totalPlanned(){return allItems().reduce((a,i)=>a+itemEffH(i),0);}
+function totalDone(){return allItems().reduce((a,i)=>a+itemDoneH(i),0);}
+function unalloc(){return Math.round((totalBudget()-totalPlanned())*10)/10;}
+function allItems(){return (plan.phases||[]).flatMap(p=>p.items);}
 
-// ── Phase config helpers ────────────────────────────────────────────────────
-function phaseConfig(idx){return (plan.phaseConfigs&&plan.phaseConfigs[idx])||DEFAULT_PHASE_CONFIGS[idx]||{hpw:4,dedicatedDays:0,hoursPerDay:6};}
-function phaseBudget(idx){
-  const cfg=phaseConfig(idx);
-  const pd=PHASE_DATES[idx];
-  const weeks=(pd.end-pd.start)/(7*24*3600*1000);
-  return Math.round((weeks*cfg.hpw + cfg.dedicatedDays*cfg.hoursPerDay)*10)/10;
-}
-function totalBudget(){return PHASE_DATES.map((_,i)=>phaseBudget(i)).reduce((a,b)=>a+b,0);}
-function unallocatedHours(){return Math.round((totalBudget()-totalPlannedHours())*10)/10;}
-
-// ── Timeline ────────────────────────────────────────────────────────────────
-function calcExpectedHours(atDate){
+// ── Timeline ─────────────────────────────────────────────────────────────────
+function calcExpected(atDate){
   let total=0;
-  for(let i=0;i<PHASE_DATES.length;i++){
-    const cfg=phaseConfig(i);
-    const pd=PHASE_DATES[i];
-    if(pd.start>=atDate) break;
-    const phEnd=pd.end<atDate?pd.end:new Date(atDate);
-    const weeks=(phEnd-pd.start)/(7*24*3600*1000);
-    total+=weeks*cfg.hpw;
-    // dedicated days: count if phase has ended by atDate
-    if(pd.end<atDate) total+=cfg.dedicatedDays*cfg.hoursPerDay;
+  for(let i=0;i<4;i++){
+    const c=pCfg(i);
+    const s=new Date(c.start),e=new Date(c.end);
+    if(s>=atDate) break;
+    const phEnd=e<atDate?e:new Date(atDate);
+    const weeks=(phEnd-s)/(7*24*3600*1000);
+    total+=weeks*c.hpw;
+    if(e<atDate) total+=c.dedicatedDays*c.hoursPerDay;
   }
   return Math.round(total*10)/10;
 }
-function calcTotalExpected(){
-  return PHASE_DATES.reduce((a,pd,i)=>{
-    const cfg=phaseConfig(i);
-    const weeks=(pd.end-pd.start)/(7*24*3600*1000);
-    return a+weeks*cfg.hpw+cfg.dedicatedDays*cfg.hoursPerDay;
-  },0);
-}
-function currentPhaseHpw(){
-  const now=new Date();
-  for(let i=0;i<PHASE_DATES.length;i++){if(now<=PHASE_DATES[i].end) return phaseConfig(i).hpw;}
-  return phaseConfig(3).hpw;
-}
+function totalExpected(){return [0,1,2,3].reduce((a,i)=>{const c=pCfg(i);const s=new Date(c.start),e=new Date(c.end);const w=(e-s)/(7*24*3600*1000);return a+w*c.hpw+c.dedicatedDays*c.hoursPerDay;},0);}
+function curHpw(){const now=new Date();for(let i=0;i<4;i++){if(now<=new Date(pCfg(i).end))return pCfg(i).hpw;}return pCfg(3).hpw;}
 
 function updateTimeline(){
   const now=new Date();
-  const clampedNow=now<TL_START?TL_START:now>TL_END?TL_END:now;
-  const totalDays=(TL_END-TL_START)/(24*3600*1000);
-  const weekNum=Math.floor((clampedNow-TL_START)/(7*24*3600*1000))+1;
+  const start=tlStart(),end=tlEnd();
+  const clamped=now<start?start:now>end?end:now;
+  const totalDays=(end-start)/(24*3600*1000);
+  const weekNum=Math.floor((clamped-start)/(7*24*3600*1000))+1;
   const totalWeeks=Math.round(totalDays/7);
-  const expectedH=calcExpectedHours(clampedNow);
-  const completedH=Math.round(totalCompletedHours()*10)/10;
-  const unalloc=unallocatedHours();
-  const actualH=Math.round((completedH+unalloc)*10)/10;
-  const totalH=calcTotalExpected();
-  document.getElementById('tl-expected').style.width=Math.min(Math.max(expectedH/totalH*100,0),100)+'%';
-  document.getElementById('tl-actual').style.width=Math.min(Math.max(actualH/totalH*100,0),100)+'%';
-  const statusEl=document.getElementById('tl-status');
-  const detailEl=document.getElementById('tl-detail');
-  if(now<TL_START){statusEl.className='tl-status';statusEl.textContent='not started';detailEl.textContent='';return;}
-  const diff=Math.round((actualH-expectedH)*10)/10;
-  const diffW=Math.round(Math.abs(diff)/currentPhaseHpw()*10)/10;
-  const weekLabel='Week '+weekNum+' of '+totalWeeks;
-  if(Math.abs(diff)<0.5){
-    statusEl.className='tl-status on-time';statusEl.textContent=weekLabel+' · on time';
-    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h';
-  }else if(diff<0){
-    statusEl.className='tl-status behind';statusEl.textContent=weekLabel+' · '+diffW+'w behind';
-    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · '+Math.abs(diff)+'h gap';
-  }else{
-    statusEl.className='tl-status ahead';statusEl.textContent=weekLabel+' · '+diffW+'w ahead';
-    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · +'+diff+'h';
+  const expectedH=calcExpected(clamped);
+  const doneH=Math.round(totalDone()*10)/10;
+  const ua=unalloc();
+  const actualH=Math.round((doneH+ua)*10)/10;
+  const totH=totalExpected();
+  document.getElementById('tl-expected').style.width=Math.min(Math.max(expectedH/totH*100,0),100)+'%';
+  document.getElementById('tl-actual').style.width=Math.min(Math.max(actualH/totH*100,0),100)+'%';
+  // labels
+  const lblEl=document.getElementById('tl-labels');
+  if(lblEl){
+    const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+    const mid1=new Date(pCfg(0).end),mid2=new Date(pCfg(1).end),mid3=new Date(pCfg(2).end);
+    lblEl.innerHTML=`<span>${fmt(start)}</span><span>${fmt(mid1)}</span><span>${fmt(mid2)}</span><span>${fmt(mid3)}</span><span>${fmt(end)}</span>`;
   }
+  const statusEl=document.getElementById('tl-status'),detailEl=document.getElementById('tl-detail');
+  if(now<start){statusEl.className='tl-status';statusEl.textContent='not started';detailEl.textContent='';return;}
+  const diff=Math.round((actualH-expectedH)*10)/10;
+  const diffW=Math.round(Math.abs(diff)/curHpw()*10)/10;
+  const wLabel='Week '+weekNum+' of '+totalWeeks;
+  if(Math.abs(diff)<0.5){statusEl.className='tl-status on-time';statusEl.textContent=wLabel+' · on time';detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h';}
+  else if(diff<0){statusEl.className='tl-status behind';statusEl.textContent=wLabel+' · '+diffW+'w behind';detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · '+Math.abs(diff)+'h gap';}
+  else{statusEl.className='tl-status ahead';statusEl.textContent=wLabel+' · '+diffW+'w ahead';detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · +'+diff+'h';}
 }
 
-// ── Persistence ────────────────────────────────────────────────────────────
+// ── Persistence ──────────────────────────────────────────────────────────────
 async function loadAll(){
   setSyncStatus('loading','loading...');
   try{
@@ -383,28 +396,48 @@ async function loadAll(){
     state=sr.ok?(await sr.json()||{}):{};
     const pd=pr.ok?await pr.json():null;
     plan=(pd&&pd.phases)?pd:JSON.parse(JSON.stringify(DEFAULT_PLAN));
-    if(!plan.phaseConfigs) plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
-    if(!pd||!pd.phases) savePlanNow();
+    if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
+    if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
+    if(!pd||!pd.phases)savePlanNow();
     setSyncStatus('ok','synced');
   }catch(e){
     setSyncStatus('err','offline — using local cache');
     try{state=JSON.parse(localStorage.getItem('edimsk_state')||'{}');}catch(x){state={};}
     try{const lp=JSON.parse(localStorage.getItem('edimsk_plan')||'null');plan=lp||JSON.parse(JSON.stringify(DEFAULT_PLAN));}catch(x){plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));}
-    if(!plan.phaseConfigs) plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
+    if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
+    if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
   }
-  renderAll();updateStats();updateTimeline();
+  applyMeta();renderAll();updateStats();updateTimeline();
 }
-async function saveStateNow(){
-  try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw new Error();setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}
-  catch(e){setSyncStatus('err','save failed — stored locally');}
-}
-async function savePlanNow(){
-  try{localStorage.setItem('edimsk_plan',JSON.stringify(plan));const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw new Error();setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}
-  catch(e){setSyncStatus('err','save failed — stored locally');}
-}
+async function saveStateNow(){try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
+async function savePlanNow(){try{localStorage.setItem('edimsk_plan',JSON.stringify(plan));const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
 function debouncedSaveState(){clearTimeout(saveStateTO);setSyncStatus('loading','saving...');saveStateTO=setTimeout(saveStateNow,800);}
 function debouncedSavePlan(){clearTimeout(savePlanTO);setSyncStatus('loading','saving...');savePlanTO=setTimeout(savePlanNow,800);}
 function setSyncStatus(t,l){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-label').textContent=l;}
+
+// ── Meta edits ───────────────────────────────────────────────────────────────
+function applyMeta(){
+  const m=plan.meta||DEFAULT_META;
+  document.getElementById('mast-title').textContent=m.title;
+  document.getElementById('mast-title-input').value=m.title;
+  document.getElementById('mast-sub').innerHTML=m.subtitle;
+  document.getElementById('mast-sub-input').value=m.subtitle;
+  document.getElementById('exam-date').textContent=m.examDate;
+  document.getElementById('exam-date-input').value=m.examDate;
+  const at=m.actionText||DEFAULT_META.actionText;
+  document.getElementById('action-text').textContent=at;
+  document.getElementById('action-text-input').value=at;
+  document.title=m.title;
+}
+function editMeta(field,val){
+  if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
+  plan.meta[field]=val;
+  if(field==='title'){document.getElementById('mast-title').textContent=val;document.title=val;}
+  if(field==='subtitle')document.getElementById('mast-sub').innerHTML=val;
+  if(field==='examDate')document.getElementById('exam-date').textContent=val;
+  if(field==='actionText')document.getElementById('action-text').textContent=val;
+  debouncedSavePlan();
+}
 
 // ── Edit mode ────────────────────────────────────────────────────────────────
 function toggleEditMode(){
@@ -419,13 +452,12 @@ function toggleEditMode(){
 function getItemDone(item){return state[item.id]!==undefined?state[item.id]:(item.done||false);}
 function findItem(id){for(const ph of plan.phases){const it=ph.items.find(i=>i.id===id);if(it)return it;}return null;}
 function findPhase(id){return plan.phases.find(p=>p.id===id);}
-function findPhaseOfItem(itemId){return plan.phases.find(ph=>ph.items.some(i=>i.id===itemId));}
-function phaseIndex(phaseId){return plan.phases.findIndex(p=>p.id===phaseId);}
+function findPhaseOfItem(id){return plan.phases.find(ph=>ph.items.some(i=>i.id===id));}
+function phaseIdx(id){return plan.phases.findIndex(p=>p.id===id);}
 
-// ── Toggle item ──────────────────────────────────────────────────────────────
+// ── Toggle (checkbox only) ───────────────────────────────────────────────────
 function toggleItem(itemId){
-  const item=findItem(itemId);if(!item)return;
-  if(item.subs&&item.subs.length>0)return;
+  const item=findItem(itemId);if(!item||item.subs&&item.subs.length)return;
   state[itemId]=!getItemDone(item);
   refreshItem(item);updateStats();updateTimeline();debouncedSaveState();
 }
@@ -434,69 +466,60 @@ function toggleSub(itemId,subId){
   const scb=document.getElementById('scb-'+subId);
   if(scb)scb.classList.toggle('checked',state['sub-'+subId]);
   const item=findItem(itemId);if(!item)return;
-  const allDone=item.subs.every(s=>state['sub-'+s.id]);
-  state[itemId]=allDone;
+  state[itemId]=item.subs.every(s=>state['sub-'+s.id]);
   refreshItem(item);updateStats();updateTimeline();debouncedSaveState();
 }
-function saveSubNote(subId,val){
-  state['note-'+subId]=val;
-  const el=document.getElementById('snote-'+subId);
-  if(el)el.classList.toggle('has-value',!!val);
-  debouncedSaveState();
-}
+
+// ── Note / hours ─────────────────────────────────────────────────────────────
+function saveSubNote(subId,val){state['note-'+subId]=val;const el=document.getElementById('snote-'+subId);if(el)el.classList.toggle('has-value',!!val);debouncedSaveState();}
 function saveSubHours(itemId,subId,val){
   const item=findItem(itemId);if(!item)return;
   const sub=item.subs.find(s=>s.id===subId);if(!sub)return;
   sub.hours=parseFloat(val)||0;
   const scb=document.getElementById('scb-'+subId);
   if(scb){const row=scb.closest('.subitem');if(row){const d=row.querySelector('.sub-hours-display');if(d)d.textContent=sub.hours+'h';}}
-  refreshItemHours(item);updateStats();updateTimeline();updatePhaseBudgetDisplay(findPhaseOfItem(itemId));debouncedSavePlan();
+  refreshItemHours(item);updateStats();updateTimeline();updatePhaseBudgetEl(findPhaseOfItem(itemId));debouncedSavePlan();
 }
-
-// ── Phase config edits ───────────────────────────────────────────────────────
-function editPhaseConfig(phaseId,field,val){
-  const idx=phaseIndex(phaseId);if(idx<0)return;
-  if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
-  plan.phaseConfigs[idx][field]=parseFloat(val)||0;
-  updatePhaseBudgetDisplay(findPhase(phaseId));
-  updateScheduleGrid();updateStats();updateTimeline();debouncedSavePlan();
-}
-
-// ── Edit actions ─────────────────────────────────────────────────────────────
 function editItemTitle(id,val){const it=findItem(id);if(it){it.title=val;debouncedSavePlan();}}
 function editItemNote(id,val){const it=findItem(id);if(it){it.note=val;debouncedSavePlan();}}
 function editItemLink(id,val){const it=findItem(id);if(it){it.link=val;debouncedSavePlan();}}
 function editItemHours(id,val){
-  const it=findItem(id);if(!it||it.subs&&it.subs.length>0)return;
+  const it=findItem(id);if(!it||it.subs&&it.subs.length)return;
   it.hours=parseFloat(val)||0;
   const el=document.getElementById('item-'+id);
-  const h=el?el.querySelector('.item-hours-display'):null;
-  if(h)h.textContent=it.hours+'h';
-  updateStats();updateTimeline();updatePhaseBudgetDisplay(findPhaseOfItem(id));debouncedSavePlan();
+  const h=el?el.querySelector('.item-hours-display'):null;if(h)h.textContent=it.hours+'h';
+  updateStats();updateTimeline();updatePhaseBudgetEl(findPhaseOfItem(id));debouncedSavePlan();
 }
-function deleteItem(itemId){
-  if(!confirm('Delete this item?'))return;
-  const ph=findPhaseOfItem(itemId);if(!ph)return;
-  ph.items=ph.items.filter(i=>i.id!==itemId);
-  renderAll();updateStats();updateTimeline();debouncedSavePlan();
+
+// ── Phase config edits ────────────────────────────────────────────────────────
+function editPhaseConfig(phaseId,field,val){
+  const i=phaseIdx(phaseId);if(i<0)return;
+  if(field==='start'||field==='end'){plan.phaseConfigs[i][field]=val;}
+  else{plan.phaseConfigs[i][field]=parseFloat(val)||0;}
+  updatePhaseBudgetEl(findPhase(phaseId));
+  updatePhaseConfigDerived(phaseId);
+  updateScheduleGrid();updateStats();updateTimeline();debouncedSavePlan();
 }
-function addItem(phaseId){
-  const ph=findPhase(phaseId);if(!ph)return;
-  ph.items.push({id:'item-'+uid(),title:'New item',hours:0,note:'',link:'',done:false,subs:[]});
-  renderAll();updateStats();debouncedSavePlan();
+function editPhaseName(phaseId,val){
+  const i=phaseIdx(phaseId);if(i<0)return;
+  plan.phaseConfigs[i].name=val;
+  debouncedSavePlan();
 }
-function moveItem(itemId,dir){
-  const ph=findPhaseOfItem(itemId);if(!ph)return;
-  const idx=ph.items.findIndex(i=>i.id===itemId);
-  const newIdx=idx+dir;
-  if(newIdx<0||newIdx>=ph.items.length)return;
-  [ph.items[idx],ph.items[newIdx]]=[ph.items[newIdx],ph.items[idx]];
-  renderAll();debouncedSavePlan();
+
+function updatePhaseConfigDerived(phaseId){
+  const i=phaseIdx(phaseId);
+  const el=document.getElementById('cfg-budget-'+phaseId);
+  if(el)el.textContent='= '+phaseBudget(i)+'h budget';
 }
+
+// ── Item mutations ────────────────────────────────────────────────────────────
+function deleteItem(itemId){if(!confirm('Delete this item?'))return;const ph=findPhaseOfItem(itemId);if(!ph)return;ph.items=ph.items.filter(i=>i.id!==itemId);renderAll();updateStats();updateTimeline();debouncedSavePlan();}
+function addItem(phaseId){const ph=findPhase(phaseId);if(!ph)return;ph.items.push({id:'item-'+uid(),title:'New item',hours:0,note:'',link:'',done:false,subs:[]});renderAll();updateStats();debouncedSavePlan();}
+function moveItem(itemId,dir){const ph=findPhaseOfItem(itemId);if(!ph)return;const idx=ph.items.findIndex(i=>i.id===itemId);const ni=idx+dir;if(ni<0||ni>=ph.items.length)return;[ph.items[idx],ph.items[ni]]=[ph.items[ni],ph.items[idx]];renderAll();debouncedSavePlan();}
 function toggleItemSubs(itemId){
   const it=findItem(itemId);if(!it)return;
-  if(it.subs&&it.subs.length>0){if(!confirm('Remove all subtasks?'))return;it.subs=[];}
-  else{const fh=it.hours||0;it.subs=[{id:itemId+'-s'+uid(),label:'S-01',note:'',hours:fh}];}
+  if(it.subs&&it.subs.length){if(!confirm('Remove all subtasks?'))return;it.subs=[];}
+  else{it.subs=[{id:itemId+'-s'+uid(),label:'S-01',note:'',hours:it.hours||0}];}
   renderAll();updateStats();updateTimeline();debouncedSavePlan();
 }
 function addSub(itemId){
@@ -504,31 +527,21 @@ function addSub(itemId){
   const n=it.subs.length;
   it.subs.push({id:itemId+'-s'+uid(),label:'S-'+String(n+1).padStart(2,'0'),note:'',hours:0});
   renderAll();updateStats();updateTimeline();debouncedSavePlan();
-  const subEl=document.getElementById('subitems-'+itemId);
-  const tog=document.getElementById('expand-'+itemId);
-  if(subEl)subEl.classList.remove('collapsed');
-  if(tog)tog.textContent='[ − subtasks ]';
+  const se=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
+  if(se)se.classList.remove('collapsed');if(tog)tog.textContent='[ − subtasks ]';
 }
-function deleteSub(itemId,subId){
-  const it=findItem(itemId);if(!it)return;
-  it.subs=it.subs.filter(s=>s.id!==subId);
-  renderAll();updateStats();updateTimeline();debouncedSavePlan();
-}
+function deleteSub(itemId,subId){const it=findItem(itemId);if(!it)return;it.subs=it.subs.filter(s=>s.id!==subId);renderAll();updateStats();updateTimeline();debouncedSavePlan();}
 function moveSub(itemId,subId,dir){
   const it=findItem(itemId);if(!it)return;
-  const idx=it.subs.findIndex(s=>s.id===subId);
-  const newIdx=idx+dir;
-  if(newIdx<0||newIdx>=it.subs.length)return;
-  [it.subs[idx],it.subs[newIdx]]=[it.subs[newIdx],it.subs[idx]];
+  const idx=it.subs.findIndex(s=>s.id===subId);const ni=idx+dir;
+  if(ni<0||ni>=it.subs.length)return;
+  [it.subs[idx],it.subs[ni]]=[it.subs[ni],it.subs[idx]];
   renderAll();debouncedSavePlan();
-  // re-open subitems panel
-  const subEl=document.getElementById('subitems-'+itemId);
-  const tog=document.getElementById('expand-'+itemId);
-  if(subEl)subEl.classList.remove('collapsed');
-  if(tog)tog.textContent='[ − subtasks ]';
+  const se=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
+  if(se)se.classList.remove('collapsed');if(tog)tog.textContent='[ − subtasks ]';
 }
 
-// ── Refresh helpers (no full re-render) ──────────────────────────────────────
+// ── Refresh helpers ───────────────────────────────────────────────────────────
 function refreshItem(item){
   const el=document.getElementById('item-'+item.id);if(!el)return;
   const hasSubs=item.subs&&item.subs.length>0;
@@ -536,190 +549,195 @@ function refreshItem(item){
   const cb=el.querySelector('.item-header>.cb');
   const title=el.querySelector('.item-title');
   if(hasSubs){
-    const doneSubs=item.subs.filter(s=>state['sub-'+s.id]).length;
-    const total=item.subs.length;
-    const all=doneSubs===total&&total>0;
-    const some=doneSubs>0&&!all;
+    const dn=item.subs.filter(s=>state['sub-'+s.id]).length,tot=item.subs.length;
+    const all=dn===tot&&tot>0,some=dn>0&&!all;
     if(cb){cb.classList.toggle('checked',all);cb.classList.toggle('partial',some);cb.innerHTML=all?CHECK_SVG:some?PART_SVG:'';}
-    if(title)title.style.textDecoration=(all?'line-through':'');
+    if(title)title.style.textDecoration=all?'line-through':'';
     refreshSubProgress(item);
   }else{
     if(cb){cb.classList.toggle('checked',isDone);cb.classList.toggle('partial',false);cb.innerHTML=isDone?CHECK_SVG:'';}
-    if(title)title.style.textDecoration=(isDone?'line-through':'');
+    if(title)title.style.textDecoration=isDone?'line-through':'';
   }
 }
 function refreshItemHours(item){
   const el=document.getElementById('item-'+item.id);if(!el)return;
-  const hd=el.querySelector('.item-hours-display');
-  if(hd)hd.textContent=itemEffectiveHours(item)+'h';
+  const hd=el.querySelector('.item-hours-display');if(hd)hd.textContent=itemEffH(item)+'h';
   refreshSubProgress(item);
 }
 function refreshSubProgress(item){
   if(!item.subs||!item.subs.length)return;
   const doneH=item.subs.filter(s=>state['sub-'+s.id]).reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
-  const totalH=itemEffectiveHours(item);
-  const doneSubs=item.subs.filter(s=>state['sub-'+s.id]).length;
-  const lbl=document.getElementById('sbar-label-'+item.id);
-  const fill=document.getElementById('sbar-fill-'+item.id);
-  if(lbl)lbl.textContent=doneSubs+' / '+item.subs.length+' subtasks completed ('+Math.round(doneH*10)/10+'h / '+Math.round(totalH*10)/10+'h)';
-  if(fill)fill.style.width=(totalH>0?Math.round(doneH/totalH*100):0)+'%';
+  const totH=itemEffH(item);
+  const dn=item.subs.filter(s=>state['sub-'+s.id]).length;
+  const lbl=document.getElementById('sbar-label-'+item.id),fill=document.getElementById('sbar-fill-'+item.id);
+  if(lbl)lbl.textContent=dn+' / '+item.subs.length+' subtasks completed ('+Math.round(doneH*10)/10+'h / '+Math.round(totH*10)/10+'h)';
+  if(fill)fill.style.width=(totH>0?Math.round(doneH/totH*100):0)+'%';
 }
-
-// ── Phase budget display ─────────────────────────────────────────────────────
-function updatePhaseBudgetDisplay(phase){
+function updatePhaseBudgetEl(phase){
   if(!phase)return;
-  const idx=phaseIndex(phase.id);
+  const i=phaseIdx(phase.id);
   const el=document.getElementById('phase-budget-'+phase.id);if(!el)return;
-  const budget=phaseBudget(idx);
-  const used=Math.round(phase.items.reduce((a,i)=>a+itemEffectiveHours(i),0)*10)/10;
+  const budget=phaseBudget(i);
+  const used=Math.round(phase.items.reduce((a,it)=>a+itemEffH(it),0)*10)/10;
   const free=Math.round((budget-used)*10)/10;
   if(free>0){el.className='phase-budget ok';el.textContent=used+'h planned of '+budget+'h budget · '+free+'h free';}
   else if(free===0){el.className='phase-budget ok';el.textContent=used+'h planned · budget fully allocated';}
   else{el.className='phase-budget over';el.textContent=used+'h planned of '+budget+'h budget · '+Math.abs(free)+'h overbooked';}
 }
 
-// ── Stats ────────────────────────────────────────────────────────────────────
+// ── Stats ─────────────────────────────────────────────────────────────────────
 function updateStats(){
-  const items=(plan.phases||[]).flatMap(p=>p.items);
-  const total=items.reduce((a,i)=>a+itemEffectiveHours(i),0);
-  const doneH=items.reduce((a,i)=>a+itemCompletedHours(i),0);
+  const items=allItems();
+  const total=items.reduce((a,i)=>a+itemEffH(i),0);
+  const doneH=items.reduce((a,i)=>a+itemDoneH(i),0);
   const doneItems=items.filter(i=>getItemDone(i)).length;
   const rem=items.length-doneItems;
-  const unalloc=unallocatedHours();
-  const effectiveH=Math.round((doneH+unalloc)*10)/10;
-  const budgetTotal=totalBudget();
-  const pct=budgetTotal>0?Math.round(effectiveH/budgetTotal*100):0;
+  const ua=unalloc();
+  const effH=Math.round((doneH+ua)*10)/10;
+  const budgetTot=totalBudget();
+  const pct=budgetTot>0?Math.round(effH/budgetTot*100):0;
   document.getElementById('s-total').textContent=Math.round(total*10)/10;
   document.getElementById('s-done').textContent=Math.round(doneH*10)/10;
   document.getElementById('s-items').textContent=rem+' items';
   document.getElementById('s-pct').textContent=Math.max(0,pct)+'%';
   document.getElementById('prog').style.width=Math.max(0,Math.min(pct,100))+'%';
-  document.getElementById('footer-stats').textContent=doneItems+' of '+items.length+' items · '+Math.round(doneH*10)/10+'h completed · '+unalloc+'h unallocated';
-  (plan.phases||[]).forEach((ph,i)=>{
+  document.getElementById('footer-stats').textContent=doneItems+' of '+items.length+' items · '+Math.round(doneH*10)/10+'h completed · '+ua+'h unallocated';
+  (plan.phases||[]).forEach(ph=>{
     const pd=ph.items.filter(it=>getItemDone(it)).length;
     const m=document.getElementById('phase-meta-'+ph.id);
-    if(m)m.textContent=ph.period+' · '+pd+'/'+ph.items.length+' done';
-    updatePhaseBudgetDisplay(ph);
+    if(m)m.textContent=phasePeriodStr(phaseIdx(ph.id))+' · '+pd+'/'+ph.items.length+' done';
+    updatePhaseBudgetEl(ph);
   });
 }
+
 function toggleAction(){
   state._action=!state._action;
   const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
   btn.classList.toggle('done',state._action);btn.textContent=state._action?'Done ✓':'Mark done';
-  banner.style.opacity=state._action?'0.5':'1';
-  debouncedSaveState();
+  banner.style.opacity=state._action?'0.5':'1';debouncedSaveState();
 }
-function togglePhase(id){
-  const body=document.getElementById('phase-body-'+id),tog=document.getElementById('phase-toggle-'+id);
-  const c=body.classList.toggle('collapsed');tog.textContent=c?'[ + expand ]':'[ − collapse ]';
-}
-function toggleSubs(itemId){
-  const el=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
-  if(!el)return;const c=el.classList.toggle('collapsed');tog.textContent=c?'[ + subtasks ]':'[ − subtasks ]';
+function togglePhase(id){const b=document.getElementById('phase-body-'+id),t=document.getElementById('phase-toggle-'+id);const c=b.classList.toggle('collapsed');t.textContent=c?'[ + expand ]':'[ − collapse ]';}
+function toggleSubs(itemId){const el=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);if(!el)return;const c=el.classList.toggle('collapsed');tog.textContent=c?'[ + subtasks ]':'[ − subtasks ]';}
+
+// ── Period string ─────────────────────────────────────────────────────────────
+function phasePeriodStr(i){
+  const c=pCfg(i);
+  const s=new Date(c.start),e=new Date(c.end);
+  const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+  const weeks=Math.round((e-s)/(7*24*3600*1000));
+  const budget=phaseBudget(i);
+  let str=fmt(s)+' – '+fmt(e)+' · '+c.hpw+'h/week';
+  if(c.dedicatedDays>0)str+=' + '+c.dedicatedDays+' day(s) × '+c.hoursPerDay+'h';
+  str+=' · ~'+budget+'h';
+  return str;
 }
 
-// ── Schedule grid ────────────────────────────────────────────────────────────
+// ── Schedule grid ─────────────────────────────────────────────────────────────
 function updateScheduleGrid(){
   const grid=document.getElementById('schedule-grid');if(!grid)return;
   grid.innerHTML='';
-  const labels=['Phase 1 · Q2 2026','Phase 2 · Q3 2026','Phase 3 · Oct–Nov 2026','Phase 4 · Dec–Mar 2027'];
-  PHASE_DATES.forEach((_,i)=>{
-    const cfg=phaseConfig(i);
+  [0,1,2,3].forEach(i=>{
+    const c=pCfg(i);
     const budget=phaseBudget(i);
     const div=document.createElement('div');div.className='sched-block';
-    div.innerHTML=`<div class="sched-label">${labels[i]}</div><div class="sched-hours">~${budget}h</div><div class="sched-note">${cfg.hpw}h/week${cfg.dedicatedDays>0?' + '+cfg.dedicatedDays+' day(s)':''}</div>`;
+    div.innerHTML=`<div class="sched-label">Phase ${i+1}</div><div class="sched-hours">~${budget}h</div><div class="sched-note">${c.hpw}h/week${c.dedicatedDays>0?' + '+c.dedicatedDays+'d × '+c.hoursPerDay+'h':''}</div>`;
     grid.appendChild(div);
   });
 }
 
-// ── Render ───────────────────────────────────────────────────────────────────
+// ── Render ────────────────────────────────────────────────────────────────────
 const CHECK_SVG=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const PART_SVG=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="2" y1="5" x2="8" y2="5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>`;
 const SCHECK_SVG=`<svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+const PHASE_TAGS=['tag-green','tag-blue','tag-amber','tag-red'];
 
 function renderAll(){
   const container=document.getElementById('phases-container');
   container.innerHTML='';
   updateScheduleGrid();
-  (plan.phases||[]).forEach((phase,phIdx)=>{
-    const cfg=phaseConfig(phIdx);
+  (plan.phases||[]).forEach((phase,phI)=>{
+    const cfg=pCfg(phI);
     const phEl=document.createElement('div');phEl.className='phase';
 
-    // header
+    // header — click only on non-input areas
     const hdr=document.createElement('div');hdr.className='phase-header';
-    hdr.onclick=()=>togglePhase(phase.id);
-    hdr.innerHTML=`<span class="phase-num">${phase.num}</span><span class="phase-name">${phase.name}</span><span class="phase-meta" id="phase-meta-${phase.id}">${phase.period}</span><span class="phase-toggle" id="phase-toggle-${phase.id}">[ − collapse ]</span>`;
+    hdr.onclick=e=>{if(e.target.tagName==='INPUT')return;togglePhase(phase.id);};
+    hdr.innerHTML=`
+      <span class="phase-num">${phase.num}</span>
+      <span class="phase-name" id="phase-name-${phase.id}">${esc(cfg.name)}</span>
+      <input class="phase-name-input" value="${esc(cfg.name)}" onclick="event.stopPropagation()" oninput="editPhaseName('${phase.id}',this.value)">
+      <span class="phase-meta" id="phase-meta-${phase.id}">${phasePeriodStr(phI)}</span>
+      <span class="phase-toggle" id="phase-toggle-${phase.id}">[ − collapse ]</span>
+    `;
     phEl.appendChild(hdr);
 
     // budget line
     const budgetEl=document.createElement('div');budgetEl.id='phase-budget-'+phase.id;budgetEl.className='phase-budget';
     phEl.appendChild(budgetEl);
 
-    // phase config editor (edit mode only)
+    // phase config editor
     const cfgEl=document.createElement('div');cfgEl.className='phase-config';
     cfgEl.innerHTML=`
-      <div class="cfg-field"><span class="cfg-label">h/week</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hpw}" oninput="editPhaseConfig('${phase.id}','hpw',this.value)"></div>
-      <div class="cfg-field"><span class="cfg-label">dedicated days</span><input class="cfg-input" type="number" min="0" step="1" value="${cfg.dedicatedDays}" oninput="editPhaseConfig('${phase.id}','dedicatedDays',this.value)"></div>
-      <div class="cfg-field"><span class="cfg-label">h/day</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hoursPerDay}" oninput="editPhaseConfig('${phase.id}','hoursPerDay',this.value)"></div>
-      <span class="cfg-derived" id="cfg-budget-${phase.id}">= ${phaseBudget(phIdx)}h budget</span>
+      <div class="cfg-field"><span class="cfg-label">Start date</span><input class="cfg-input" type="date" value="${cfg.start}" oninput="editPhaseConfig('${phase.id}','start',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">End date</span><input class="cfg-input" type="date" value="${cfg.end}" oninput="editPhaseConfig('${phase.id}','end',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">h / week</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hpw}" oninput="editPhaseConfig('${phase.id}','hpw',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">Dedicated days</span><input class="cfg-input" type="number" min="0" step="1" value="${cfg.dedicatedDays}" oninput="editPhaseConfig('${phase.id}','dedicatedDays',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">h / dedicated day</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hoursPerDay}" oninput="editPhaseConfig('${phase.id}','hoursPerDay',this.value)"></div>
+      <span class="cfg-derived" id="cfg-budget-${phase.id}">= ${phaseBudget(phI)}h budget</span>
     `;
     phEl.appendChild(cfgEl);
 
-    // items
     const body=document.createElement('div');body.className='phase-body';body.id='phase-body-'+phase.id;
+    const tag=PHASE_TAGS[phI]||'tag-green';
 
-    phase.items.forEach((item,itemIdx)=>{
+    phase.items.forEach((item,itemI)=>{
       const hasSubs=item.subs&&item.subs.length>0;
       const isDone=getItemDone(item);
-      const effH=itemEffectiveHours(item);
+      const effH=itemEffH(item);
       const doneSubs=hasSubs?item.subs.filter(s=>state['sub-'+s.id]).length:0;
       const allDone=hasSubs&&doneSubs===item.subs.length&&item.subs.length>0;
       const someDone=hasSubs&&doneSubs>0&&!allDone;
-      const tag=phase.tag||'tag-green';
-      const tagLabel=phase.tagLabel||phase.num;
-
-      const el=document.createElement('div');el.className='item';el.id='item-'+item.id;
-
-      const ih=document.createElement('div');ih.className='item-header';
-      if(!hasSubs)ih.onclick=()=>toggleItem(item.id);
-
       const cbClass='cb'+(allDone||(!hasSubs&&isDone)?' checked':someDone?' partial':'');
       const cbSvg=allDone||(!hasSubs&&isDone)?CHECK_SVG:someDone?PART_SVG:'';
       const titleStyle=(allDone||(!hasSubs&&isDone))?'text-decoration:line-through;opacity:.6':'';
 
+      const el=document.createElement('div');el.className='item';el.id='item-'+item.id;
+      const ih=document.createElement('div');ih.className='item-header';
+      // no onclick on the header — only the .cb handles toggling
+
       ih.innerHTML=`
         <div class="order-btns">
-          <button class="order-btn" onclick="event.stopPropagation();moveItem('${item.id}',-1)" title="move up">▲</button>
-          <button class="order-btn" onclick="event.stopPropagation();moveItem('${item.id}',1)" title="move down">▼</button>
+          <button class="order-btn" onclick="moveItem('${item.id}',-1)">▲</button>
+          <button class="order-btn" onclick="moveItem('${item.id}',1)">▼</button>
         </div>
-        <div class="${cbClass}" onclick="event.stopPropagation();toggleItem('${item.id}')">${cbSvg}</div>
+        <div class="${cbClass}" onclick="toggleItem('${item.id}')">${cbSvg}</div>
         <div class="item-body">
           <div class="item-title field-display" style="${titleStyle}">${esc(item.title)}</div>
           <input class="item-title-input field-input" value="${esc(item.title)}" placeholder="Item title" oninput="editItemTitle('${item.id}',this.value)">
           <div class="item-row">
             <span class="item-hours-display">${effH}h</span>
             ${!hasSubs?`<input class="hours-input field-input" type="number" min="0" step="0.5" value="${item.hours}" oninput="editItemHours('${item.id}',this.value)">`:''}
-            <span class="tag ${tag}">${tagLabel}</span>
+            <span class="tag ${tag}">${phase.num}</span>
           </div>
           ${item.note?`<div class="item-note field-display">${esc(item.note)}</div>`:''}
           <input class="item-note-input field-input" value="${esc(item.note||'')}" placeholder="Add a note..." oninput="editItemNote('${item.id}',this.value)">
-          ${item.link?`<a class="item-link field-display" href="${esc(item.link)}" onclick="event.stopPropagation()" target="_blank">${esc(item.link)}</a>`:''}
+          ${item.link?`<a class="item-link field-display" href="${esc(item.link)}" target="_blank">${esc(item.link)}</a>`:''}
           <input class="item-link-input field-input" value="${esc(item.link||'')}" placeholder="https://..." oninput="editItemLink('${item.id}',this.value)">
           ${hasSubs?`<div class="sub-progress"><div class="sub-progress-label" id="sbar-label-${item.id}">0 / ${item.subs.length} subtasks completed</div><div class="sub-track"><div class="sub-fill" id="sbar-fill-${item.id}" style="width:0%"></div></div></div>`:''}
           <div class="item-edit-controls">
-            <button class="edit-btn" onclick="event.stopPropagation();toggleItemSubs('${item.id}')">${hasSubs?'remove subtasks':'add subtasks'}</button>
-            <button class="edit-btn del" onclick="event.stopPropagation();deleteItem('${item.id}')">delete</button>
+            <button class="edit-btn" onclick="toggleItemSubs('${item.id}')">${hasSubs?'remove subtasks':'add subtasks'}</button>
+            <button class="edit-btn del" onclick="deleteItem('${item.id}')">delete</button>
           </div>
         </div>
-        ${hasSubs?`<span class="expand-toggle" id="expand-${item.id}" onclick="event.stopPropagation();toggleSubs('${item.id}')">[ + subtasks ]</span>`:''}
+        ${hasSubs?`<span class="expand-toggle" id="expand-${item.id}" onclick="toggleSubs('${item.id}')">[ + subtasks ]</span>`:''}
       `;
       el.appendChild(ih);
 
       if(hasSubs){
         const subDiv=document.createElement('div');subDiv.className='subitems collapsed';subDiv.id='subitems-'+item.id;
-        item.subs.forEach((s,si)=>{
+        item.subs.forEach(s=>{
           const isDoneS=state['sub-'+s.id]||false;
           const noteVal=state['note-'+s.id]||'';
           const ph=noteVal||s.note||'note...';
@@ -732,14 +750,14 @@ function renderAll(){
             <div class="sub-cb ${isDoneS?'checked':''}" id="scb-${s.id}" onclick="toggleSub('${item.id}','${s.id}')">${SCHECK_SVG}</div>
             <span class="sub-label">${esc(s.label)}</span>
             <span class="sub-hours-display">${s.hours||0}h</span>
-            <input class="sub-hours-input" type="number" min="0" step="0.5" value="${s.hours||0}" onclick="event.stopPropagation()" oninput="saveSubHours('${item.id}','${s.id}',this.value)">
-            <input class="sub-note ${noteVal?'has-value':''}" id="snote-${s.id}" type="text" placeholder="${esc(ph)}" value="${esc(noteVal)}" onclick="event.stopPropagation()" oninput="saveSubNote('${s.id}',this.value)">
-            <button class="sub-del-btn" onclick="event.stopPropagation();deleteSub('${item.id}','${s.id}')">✕</button>
+            <input class="sub-hours-input" type="number" min="0" step="0.5" value="${s.hours||0}" oninput="saveSubHours('${item.id}','${s.id}',this.value)">
+            <input class="sub-note ${noteVal?'has-value':''}" id="snote-${s.id}" type="text" placeholder="${esc(ph)}" value="${esc(noteVal)}" oninput="saveSubNote('${s.id}',this.value)">
+            <button class="sub-del-btn" onclick="deleteSub('${item.id}','${s.id}')">✕</button>
           `;
           subDiv.appendChild(row);
         });
         const addBtn=document.createElement('button');addBtn.className='sub-add-btn';addBtn.textContent='+ add subtask';
-        addBtn.onclick=e=>{e.stopPropagation();addSub(item.id);};
+        addBtn.onclick=()=>addSub(item.id);
         subDiv.appendChild(addBtn);
         el.appendChild(subDiv);
         refreshSubProgress(item);
@@ -753,10 +771,9 @@ function renderAll(){
     body.appendChild(addBtn);
     phEl.appendChild(body);
     container.appendChild(phEl);
-    updatePhaseBudgetDisplay(phase);
+    updatePhaseBudgetEl(phase);
   });
 
-  // action banner state
   const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
   if(btn){btn.classList.toggle('done',!!state._action);btn.textContent=state._action?'Done ✓':'Mark done';}
   if(banner)banner.style.opacity=state._action?'0.5':'1';
