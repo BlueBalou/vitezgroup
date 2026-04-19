@@ -587,7 +587,10 @@ function addSub(itemId){
   const se=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
   if(se)se.classList.remove('collapsed');if(tog)tog.textContent='[ − subtasks ]';
 }
-function deleteSub(itemId,subId){const it=findItem(itemId);if(!it)return;it.subs=it.subs.filter(s=>s.id!==subId);renderAll();updateStats();updateTimeline();debouncedSavePlan();}
+function deleteSub(itemId,subId){const it=findItem(itemId);if(!it)return;it.subs=it.subs.filter(s=>s.id!==subId);renderAll();updateStats();updateTimeline();debouncedSavePlan();
+  const se=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
+  if(se)se.classList.remove('collapsed');if(tog)tog.textContent='[ − subtasks ]';
+}
 function moveSub(itemId,subId,dir){
   const it=findItem(itemId);if(!it)return;
   const idx=it.subs.findIndex(s=>s.id===subId);const ni=idx+dir;
