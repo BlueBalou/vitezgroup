@@ -388,24 +388,49 @@ function updateTimeline(){
   else{statusEl.className='tl-status ahead';statusEl.textContent=wLabel+' · '+diffW+'w ahead';detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · +'+diff+'h';}
 }
 
+// ── Migration guard ───────────────────────────────────────────────────────────
+// Called after any plan load. Patches missing fields from defaults without
+// overwriting anything that already exists. Safe to run on every load.
+function migratePlan(){
+  // meta
+  if(!plan.meta) plan.meta={};
+  Object.keys(DEFAULT_META).forEach(k=>{ if(plan.meta[k]===undefined) plan.meta[k]=DEFAULT_META[k]; });
+  // phaseConfigs
+  if(!Array.isArray(plan.phaseConfigs)) plan.phaseConfigs=[];
+  DEFAULT_PHASE_CONFIGS.forEach((def,i)=>{
+    if(!plan.phaseConfigs[i]) plan.phaseConfigs[i]={};
+    Object.keys(def).forEach(k=>{ if(plan.phaseConfigs[i][k]===undefined) plan.phaseConfigs[i][k]=def[k]; });
+  });
+  // phases array must exist
+  if(!Array.isArray(plan.phases)||!plan.phases.length){
+    plan.phases=JSON.parse(JSON.stringify(DEFAULT_PLAN.phases));
+  }
+  // each item must have subs array
+  plan.phases.forEach(ph=>{
+    if(!Array.isArray(ph.items)) ph.items=[];
+    ph.items.forEach(it=>{ if(!Array.isArray(it.subs)) it.subs=[]; });
+  });
+}
+
 // ── Persistence ──────────────────────────────────────────────────────────────
 async function loadAll(){
   setSyncStatus('loading','loading...');
+  let needsSave=false;
   try{
     const[sr,pr]=await Promise.all([fetch('/state?key=state'),fetch('/state?key=plan')]);
     state=sr.ok?(await sr.json()||{}):{};
     const pd=pr.ok?await pr.json():null;
-    plan=(pd&&pd.phases)?pd:JSON.parse(JSON.stringify(DEFAULT_PLAN));
-    if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
-    if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
-    if(!pd||!pd.phases)savePlanNow();
+    if(pd&&pd.phases){ plan=pd; }
+    else{ plan=JSON.parse(JSON.stringify(DEFAULT_PLAN)); needsSave=true; }
+    migratePlan();
+    // if migration added fields, save the upgraded plan back
+    if(needsSave||JSON.stringify(pd)!==JSON.stringify(plan)) savePlanNow();
     setSyncStatus('ok','synced');
   }catch(e){
     setSyncStatus('err','offline — using local cache');
     try{state=JSON.parse(localStorage.getItem('edimsk_state')||'{}');}catch(x){state={};}
     try{const lp=JSON.parse(localStorage.getItem('edimsk_plan')||'null');plan=lp||JSON.parse(JSON.stringify(DEFAULT_PLAN));}catch(x){plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));}
-    if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
-    if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
+    migratePlan();
   }
   applyMeta();renderAll();updateStats();updateTimeline();
 }
