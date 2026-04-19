@@ -9,7 +9,9 @@
 @media(prefers-color-scheme:dark){:root{--bg:#141412;--surface:#1e1d1b;--surface2:#262522;--border:#2e2c28;--border2:#3a3835;--text:#f0ede6;--text2:#9c9a93;--text3:#6b6860;--green:#4ade9a;--green-bg:#0d2e1f;--blue:#60a5e8;--blue-bg:#0d2035;--amber:#e0a840;--amber-bg:#2a1e08;--red:#e07070;--red-bg:#2a0d0d;--accent:#4ade9a}}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;background-attachment:fixed;background-size:cover;background-position:center}
-.page{max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem;background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.5) 100%);pointer-events:none;z-index:0}
+.page{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem;background:rgba(250,250,248,0.88);backdrop-filter:blur(3px);box-shadow:0 0 60px rgba(0,0,0,.18)}
+@media(prefers-color-scheme:dark){.page{background:rgba(20,20,18,0.88)}}
 .float-edit{position:fixed;top:1rem;right:1rem;z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
 .float-edit-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.3rem .75rem;border:1px solid var(--border2);border-radius:3px;background:var(--surface);color:var(--text2);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .float-edit-btn:hover{border-color:var(--text2);color:var(--text)}
@@ -163,7 +165,7 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 <body>
 <div class="float-edit">
   <button class="float-edit-btn" id="float-edit-btn" onclick="toggleEditMode()">Edit plan</button>
-  <span class="float-edit-hint" id="float-edit-hint">⌘⇧E</span>
+  <span class="float-edit-hint" id="float-edit-hint">Ctrl+Shift+E</span>
 </div>
 <div class="page">
 
@@ -470,7 +472,7 @@ function applyMeta(){
   // set shortcut hint based on platform
   const isMac=navigator.platform.toUpperCase().includes('MAC')||navigator.userAgent.includes('Mac');
   const hint=document.getElementById('float-edit-hint');
-  if(hint)hint.textContent=isMac?'⌘⇧E':'Ctrl+Shift+E';
+  if(hint)hint.textContent=isMac?'Cmd+Shift+E':'Ctrl+Shift+E';
 }
 function applyBgImage(url){
   document.body.style.backgroundImage=url?'url('+JSON.stringify(url)+')':'';
