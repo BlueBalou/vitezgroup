@@ -8,8 +8,13 @@
 :root{--bg:#fafaf8;--surface:#fff;--surface2:#f4f3ef;--border:#e2e0d8;--border2:#cac8be;--text:#1a1917;--text2:#6b6860;--text3:#9c9a93;--green:#1a7a52;--green-bg:#e8f5ee;--blue:#1a5c8a;--blue-bg:#e8f2fa;--amber:#8a5a10;--amber-bg:#fdf3e0;--red:#8a2020;--red-bg:#fde8e8;--accent:#2d6a4f;--r:8px;--rl:12px}
 @media(prefers-color-scheme:dark){:root{--bg:#141412;--surface:#1e1d1b;--surface2:#262522;--border:#2e2c28;--border2:#3a3835;--text:#f0ede6;--text2:#9c9a93;--text3:#6b6860;--green:#4ade9a;--green-bg:#0d2e1f;--blue:#60a5e8;--blue-bg:#0d2035;--amber:#e0a840;--amber-bg:#2a1e08;--red:#e07070;--red-bg:#2a0d0d;--accent:#4ade9a}}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
-.page{max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem}
+body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;background-attachment:fixed;background-size:cover;background-position:center}
+.page{max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem;background:var(--bg)}
+.float-edit{position:fixed;top:1rem;right:1rem;z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.float-edit-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.3rem .75rem;border:1px solid var(--border2);border-radius:3px;background:var(--surface);color:var(--text2);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.float-edit-btn:hover{border-color:var(--text2);color:var(--text)}
+.float-edit-btn.active{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+.float-edit-hint{font-family:'Courier New',monospace;font-size:.62rem;color:var(--text3);text-align:right}
 /* masthead */
 .masthead{border-bottom:2px solid var(--text);padding-bottom:1.25rem;margin-bottom:1.5rem}
 .masthead-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem}
@@ -156,6 +161,10 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
 </style>
 </head>
 <body>
+<div class="float-edit">
+  <button class="float-edit-btn" id="float-edit-btn" onclick="toggleEditMode()">Edit plan</button>
+  <span class="float-edit-hint" id="float-edit-hint">⌘⇧E</span>
+</div>
 <div class="page">
 
 <div class="masthead">
@@ -167,6 +176,7 @@ body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-hei
   </div>
   <div class="masthead-sub" id="mast-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior &nbsp;·&nbsp; 40 MCQ + oral cases</div>
   <input class="mast-sub-input" id="mast-sub-input" value="European Diploma in Musculoskeletal Radiology · Written exam ~3 weeks prior · 40 MCQ + oral cases" oninput="editMeta('subtitle',this.value)">
+  <input class="mast-sub-input" id="mast-bg-input" placeholder="Background image URL (e.g. /bg.jpg or https://...)" style="margin-top:4px;font-style:italic" oninput="editMeta('bgImage',this.value)">
 </div>
 
 <div class="topbar">
@@ -220,7 +230,8 @@ const DEFAULT_META = {
   title:'EDiMSK 2027 — Study Plan',
   subtitle:'European Diploma in Musculoskeletal Radiology · Written exam ~3 weeks prior · 40 MCQ + oral cases',
   examDate:'ECR · Vienna · Feb/Mar 2027',
-  actionText:'Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.'
+  actionText:'Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.',
+  bgImage:''
 };
 
 const DEFAULT_PHASE_CONFIGS = [
@@ -453,6 +464,16 @@ function applyMeta(){
   document.getElementById('action-text').textContent=at;
   document.getElementById('action-text-input').value=at;
   document.title=m.title;
+  applyBgImage(m.bgImage||'');
+  const bgInput=document.getElementById('mast-bg-input');
+  if(bgInput)bgInput.value=m.bgImage||'';
+  // set shortcut hint based on platform
+  const isMac=navigator.platform.toUpperCase().includes('MAC')||navigator.userAgent.includes('Mac');
+  const hint=document.getElementById('float-edit-hint');
+  if(hint)hint.textContent=isMac?'⌘⇧E':'Ctrl+Shift+E';
+}
+function applyBgImage(url){
+  document.body.style.backgroundImage=url?'url('+JSON.stringify(url)+')':'';
 }
 function editMeta(field,val){
   if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
@@ -461,6 +482,7 @@ function editMeta(field,val){
   if(field==='subtitle')document.getElementById('mast-sub').innerHTML=val;
   if(field==='examDate')document.getElementById('exam-date').textContent=val;
   if(field==='actionText')document.getElementById('action-text').textContent=val;
+  if(field==='bgImage')applyBgImage(val);
   debouncedSavePlan();
 }
 
@@ -468,10 +490,18 @@ function editMeta(field,val){
 function toggleEditMode(){
   editMode=!editMode;
   document.body.classList.toggle('edit-mode',editMode);
-  const btn=document.getElementById('edit-toggle-btn');
-  btn.classList.toggle('active',editMode);
-  btn.textContent=editMode?'Done editing':'Edit plan';
+  ['edit-toggle-btn','float-edit-btn'].forEach(id=>{
+    const btn=document.getElementById(id);
+    if(!btn)return;
+    btn.classList.toggle('active',editMode);
+    btn.textContent=editMode?'Done editing':'Edit plan';
+  });
 }
+
+// keyboard shortcut Cmd/Ctrl+Shift+E
+document.addEventListener('keydown',e=>{
+  if(e.key==='E'&&e.shiftKey&&(e.metaKey||e.ctrlKey)){e.preventDefault();toggleEditMode();}
+});
 
 // ── Item helpers ─────────────────────────────────────────────────────────────
 function getItemDone(item){return state[item.id]!==undefined?state[item.id]:(item.done||false);}
