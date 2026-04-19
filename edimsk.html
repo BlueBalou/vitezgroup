@@ -5,490 +5,764 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EDiMSK 2027 — Study Plan</title>
 <style>
-  :root {
-    --bg: #fafaf8; --surface: #ffffff; --surface2: #f4f3ef;
-    --border: #e2e0d8; --border2: #cac8be;
-    --text: #1a1917; --text2: #6b6860; --text3: #9c9a93;
-    --green: #1a7a52; --green-bg: #e8f5ee;
-    --blue: #1a5c8a; --blue-bg: #e8f2fa;
-    --amber: #8a5a10; --amber-bg: #fdf3e0;
-    --red: #8a2020; --red-bg: #fde8e8;
-    --accent: #2d6a4f; --radius: 8px; --radius-lg: 12px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141412; --surface: #1e1d1b; --surface2: #262522;
-      --border: #2e2c28; --border2: #3a3835;
-      --text: #f0ede6; --text2: #9c9a93; --text3: #6b6860;
-      --green: #4ade9a; --green-bg: #0d2e1f;
-      --blue: #60a5e8; --blue-bg: #0d2035;
-      --amber: #e0a840; --amber-bg: #2a1e08;
-      --red: #e07070; --red-bg: #2a0d0d;
-      --accent: #4ade9a;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
-  .page { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-  .masthead { border-bottom: 2px solid var(--text); padding-bottom: 1.25rem; margin-bottom: 2rem; }
-  .masthead-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
-  .masthead h1 { font-size: 1.75rem; font-weight: normal; letter-spacing: -0.02em; color: var(--text); }
-  .masthead-sub { font-size: 0.85rem; color: var(--text2); font-family: 'Courier New', monospace; margin-top: 0.35rem; }
-  .exam-date { font-family: 'Courier New', monospace; font-size: 0.8rem; background: var(--text); color: var(--bg); padding: 0.3rem 0.75rem; border-radius: 3px; white-space: nowrap; }
-  .sync-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
-  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
-  .sync-dot.ok { background: var(--green); }
-  .sync-dot.err { background: var(--red); }
-  .sync-dot.loading { background: var(--amber); }
-  .action-banner { background: var(--amber-bg); border: 1px solid var(--amber); border-radius: var(--radius); padding: 0.9rem 1.1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem; }
-  .action-banner-body { flex: 1; }
-  .action-banner strong { font-size: 0.9rem; color: var(--amber); display: block; margin-bottom: 0.2rem; font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
-  .action-banner p { font-size: 0.85rem; color: var(--text2); }
-  .action-done-btn { background: none; border: 1px solid var(--amber); color: var(--amber); font-size: 0.78rem; padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer; font-family: 'Courier New', monospace; white-space: nowrap; flex-shrink: 0; margin-top: 0.15rem; }
-  .action-done-btn.done { opacity: 0.4; text-decoration: line-through; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-  .stat { background: var(--surface2); border-radius: var(--radius); padding: 0.85rem 1rem; }
-  .stat-label { font-size: 0.72rem; color: var(--text3); font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
-  .stat-value { font-size: 1.5rem; color: var(--text); font-weight: normal; }
-  .progress-track { height: 3px; background: var(--border); margin-bottom: 2rem; }
-  .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s ease; }
-  .schedule { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 2rem; }
-  .schedule-title { font-size: 0.75rem; color: var(--text3); font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.85rem; }
-  .schedule-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .sched-block { background: var(--surface2); border-radius: var(--radius); padding: 0.7rem 0.85rem; }
-  .sched-label { font-size: 0.72rem; font-family: 'Courier New', monospace; color: var(--text3); margin-bottom: 0.25rem; }
-  .sched-hours { font-size: 1.1rem; color: var(--text); }
-  .sched-note { font-size: 0.7rem; color: var(--text3); margin-top: 0.2rem; }
-  .phase { margin-bottom: 2.5rem; }
-  .phase-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; margin-bottom: 1rem; cursor: pointer; user-select: none; }
-  .phase-header:hover .phase-name { color: var(--accent); }
-  .phase-num { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
-  .phase-name { font-size: 1.05rem; font-weight: normal; color: var(--text); flex: 1; }
-  .phase-meta { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text2); }
-  .phase-toggle { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
-  .phase-body { display: flex; flex-direction: column; gap: 8px; }
-  .phase-body.collapsed { display: none; }
-  /* Parent items */
-  .item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.15s; }
-  .item.conditional { border-style: dashed; }
-  .item-header { display: flex; align-items: flex-start; gap: 12px; padding: 0.85rem 1rem; cursor: pointer; }
-  .item-header:hover { background: var(--surface2); border-radius: var(--radius); }
-  .item.done > .item-header { opacity: 0.5; }
-  .item.done > .item-header .item-title { text-decoration: line-through; }
-  .cb { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; border: 1.5px solid var(--border2); border-radius: 3px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; cursor: pointer; }
-  .cb.checked { background: var(--accent); border-color: var(--accent); }
-  .cb svg { display: none; }
-  .cb.checked svg { display: block; }
-  .item-body { flex: 1; min-width: 0; }
-  .item-title { font-size: 0.9rem; color: var(--text); line-height: 1.45; }
-  .item-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
-  .item-hours { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text3); }
-  .tag { font-size: 0.68rem; padding: 2px 7px; border-radius: 3px; font-family: 'Courier New', monospace; letter-spacing: 0.03em; }
-  .tag-green { background: var(--green-bg); color: var(--green); }
-  .tag-blue { background: var(--blue-bg); color: var(--blue); }
-  .tag-amber { background: var(--amber-bg); color: var(--amber); }
-  .tag-red { background: var(--red-bg); color: var(--red); }
-  .tag-optional { background: var(--surface2); color: var(--text3); }
-  .item-note { font-size: 0.8rem; color: var(--text2); margin-top: 5px; line-height: 1.5; font-family: 'Georgia', serif; }
-  .item-link { font-size: 0.78rem; color: var(--accent); margin-top: 3px; display: block; word-break: break-all; }
-  .item-link:hover { text-decoration: underline; }
-  /* Video progress bar */
-  .video-progress { margin-top: 6px; }
-  .video-progress-label { font-family: 'Courier New', monospace; font-size: 0.72rem; color: var(--text3); margin-bottom: 3px; }
-  .video-track { height: 3px; background: var(--border); border-radius: 2px; }
-  .video-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
-  /* Expand toggle */
-  .expand-toggle { font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--text3); margin-left: auto; white-space: nowrap; flex-shrink: 0; padding-left: 8px; }
-  /* Subitems */
-  .subitems { border-top: 1px solid var(--border); padding: 0.5rem 0.75rem 0.75rem; display: flex; flex-direction: column; gap: 5px; }
-  .subitems.collapsed { display: none; }
-  .subitem { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-  .sub-cb { width: 13px; height: 13px; flex-shrink: 0; border: 1.5px solid var(--border2); border-radius: 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
-  .sub-cb.checked { background: var(--accent); border-color: var(--accent); }
-  .sub-cb svg { display: none; }
-  .sub-cb.checked svg { display: block; }
-  .sub-label { font-size: 0.8rem; color: var(--text2); font-family: 'Courier New', monospace; flex-shrink: 0; min-width: 60px; }
-  .sub-note { flex: 1; font-size: 0.78rem; color: var(--text2); background: none; border: none; border-bottom: 1px solid transparent; font-family: 'Georgia', serif; outline: none; width: 100%; cursor: text; }
-  .sub-note:focus { border-bottom-color: var(--border2); }
-  .sub-note::placeholder { color: var(--text3); font-style: italic; }
-  .sub-note.has-value { color: var(--text); }
-  /* Footer */
-  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text3); font-family: 'Courier New', monospace; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-  @media (max-width: 600px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .schedule-grid { grid-template-columns: repeat(2, 1fr); }
-    .masthead-top { flex-direction: column; }
-  }
+:root{--bg:#fafaf8;--surface:#fff;--surface2:#f4f3ef;--border:#e2e0d8;--border2:#cac8be;--text:#1a1917;--text2:#6b6860;--text3:#9c9a93;--green:#1a7a52;--green-bg:#e8f5ee;--blue:#1a5c8a;--blue-bg:#e8f2fa;--amber:#8a5a10;--amber-bg:#fdf3e0;--red:#8a2020;--red-bg:#fde8e8;--accent:#2d6a4f;--r:8px;--rl:12px}
+@media(prefers-color-scheme:dark){:root{--bg:#141412;--surface:#1e1d1b;--surface2:#262522;--border:#2e2c28;--border2:#3a3835;--text:#f0ede6;--text2:#9c9a93;--text3:#6b6860;--green:#4ade9a;--green-bg:#0d2e1f;--blue:#60a5e8;--blue-bg:#0d2035;--amber:#e0a840;--amber-bg:#2a1e08;--red:#e07070;--red-bg:#2a0d0d;--accent:#4ade9a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.page{max-width:840px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.masthead{border-bottom:2px solid var(--text);padding-bottom:1.25rem;margin-bottom:1.5rem}
+.masthead-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem}
+.masthead h1{font-size:1.75rem;font-weight:normal;letter-spacing:-.02em}
+.masthead-sub{font-size:.85rem;color:var(--text2);font-family:'Courier New',monospace;margin-top:.35rem}
+.exam-date{font-family:'Courier New',monospace;font-size:.8rem;background:var(--text);color:var(--bg);padding:.3rem .75rem;border-radius:3px;white-space:nowrap}
+.topbar{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.sync-bar{display:flex;align-items:center;gap:.5rem;font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sync-dot.ok{background:var(--green)}.sync-dot.err{background:var(--red)}.sync-dot.loading{background:var(--amber)}
+.edit-toggle-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.25rem .65rem;border:1px solid var(--border2);border-radius:3px;background:none;color:var(--text2);cursor:pointer;margin-left:auto}
+.edit-toggle-btn.active{border-color:var(--amber);color:var(--amber)}
+.timeline-bar{border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1.5rem}
+.tl-top{display:flex;align-items:baseline;gap:1rem;margin-bottom:.6rem;flex-wrap:wrap}
+.tl-title{font-family:'Courier New',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
+.tl-status{font-family:'Courier New',monospace;font-size:.8rem;font-weight:500}
+.tl-status.on-time{color:var(--green)}.tl-status.behind{color:var(--red)}.tl-status.ahead{color:var(--blue)}
+.tl-detail{font-family:'Courier New',monospace;font-size:.72rem;color:var(--text2);margin-left:auto}
+.tl-track{height:4px;background:var(--border);border-radius:2px;margin-bottom:.5rem;position:relative}
+.tl-expected{position:absolute;top:0;left:0;height:100%;background:var(--border2);border-radius:2px;transition:width .4s}
+.tl-actual{position:absolute;top:0;left:0;height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+.tl-labels{display:flex;justify-content:space-between;font-family:'Courier New',monospace;font-size:.68rem;color:var(--text3)}
+.action-banner{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--r);padding:.9rem 1.1rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:.75rem}
+.action-banner-body{flex:1}
+.action-banner strong{font-size:.9rem;color:var(--amber);display:block;margin-bottom:.2rem;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.05em}
+.action-banner p{font-size:.85rem;color:var(--text2)}
+.action-done-btn{background:none;border:1px solid var(--amber);color:var(--amber);font-size:.78rem;padding:.3rem .7rem;border-radius:4px;cursor:pointer;font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0;margin-top:.15rem}
+.action-done-btn.done{opacity:.4;text-decoration:line-through}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem}
+.stat{background:var(--surface2);border-radius:var(--r);padding:.85rem 1rem}
+.stat-label{font-size:.72rem;color:var(--text3);font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+.stat-value{font-size:1.5rem;color:var(--text)}
+.progress-track{height:3px;background:var(--border);margin-bottom:2rem}
+.progress-fill{height:100%;background:var(--accent);transition:width .4s}
+.schedule{border:1px solid var(--border);border-radius:var(--rl);padding:1.1rem 1.25rem;margin-bottom:2rem}
+.schedule-title{font-size:.75rem;color:var(--text3);font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.85rem}
+.schedule-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sched-block{background:var(--surface2);border-radius:var(--r);padding:.7rem .85rem}
+.sched-label{font-size:.72rem;font-family:'Courier New',monospace;color:var(--text3);margin-bottom:.25rem}
+.sched-hours{font-size:1.1rem;color:var(--text)}
+.sched-note{font-size:.7rem;color:var(--text3);margin-top:.2rem}
+/* phases */
+.phase{margin-bottom:2.5rem}
+.phase-header{display:flex;align-items:center;gap:1rem;border-bottom:1px solid var(--border);padding-bottom:.6rem;margin-bottom:.4rem;cursor:pointer;user-select:none}
+.phase-header:hover .phase-name{color:var(--accent)}
+.phase-num{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0}
+.phase-name{font-size:1.05rem;font-weight:normal;color:var(--text);flex:1}
+.phase-toggle{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3);flex-shrink:0}
+.phase-budget{font-family:'Courier New',monospace;font-size:.72rem;padding:.2rem 0 .5rem}
+.phase-budget.ok{color:var(--green)}.phase-budget.warn{color:var(--amber)}.phase-budget.over{color:var(--red)}
+/* phase config editor — edit mode only */
+.phase-config{display:none;background:var(--surface2);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.75rem;gap:1rem;flex-wrap:wrap;align-items:flex-end}
+.edit-mode .phase-config{display:flex}
+.cfg-field{display:flex;flex-direction:column;gap:3px}
+.cfg-label{font-family:'Courier New',monospace;font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.cfg-input{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text);background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:.2rem .5rem;outline:none;width:70px}
+.cfg-input:focus{border-color:var(--accent)}
+.cfg-derived{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text2);align-self:flex-end;padding-bottom:.25rem}
+.phase-body{display:flex;flex-direction:column;gap:8px}
+.phase-body.collapsed{display:none}
+.phase-add-btn{font-family:'Courier New',monospace;font-size:.75rem;padding:.35rem .75rem;border:1px dashed var(--border2);border-radius:var(--r);background:none;color:var(--text3);cursor:pointer;text-align:left;display:none}
+.phase-add-btn:hover{color:var(--accent);border-color:var(--accent)}
+.edit-mode .phase-add-btn{display:block}
+/* items */
+.item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.item.conditional{border-style:dashed}
+.item-header{display:flex;align-items:flex-start;gap:8px;padding:.85rem 1rem}
+.item-header:hover{background:var(--surface2);border-radius:var(--r)}
+.cb{width:17px;height:17px;flex-shrink:0;margin-top:2px;border:1.5px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s}
+.cb.checked{background:var(--accent);border-color:var(--accent)}
+.cb.partial{background:var(--border2);border-color:var(--border2)}
+.cb svg{display:none}.cb.checked svg,.cb.partial svg{display:block}
+.item-body{flex:1;min-width:0}
+.item-title{font-size:.9rem;color:var(--text);line-height:1.45}
+.field-display{}.field-input{display:none!important}
+.edit-mode .field-display{display:none!important}.edit-mode .field-input{display:block!important}
+.item-title-input{font-size:.9rem;color:var(--text);background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Georgia',serif;line-height:1.45}
+.item-row{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+.item-hours-display{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3)}
+.hours-input{font-family:'Courier New',monospace;font-size:.75rem;color:var(--text3);background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:40px}
+.tag{font-size:.68rem;padding:2px 7px;border-radius:3px;font-family:'Courier New',monospace;letter-spacing:.03em}
+.tag-green{background:var(--green-bg);color:var(--green)}.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-amber{background:var(--amber-bg);color:var(--amber)}.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-optional{background:var(--surface2);color:var(--text3)}
+.item-note{font-size:.8rem;color:var(--text2);margin-top:5px;line-height:1.5}
+.item-note-input{font-size:.8rem;color:var(--text2);margin-top:5px;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Georgia',serif}
+.item-link{font-size:.78rem;color:var(--accent);margin-top:3px;display:block;word-break:break-all}
+.item-link:hover{text-decoration:underline}
+.item-link-input{font-size:.78rem;color:var(--accent);margin-top:3px;background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:100%;font-family:'Courier New',monospace}
+.sub-progress{margin-top:6px}
+.sub-progress-label{font-family:'Courier New',monospace;font-size:.72rem;color:var(--text3);margin-bottom:3px}
+.sub-track{height:3px;background:var(--border);border-radius:2px}
+.sub-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+.expand-toggle{font-family:'Courier New',monospace;font-size:.7rem;color:var(--text3);white-space:nowrap;flex-shrink:0;padding-left:4px;cursor:pointer;align-self:flex-start;margin-top:4px}
+/* order arrows */
+.order-btns{display:none;flex-direction:column;gap:2px;flex-shrink:0;margin-top:1px}
+.edit-mode .order-btns{display:flex}
+.order-btn{font-family:'Courier New',monospace;font-size:.65rem;background:none;border:1px solid var(--border2);border-radius:2px;color:var(--text3);cursor:pointer;padding:0 4px;line-height:1.4}
+.order-btn:hover{color:var(--text);border-color:var(--text2)}
+/* edit controls */
+.item-edit-controls{display:none;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.edit-mode .item-edit-controls{display:flex}
+.edit-btn{font-family:'Courier New',monospace;font-size:.68rem;padding:2px 8px;border:1px solid var(--border2);border-radius:3px;background:none;color:var(--text3);cursor:pointer}
+.edit-btn:hover{color:var(--text);border-color:var(--text2)}
+.edit-btn.del{border-color:var(--red);color:var(--red)}.edit-btn.del:hover{background:var(--red-bg)}
+/* subitems */
+.subitems{border-top:1px solid var(--border);padding:.5rem .75rem .75rem;display:flex;flex-direction:column;gap:4px}
+.subitems.collapsed{display:none}
+.subitem{display:flex;align-items:center;gap:8px;padding:3px 0}
+.sub-cb{width:13px;height:13px;flex-shrink:0;border:1.5px solid var(--border2);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,border-color .15s}
+.sub-cb.checked{background:var(--accent);border-color:var(--accent)}
+.sub-cb svg{display:none}.sub-cb.checked svg{display:block}
+.sub-order-btns{display:none;gap:2px;flex-shrink:0}
+.edit-mode .sub-order-btns{display:flex}
+.sub-order-btn{font-family:'Courier New',monospace;font-size:.6rem;background:none;border:1px solid var(--border2);border-radius:2px;color:var(--text3);cursor:pointer;padding:0 3px;line-height:1.4}
+.sub-order-btn:hover{color:var(--text)}
+.sub-label{font-family:'Courier New',monospace;font-size:.72rem;color:var(--text3);flex-shrink:0;min-width:48px}
+.sub-hours-display{font-family:'Courier New',monospace;font-size:.7rem;color:var(--text3);flex-shrink:0;min-width:28px}
+.sub-hours-input{font-family:'Courier New',monospace;font-size:.7rem;color:var(--text3);background:none;border:none;border-bottom:1px solid var(--border2);outline:none;width:36px;flex-shrink:0;display:none}
+.edit-mode .sub-hours-display{display:none}.edit-mode .sub-hours-input{display:block}
+.sub-note{flex:1;font-size:.78rem;color:var(--text2);background:none;border:none;border-bottom:1px solid transparent;font-family:'Georgia',serif;outline:none;width:100%;cursor:text}
+.sub-note:focus{border-bottom-color:var(--border2)}
+.sub-note.has-value{color:var(--text)}
+.sub-del-btn{display:none;font-family:'Courier New',monospace;font-size:.65rem;color:var(--red);background:none;border:none;cursor:pointer;flex-shrink:0;padding:0 4px}
+.edit-mode .sub-del-btn{display:block}
+.sub-add-btn{display:none;font-family:'Courier New',monospace;font-size:.72rem;color:var(--text3);background:none;border:1px dashed var(--border2);border-radius:3px;cursor:pointer;padding:3px 10px;margin-top:4px}
+.sub-add-btn:hover{color:var(--accent);border-color:var(--accent)}
+.edit-mode .sub-add-btn{display:block}
+.footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--text3);font-family:'Courier New',monospace;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.schedule-grid{grid-template-columns:repeat(2,1fr)}.masthead-top{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="masthead">
-    <div class="masthead-top">
-      <h1>EDiMSK 2027 — Study Plan</h1>
-      <span class="exam-date">ECR · Vienna · Feb/Mar 2027</span>
-    </div>
-    <div class="masthead-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior to congress &nbsp;·&nbsp; 40 MCQ + oral cases</div>
+<div class="masthead">
+  <div class="masthead-top"><h1>EDiMSK 2027 — Study Plan</h1><span class="exam-date">ECR · Vienna · Feb/Mar 2027</span></div>
+  <div class="masthead-sub">European Diploma in Musculoskeletal Radiology &nbsp;·&nbsp; Written exam ~3 weeks prior &nbsp;·&nbsp; 40 MCQ + oral cases</div>
+</div>
+<div class="topbar">
+  <div class="sync-bar"><div class="sync-dot loading" id="sync-dot"></div><span id="sync-label">connecting...</span></div>
+  <button class="edit-toggle-btn" id="edit-toggle-btn" onclick="toggleEditMode()">Edit plan</button>
+</div>
+<div class="timeline-bar">
+  <div class="tl-top">
+    <span class="tl-title">Timeline</span>
+    <span class="tl-status" id="tl-status">—</span>
+    <span class="tl-detail" id="tl-detail">—</span>
   </div>
-  <div class="sync-bar">
-    <div class="sync-dot loading" id="sync-dot"></div>
-    <span id="sync-label">connecting...</span>
+  <div class="tl-track">
+    <div class="tl-expected" id="tl-expected" style="width:0%"></div>
+    <div class="tl-actual" id="tl-actual" style="width:0%"></div>
   </div>
-  <div class="action-banner" id="action-banner">
-    <div class="action-banner-body">
-      <strong>Administrative — do now</strong>
-      <p>Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</p>
-    </div>
-    <button class="action-done-btn" id="action-btn" onclick="toggleAction()">Mark done</button>
+  <div class="tl-labels"><span>Apr 19 2026</span><span>Jun 30</span><span>Sep 30</span><span>Nov 30</span><span>Mar 7 2027</span></div>
+</div>
+<div class="action-banner" id="action-banner">
+  <div class="action-banner-body">
+    <strong>Administrative — do now</strong>
+    <p>Send confirmation email to ESSR/ECR that you intend to sit the EDiMSK at ECR 2027. You have already been deemed eligible. Check essr.org/diploma/ for the application deadline and required documents list.</p>
   </div>
-  <div class="stats-grid">
-    <div class="stat"><div class="stat-label">Total hours</div><div class="stat-value" id="s-total">0</div></div>
-    <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div></div>
-    <div class="stat"><div class="stat-label">Remaining</div><div class="stat-value" id="s-items">0</div></div>
-    <div class="stat"><div class="stat-label">Progress</div><div class="stat-value" id="s-pct">0%</div></div>
-  </div>
-  <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
-  <div class="schedule">
-    <div class="schedule-title">Study time budget</div>
-    <div class="schedule-grid">
-      <div class="sched-block"><div class="sched-label">Phase 1 · Q2 2026</div><div class="sched-hours">~44 h</div><div class="sched-note">4 h/week · mid-Apr – Jun</div></div>
-      <div class="sched-block"><div class="sched-label">Phase 2 · Q3 2026</div><div class="sched-hours">~78 h</div><div class="sched-note">6 h/week · Thu + weekend</div></div>
-      <div class="sched-block"><div class="sched-label">Phase 3 · Oct–Nov 2026</div><div class="sched-hours">~54 h</div><div class="sched-note">6 h/week · Mon + weekend</div></div>
-      <div class="sched-block"><div class="sched-label">Phase 4 · Dec–Mar 2027</div><div class="sched-hours">~114 h</div><div class="sched-note">8 h/week + Jan study week (42 h)</div></div>
-    </div>
-  </div>
-  <div id="phases-container"></div>
-  <div class="footer">
-    <span>Last updated: April 2026</span>
-    <span id="footer-stats"></span>
-  </div>
+  <button class="action-done-btn" id="action-btn" onclick="toggleAction()">Mark done</button>
+</div>
+<div class="stats-grid">
+  <div class="stat"><div class="stat-label">Total hours</div><div class="stat-value" id="s-total">0</div></div>
+  <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div></div>
+  <div class="stat"><div class="stat-label">Remaining items</div><div class="stat-value" id="s-items">0</div></div>
+  <div class="stat"><div class="stat-label">Progress</div><div class="stat-value" id="s-pct">0%</div></div>
+</div>
+<div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+<div class="schedule">
+  <div class="schedule-title">Study time budget</div>
+  <div class="schedule-grid" id="schedule-grid"></div>
+</div>
+<div id="phases-container"></div>
+<div class="footer"><span>Last updated: April 2026</span><span id="footer-stats"></span></div>
 </div>
 <script>
-const RCL_VIDEOS = [
-  {label:'AI-01', title:'MR Acceleration Via Deep Learning — Recht'},
-  {label:'TR-01', title:'Upper Extremity Injuries: Importance of Radiographs — Gyftopoulos'},
-  {label:'TR-02', title:'Pelvis and Hip Trauma — Blankenbaker'},
-  {label:'TR-03', title:'Key Lower Extremity Injuries — Resnik'},
-  {label:'TR-04', title:'Skeletal Trauma: Axial Skeleton — Pathria'},
-  {label:'TR-05', title:'Pediatric Fractures — Laor'},
-  {label:'TR-06', title:'Normal Fracture Healing — Rubin'},
-  {label:'TR-07', title:'Abnormal Fracture Healing — Rubin'},
-  {label:'TR-08', title:'Stress Injuries of Bone — Anderson'},
-  {label:'TR-09', title:'Orthopaedic Imaging: Principles of Fracture Fixation — Weissman'},
-  {label:'AR-01', title:'Target Area Approach to Arthritis — Resnick'},
-  {label:'AR-02', title:'Osteoarthritis — Rubin'},
-  {label:'AR-03', title:'Crystal Arthropathy: Gout, CPPD and HADD — Murphey'},
-  {label:'AR-04', title:'Degenerative and Inflammatory Disorders of Vertebral Column — Resnick'},
-  {label:'AR-05', title:'Connective Tissue Disorders — Bredella'},
-  {label:'AR-06', title:'Renal Osteodystrophy — Lenchik'},
-  {label:'AR-07', title:"Paget's Disease of Bone — Fayad"},
-  {label:'AR-08', title:'Osteoporosis — Petchprapa'},
-  {label:'AR-09', title:'Radiographic Analysis of the Prosthetic Hip — Miller'},
-  {label:'AR-10', title:'Crystal Deposition Disease — Klein'},
-  {label:'TU-01', title:'Approach to Bone Tumours — (SSR/ISS faculty)'},
-  {label:'TU-02', title:'Benign Bone Tumours — (SSR/ISS faculty)'},
-  {label:'TU-03', title:'Malignant Bone Tumours — (SSR/ISS faculty)'},
-  {label:'TU-04', title:'Bone Marrow Disorders — (SSR/ISS faculty)'},
-  {label:'TU-05', title:'Soft Tissue Tumours — (SSR/ISS faculty)'},
-  {label:'IN-01', title:'Musculoskeletal Infection — (SSR/ISS faculty)'},
-  {label:'IN-02', title:'Septic Arthritis and Osteomyelitis — (SSR/ISS faculty)'},
-  {label:'MR-01', title:'Basic Principles of MSK MRI — (SSR/ISS faculty)'},
-  {label:'MR-02', title:'Shoulder MRI: Rotator Cuff — (SSR/ISS faculty)'},
-  {label:'MR-03', title:'Shoulder MRI: Instability — (SSR/ISS faculty)'},
-  {label:'MR-04', title:'Knee MRI: Menisci — (SSR/ISS faculty)'},
-  {label:'MR-05', title:'Knee MRI: Ligaments — (SSR/ISS faculty)'},
-  {label:'MR-06', title:'Hip MRI — (SSR/ISS faculty)'},
-  {label:'MR-07', title:'Ankle and Foot MRI — (SSR/ISS faculty)'},
-  {label:'MR-08', title:'Wrist and Hand MRI — (SSR/ISS faculty)'},
-  {label:'MR-09', title:'Elbow MRI — (SSR/ISS faculty)'},
-  {label:'SP-01', title:'Spine: Basics of Spine Surgery — (SSR/ISS faculty)'},
-  {label:'SP-02', title:'Spine: Disc Disease and Stenosis — (SSR/ISS faculty)'},
-  {label:'US-01', title:'MSK Ultrasound: Principles — (SSR/ISS faculty)'},
-  {label:'US-02', title:'MSK Ultrasound: Tendons and Soft Tissue — (SSR/ISS faculty)'},
-  {label:'PD-01', title:'Paediatric MSK: Congenital Disorders — (SSR/ISS faculty)'},
-  {label:'PD-02', title:'Paediatric MSK: Metabolic and Developmental — (SSR/ISS faculty)'}
+const TL_START = new Date('2026-04-19');
+const TL_END   = new Date('2027-03-07');
+
+// Phase date boundaries for expected hours calculation
+const PHASE_DATES = [
+  {start:new Date('2026-04-19'), end:new Date('2026-06-30')},
+  {start:new Date('2026-07-01'), end:new Date('2026-09-30')},
+  {start:new Date('2026-10-01'), end:new Date('2026-11-30')},
+  {start:new Date('2026-12-01'), end:new Date('2027-03-07')}
 ];
 
-function makeVideoSlots(count, prefix) {
-  return Array.from({length: count}, (_, i) => ({
-    label: prefix + '-' + String(i+1).padStart(2,'0'),
-    title: ''
-  }));
+function makeSubs(n, prefix, h) {
+  return Array.from({length:n},(_,i)=>({id:prefix+'-s'+i,label:prefix.replace(/[^a-z0-9]/gi,'').toUpperCase().slice(0,2)+'-'+String(i+1).padStart(2,'0'),note:'',hours:h}));
 }
 
-const PHASES = [
-  {
-    id:'p1', num:'Phase 1', name:'Foundations & orientation',
-    period:'Q2 2026 · mid-Apr – Jun · ~44 h available · 4 h/week',
-    tag:'tag-green', tagLabel:'Phase 1',
-    items:[
-      {id:'p1-action', title:'Read the three official ESSR exam preparation articles', hours:3, note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), and webinar programme paper. Free PDFs at essr.org/diploma/ — the most important thing to read first.', link:'https://www.essr.org/diploma/', done:false},
-      {id:'p1-etcsr', title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)', hours:2, note:'Defines the 27 topic areas tested. Use as your master checklist — every study item maps back to it.', link:'https://www.myesr.org/education/training-curricula/', done:false},
-      {id:'p1-anki', title:'Set up Anki deck structure — one subdeck per ETCSR topic area', hours:1, note:'Create 27 subdecks before adding any cards. Prevents a disorganised backlog. Add cards continuously from Phase 1 through Phase 3.', done:false},
-      {id:'p1-elearn', title:'ESSR e-learning platform — complete selected lectures', hours:20, note:'Structured library at essr.org/e-learning/ organised by subcommittee domain. Free for active ESSR members. Start here. Generate Anki cards throughout.', link:'https://www.essr.org/e-learning/', done:false, videos: makeVideoSlots(20, 'EL')},
-      {id:'p1-webinars', title:'ESSR webinar archive — systematic sweep by subcommittee', hours:15, note:'Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions.', link:'https://www.essr.org/education/webinars/', done:false, videos: makeVideoSlots(15, 'WB')},
-      {id:'p1-samples', title:'Work through the 10 official sample MCQs and 10 sample oral cases', hours:2, note:'From the official prep articles at essr.org/diploma/. Already completed from a previous cycle — mark done if content has not changed since.', link:'https://www.essr.org/diploma/', done:true}
-    ]
-  },
-  {
-    id:'p2', num:'Phase 2', name:'Video content — targeted by curriculum gap',
-    period:'Q3 2026 · Jul – Sep · ~78 h available · 6 h/week',
-    tag:'tag-blue', tagLabel:'Phase 2',
-    items:[
-      {id:'p2-corelec', title:'Radiology Core Lectures MSK — selected lectures', hours:15, note:'42 open-access lectures by SSR/ISS faculty. All listed below — pick 15 based on ETCSR gaps from Phase 1. Free at radiologycorelectures.org/msk/', link:'https://radiologycorelectures.org/msk/', done:false, videos: RCL_VIDEOS},
-      {id:'p2-radiopaedia', title:'Radiopaedia MSK courses — bone lesions pathway + spine courses', hours:8, note:'Matt Skalski video lectures with interactive case content. Strong on bone lesion approach and spine.', link:'https://radiopaedia.org/courses/official-courses', done:false, videos: makeVideoSlots(8, 'RP')},
-      {id:'p2-essr2025', title:'ESSR Annual Congress 2025 VoD — MSK educational sessions', hours:12, note:'Via ESR Connect. Prioritise educational and case-based sessions. Cross-reference against ETCSR gaps from Phase 1.', link:'https://connect.myesr.org/', done:false, videos: makeVideoSlots(12, 'ES')},
-      {id:'p2-davos', title:'Davos Radiology 2026 VoD — MSK and sports imaging content', hours:10, note:'Historically strong on MSK MRI and sports imaging. Prioritise by ETCSR gap rather than watching systematically.', done:false, videos: makeVideoSlots(10, 'DV')},
-      {id:'p2-ecr2025', title:'ECR 2025 VoD — MSK sessions (E³ Advanced Courses and Refresher Courses)', hours:8, note:'Via ESR Connect (ESR Premium Education Package required). The E³ Advanced Courses are most directly aligned with Level III curriculum objectives.', link:'https://connect.myesr.org/', done:false, videos: makeVideoSlots(8, 'EC')},
-      {id:'p2-issr', title:'ISS / SSR core lecture videos — tumour and metabolic bone content', hours:6, note:'Free, via skeletalrad.org and ISS website. Strong on bone tumour classification and metabolic bone disease.', link:'https://skeletalrad.org/msk-core-lecture-series', done:false, videos: makeVideoSlots(6, 'IS')}
-    ]
-  },
-  {
-    id:'p3', num:'Phase 3', name:'Case-based work & reading',
-    period:'Oct – Nov 2026 · ~54 h available · 6 h/week',
-    tag:'tag-amber', tagLabel:'Phase 3',
-    items:[
-      {id:'p3-auntminnie', title:'Aunt Minnie MSK cases — systematic case review', hours:10, note:'Pattern recognition for classic presentations. Simulate exam conditions — commit to one diagnosis before checking the answer.', link:'https://www.auntminnie.com/', done:false},
-      {id:'p3-radassist', title:'Radiology Assistant — MSK modules', hours:6, note:'Free, European-authored. Particularly strong on arthritis patterns, knee MRI, and orthopaedic hardware.', link:'https://www.radiologyassistant.nl/musculoskeletal', done:false},
-      {id:'p3-crack', title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)', hours:12, note:'Efficient for MCQ trivia: percentages, associations, classification systems, eponyms. Complement to video work.', done:false},
-      {id:'p3-sports', title:'ESSR MRI Guidelines for Sports Injuries — full read', hours:3, note:'Official ESSR document. Directly relevant to oral exam cases given the prominence of the Sports Imaging subcommittee.', link:'https://www.essr.org/', done:false},
-      {id:'p3-resnick', title:'Resnick & Kransdorf — targeted chapter review', hours:8, note:'Use only if a specific ETCSR domain is not adequately covered by video resources. Most useful for: metabolic bone disease, crystal arthropathies, soft tissue tumours.', conditional:true, done:false},
-      {id:'p3-helms', title:'Helms et al. Musculoskeletal MRI — targeted joint chapters', hours:5, note:'Selective use only. Useful if specific joint MRI topics remain weak after Phase 2.', conditional:true, done:false}
-    ]
-  },
-  {
-    id:'p4', num:'Phase 4', name:'Consolidation & exam simulation',
-    period:'Dec 2026 – Mar 2027 · ~114 h available · 8 h/week + Jan study week (42 h)',
-    tag:'tag-red', tagLabel:'Phase 4',
-    items:[
-      {id:'p4-anki', title:'Anki intensive review — daily, increasing to 45–60 min/day', hours:20, note:'In Phase 4: increase to 45–60 min/day. Filter by lapse count to focus on persistent gaps. Do not skip more than 2 days.', done:false},
-      {id:'p4-gaps', title:'Second-pass video or reading on weak ETCSR domains', hours:15, note:'Identify which ETCSR subdecks have the highest Anki miss-rate. Return to the most targeted resource for those domains only.', done:false},
-      {id:'p4-oral', title:'Oral case practice — structured case presentations aloud', hours:10, note:'Practice presenting cases to a colleague or recording yourself. Structure: modality → findings → diagnosis → differential → management principle.', done:false},
-      {id:'p4-janweek', title:'January 2027 dedicated study week — 6 h/day, 7 days (42 h)', hours:42, note:'Days 1–3: Anki intensive and gap identification. Days 4–5: oral case simulation. Days 6–7: final MCQ practice and weak-area reading.', done:false},
-      {id:'p4-written', title:'Final written exam simulation — timed MCQ practice', hours:3, note:'Two timed 60-minute sessions of 40 MCQs in the final 2 weeks before the written exam.', done:false},
-      {id:'p4-logistics', title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel', hours:1, note:'Confirm both exam dates on essr.org/diploma/ once ECR 2027 dates are published. Book accommodation early.', link:'https://www.essr.org/diploma/', done:false}
-    ]
-  }
+const DEFAULT_PHASE_CONFIGS = [
+  {hpw:4,  dedicatedDays:0, hoursPerDay:6},
+  {hpw:6,  dedicatedDays:0, hoursPerDay:6},
+  {hpw:6,  dedicatedDays:0, hoursPerDay:6},
+  {hpw:8,  dedicatedDays:7, hoursPerDay:6}
 ];
 
-let state = {};
-let saveTimeout = null;
+const DEFAULT_PLAN = {
+  phaseConfigs: JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS)),
+  phases:[
+  {id:'p1',num:'Phase 1',name:'Foundations & orientation',period:'Q2 2026 · mid-Apr – Jun',items:[
+    {id:'p1-action',title:'Read the three official ESSR exam preparation articles',hours:3,note:'Written exam guide (10 sample MCQs), oral exam guide (10 sample cases), webinar programme paper. Free PDFs at essr.org/diploma/',link:'https://www.essr.org/diploma/',done:false,subs:[]},
+    {id:'p1-etcsr',title:'Download and annotate the ESR Level III MSK curriculum (ETCSR)',hours:2,note:'Defines the 27 topic areas tested. Use as your master checklist.',link:'https://www.myesr.org/education/training-curricula/',done:false,subs:[]},
+    {id:'p1-anki',title:'Set up Anki deck structure — one subdeck per ETCSR topic area',hours:1,note:'Create 27 subdecks before adding any cards. Add cards continuously from Phase 1 through Phase 3.',done:false,subs:[]},
+    {id:'p1-elearn',title:'ESSR e-learning platform — selected lectures',hours:20,note:'Structured library at essr.org/e-learning/ by subcommittee domain. Free for ESSR members. Generate Anki cards throughout.',link:'https://www.essr.org/e-learning/',done:false,subs:makeSubs(20,'el',1)},
+    {id:'p1-webinars',title:'ESSR webinar archive — sweep by subcommittee',hours:15,note:'Work through by ETCSR domain: arthritis, tumours, spine, sports, ultrasound, paediatric, osteoporosis/metabolic, interventions.',link:'https://www.essr.org/education/webinars/',done:false,subs:makeSubs(15,'wb',1)},
+    {id:'p1-samples',title:'Work through the 10 official sample MCQs and 10 sample oral cases',hours:2,note:'Already completed from a previous cycle — mark done if content has not changed since.',link:'https://www.essr.org/diploma/',done:true,subs:[]}
+  ]},
+  {id:'p2',num:'Phase 2',name:'Video content — targeted by curriculum gap',period:'Q3 2026 · Jul – Sep',items:[
+    {id:'p2-corelec',title:'Radiology Core Lectures MSK — selected lectures',hours:15,note:'42 open-access lectures by SSR/ISS faculty. Pick ~15 based on ETCSR gaps from Phase 1.',link:'https://radiologycorelectures.org/msk/',done:false,subs:[
+      {id:'p2-corelec-s0', label:'AI-01',note:'MR Acceleration Via Deep Learning — Recht',hours:1},
+      {id:'p2-corelec-s1', label:'TR-01',note:'Upper Extremity Injuries: Radiographs — Gyftopoulos',hours:1},
+      {id:'p2-corelec-s2', label:'TR-02',note:'Pelvis and Hip Trauma — Blankenbaker',hours:1},
+      {id:'p2-corelec-s3', label:'TR-03',note:'Key Lower Extremity Injuries — Resnik',hours:1},
+      {id:'p2-corelec-s4', label:'TR-04',note:'Skeletal Trauma: Axial Skeleton — Pathria',hours:1},
+      {id:'p2-corelec-s5', label:'TR-05',note:'Pediatric Fractures — Laor',hours:1},
+      {id:'p2-corelec-s6', label:'TR-06',note:'Normal Fracture Healing — Rubin',hours:1},
+      {id:'p2-corelec-s7', label:'TR-07',note:'Abnormal Fracture Healing — Rubin',hours:1},
+      {id:'p2-corelec-s8', label:'TR-08',note:'Stress Injuries of Bone — Anderson',hours:1},
+      {id:'p2-corelec-s9', label:'TR-09',note:'Orthopaedic Imaging: Fracture Fixation — Weissman',hours:1},
+      {id:'p2-corelec-s10',label:'AR-01',note:'Target Area Approach to Arthritis — Resnick',hours:1},
+      {id:'p2-corelec-s11',label:'AR-02',note:'Osteoarthritis — Rubin',hours:1},
+      {id:'p2-corelec-s12',label:'AR-03',note:'Crystal Arthropathy: Gout, CPPD, HADD — Murphey',hours:1},
+      {id:'p2-corelec-s13',label:'AR-04',note:'Degenerative/Inflammatory Vertebral Column — Resnick',hours:1},
+      {id:'p2-corelec-s14',label:'AR-05',note:'Connective Tissue Disorders — Bredella',hours:1},
+      {id:'p2-corelec-s15',label:'AR-06',note:'Renal Osteodystrophy — Lenchik',hours:1},
+      {id:'p2-corelec-s16',label:'AR-07',note:"Paget's Disease of Bone — Fayad",hours:1},
+      {id:'p2-corelec-s17',label:'AR-08',note:'Osteoporosis — Petchprapa',hours:1},
+      {id:'p2-corelec-s18',label:'AR-09',note:'Radiographic Analysis of Prosthetic Hip — Miller',hours:1},
+      {id:'p2-corelec-s19',label:'AR-10',note:'Crystal Deposition Disease — Klein',hours:1},
+      {id:'p2-corelec-s20',label:'TU-01',note:'Approach to Bone Tumours',hours:1},
+      {id:'p2-corelec-s21',label:'TU-02',note:'Benign Bone Tumours',hours:1},
+      {id:'p2-corelec-s22',label:'TU-03',note:'Malignant Bone Tumours',hours:1},
+      {id:'p2-corelec-s23',label:'TU-04',note:'Bone Marrow Disorders',hours:1},
+      {id:'p2-corelec-s24',label:'TU-05',note:'Soft Tissue Tumours',hours:1},
+      {id:'p2-corelec-s25',label:'IN-01',note:'Musculoskeletal Infection',hours:1},
+      {id:'p2-corelec-s26',label:'IN-02',note:'Septic Arthritis and Osteomyelitis',hours:1},
+      {id:'p2-corelec-s27',label:'MR-01',note:'Basic Principles of MSK MRI',hours:1},
+      {id:'p2-corelec-s28',label:'MR-02',note:'Shoulder MRI: Rotator Cuff',hours:1},
+      {id:'p2-corelec-s29',label:'MR-03',note:'Shoulder MRI: Instability',hours:1},
+      {id:'p2-corelec-s30',label:'MR-04',note:'Knee MRI: Menisci',hours:1},
+      {id:'p2-corelec-s31',label:'MR-05',note:'Knee MRI: Ligaments',hours:1},
+      {id:'p2-corelec-s32',label:'MR-06',note:'Hip MRI',hours:1},
+      {id:'p2-corelec-s33',label:'MR-07',note:'Ankle and Foot MRI',hours:1},
+      {id:'p2-corelec-s34',label:'MR-08',note:'Wrist and Hand MRI',hours:1},
+      {id:'p2-corelec-s35',label:'MR-09',note:'Elbow MRI',hours:1},
+      {id:'p2-corelec-s36',label:'SP-01',note:'Spine: Basics of Spine Surgery',hours:1},
+      {id:'p2-corelec-s37',label:'SP-02',note:'Spine: Disc Disease and Stenosis',hours:1},
+      {id:'p2-corelec-s38',label:'US-01',note:'MSK Ultrasound: Principles',hours:1},
+      {id:'p2-corelec-s39',label:'US-02',note:'MSK Ultrasound: Tendons and Soft Tissue',hours:1},
+      {id:'p2-corelec-s40',label:'PD-01',note:'Paediatric MSK: Congenital Disorders',hours:1},
+      {id:'p2-corelec-s41',label:'PD-02',note:'Paediatric MSK: Metabolic and Developmental',hours:1}
+    ]},
+    {id:'p2-radiopaedia',title:'Radiopaedia MSK courses — bone lesions + spine pathways',hours:8,note:'Matt Skalski video lectures with interactive case content.',link:'https://radiopaedia.org/courses/official-courses',done:false,subs:makeSubs(8,'rp',1)},
+    {id:'p2-essr2025',title:'ESSR Annual Congress 2025 VoD — MSK educational sessions',hours:12,note:'Via ESR Connect. Prioritise educational and case-based sessions.',link:'https://connect.myesr.org/',done:false,subs:makeSubs(12,'es',1)},
+    {id:'p2-davos',title:'Davos Radiology 2026 VoD — MSK and sports imaging content',hours:10,note:'Historically strong on MSK MRI and sports imaging.',done:false,subs:makeSubs(10,'dv',1)},
+    {id:'p2-ecr2025',title:'ECR 2025 VoD — E³ Advanced Courses and Refresher Courses',hours:8,note:'Via ESR Connect (ESR Premium Education Package required).',link:'https://connect.myesr.org/',done:false,subs:makeSubs(8,'ec',1)},
+    {id:'p2-issr',title:'ISS / SSR core lecture videos — tumour and metabolic bone content',hours:6,note:'Free, via skeletalrad.org. Strong on bone tumours and metabolic bone disease.',link:'https://skeletalrad.org/msk-core-lecture-series',done:false,subs:makeSubs(6,'is',1)}
+  ]},
+  {id:'p3',num:'Phase 3',name:'Case-based work & reading',period:'Oct – Nov 2026',items:[
+    {id:'p3-auntminnie',title:'Aunt Minnie MSK cases — systematic case review',hours:10,note:'Pattern recognition for classic presentations. Simulate exam conditions.',link:'https://www.auntminnie.com/',done:false,subs:[]},
+    {id:'p3-radassist',title:'Radiology Assistant — MSK modules',hours:6,note:'Free, European-authored. Strong on arthritis patterns, knee MRI, orthopaedic hardware.',link:'https://www.radiologyassistant.nl/musculoskeletal',done:false,subs:[]},
+    {id:'p3-crack',title:'Crack the Core Vol. 2 — MSK chapter (read + Anki)',hours:12,note:'Efficient for MCQ trivia: percentages, associations, classification systems, eponyms.',done:false,subs:[]},
+    {id:'p3-sports',title:'ESSR MRI Guidelines for Sports Injuries — full read',hours:3,note:'Official ESSR document. Directly relevant to oral exam cases.',link:'https://www.essr.org/',done:false,subs:[]},
+    {id:'p3-resnick',title:'Resnick & Kransdorf — targeted chapter review',hours:8,note:'Use only if ETCSR domains not covered by video resources. Most useful for: metabolic bone, crystal arthropathies, soft tissue tumours.',done:false,subs:[]},
+    {id:'p3-helms',title:'Helms et al. Musculoskeletal MRI — targeted joint chapters',hours:5,note:'Selective use only if joint MRI topics remain weak after Phase 2.',done:false,subs:[]}
+  ]},
+  {id:'p4',num:'Phase 4',name:'Consolidation & exam simulation',period:'Dec 2026 – Mar 2027',items:[
+    {id:'p4-buffer',title:'Buffer — unallocated study time',hours:26,note:'Placeholder for unallocated budget hours. Reduce as new items are added; remove when fully allocated.',done:false,subs:[]},
+    {id:'p4-anki',title:'Anki intensive review — daily, increasing to 45–60 min/day',hours:20,note:'Filter by lapse count. Do not skip more than 2 days.',done:false,subs:[]},
+    {id:'p4-gaps',title:'Second-pass video or reading on weak ETCSR domains',hours:15,note:'Use Anki miss-rate by subdeck to identify which domains need reinforcement.',done:false,subs:[]},
+    {id:'p4-oral',title:'Oral case practice — structured case presentations aloud',hours:10,note:'Structure: modality → findings → diagnosis → differential → management principle.',done:false,subs:[]},
+    {id:'p4-janweek',title:'January 2027 dedicated study week — 6 h/day × 7 days (42 h)',hours:42,note:'Days 1–3: Anki and gap identification. Days 4–5: oral case simulation. Days 6–7: MCQ practice.',done:false,subs:[]},
+    {id:'p4-written',title:'Final written exam simulation — timed MCQ practice',hours:3,note:'Two timed 60-minute sessions of 40 MCQs in the final 2 weeks before the written exam.',done:false,subs:[]},
+    {id:'p4-logistics',title:'Confirm exam logistics — written exam access, oral exam venue, Vienna travel and hotel',hours:1,note:'Book accommodation early — Vienna during ECR fills quickly.',link:'https://www.essr.org/diploma/',done:false,subs:[]}
+  ]}
+]};
 
-async function loadState() {
+// ── State & plan ────────────────────────────────────────────────────────────
+let plan = {}, state = {}, editMode = false;
+let saveStateTO = null, savePlanTO = null;
+function uid(){return Math.random().toString(36).slice(2,8);}
+
+// ── Hours helpers ────────────────────────────────────────────────────────────
+function itemEffectiveHours(item){
+  if(item.subs&&item.subs.length>0) return item.subs.reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
+  return parseFloat(item.hours)||0;
+}
+function itemCompletedHours(item){
+  if(item.subs&&item.subs.length>0) return item.subs.filter(s=>state['sub-'+s.id]).reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
+  return getItemDone(item)?(parseFloat(item.hours)||0):0;
+}
+function totalPlannedHours(){return (plan.phases||[]).flatMap(p=>p.items).reduce((a,i)=>a+itemEffectiveHours(i),0);}
+function totalCompletedHours(){return (plan.phases||[]).flatMap(p=>p.items).reduce((a,i)=>a+itemCompletedHours(i),0);}
+
+// ── Phase config helpers ────────────────────────────────────────────────────
+function phaseConfig(idx){return (plan.phaseConfigs&&plan.phaseConfigs[idx])||DEFAULT_PHASE_CONFIGS[idx]||{hpw:4,dedicatedDays:0,hoursPerDay:6};}
+function phaseBudget(idx){
+  const cfg=phaseConfig(idx);
+  const pd=PHASE_DATES[idx];
+  const weeks=(pd.end-pd.start)/(7*24*3600*1000);
+  return Math.round((weeks*cfg.hpw + cfg.dedicatedDays*cfg.hoursPerDay)*10)/10;
+}
+function totalBudget(){return PHASE_DATES.map((_,i)=>phaseBudget(i)).reduce((a,b)=>a+b,0);}
+function unallocatedHours(){return Math.round((totalBudget()-totalPlannedHours())*10)/10;}
+
+// ── Timeline ────────────────────────────────────────────────────────────────
+function calcExpectedHours(atDate){
+  let total=0;
+  for(let i=0;i<PHASE_DATES.length;i++){
+    const cfg=phaseConfig(i);
+    const pd=PHASE_DATES[i];
+    if(pd.start>=atDate) break;
+    const phEnd=pd.end<atDate?pd.end:new Date(atDate);
+    const weeks=(phEnd-pd.start)/(7*24*3600*1000);
+    total+=weeks*cfg.hpw;
+    // dedicated days: count if phase has ended by atDate
+    if(pd.end<atDate) total+=cfg.dedicatedDays*cfg.hoursPerDay;
+  }
+  return Math.round(total*10)/10;
+}
+function calcTotalExpected(){
+  return PHASE_DATES.reduce((a,pd,i)=>{
+    const cfg=phaseConfig(i);
+    const weeks=(pd.end-pd.start)/(7*24*3600*1000);
+    return a+weeks*cfg.hpw+cfg.dedicatedDays*cfg.hoursPerDay;
+  },0);
+}
+function currentPhaseHpw(){
+  const now=new Date();
+  for(let i=0;i<PHASE_DATES.length;i++){if(now<=PHASE_DATES[i].end) return phaseConfig(i).hpw;}
+  return phaseConfig(3).hpw;
+}
+
+function updateTimeline(){
+  const now=new Date();
+  const clampedNow=now<TL_START?TL_START:now>TL_END?TL_END:now;
+  const totalDays=(TL_END-TL_START)/(24*3600*1000);
+  const weekNum=Math.floor((clampedNow-TL_START)/(7*24*3600*1000))+1;
+  const totalWeeks=Math.round(totalDays/7);
+  const expectedH=calcExpectedHours(clampedNow);
+  const completedH=Math.round(totalCompletedHours()*10)/10;
+  const unalloc=unallocatedHours();
+  const actualH=Math.round((completedH+unalloc)*10)/10;
+  const totalH=calcTotalExpected();
+  document.getElementById('tl-expected').style.width=Math.min(Math.max(expectedH/totalH*100,0),100)+'%';
+  document.getElementById('tl-actual').style.width=Math.min(Math.max(actualH/totalH*100,0),100)+'%';
+  const statusEl=document.getElementById('tl-status');
+  const detailEl=document.getElementById('tl-detail');
+  if(now<TL_START){statusEl.className='tl-status';statusEl.textContent='not started';detailEl.textContent='';return;}
+  const diff=Math.round((actualH-expectedH)*10)/10;
+  const diffW=Math.round(Math.abs(diff)/currentPhaseHpw()*10)/10;
+  const weekLabel='Week '+weekNum+' of '+totalWeeks;
+  if(Math.abs(diff)<0.5){
+    statusEl.className='tl-status on-time';statusEl.textContent=weekLabel+' · on time';
+    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h';
+  }else if(diff<0){
+    statusEl.className='tl-status behind';statusEl.textContent=weekLabel+' · '+diffW+'w behind';
+    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · '+Math.abs(diff)+'h gap';
+  }else{
+    statusEl.className='tl-status ahead';statusEl.textContent=weekLabel+' · '+diffW+'w ahead';
+    detailEl.textContent='expected '+expectedH+'h · effective '+actualH+'h · +'+diff+'h';
+  }
+}
+
+// ── Persistence ────────────────────────────────────────────────────────────
+async function loadAll(){
   setSyncStatus('loading','loading...');
-  try {
-    const res = await fetch('/state');
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    state = await res.json();
+  try{
+    const[sr,pr]=await Promise.all([fetch('/state?key=state'),fetch('/state?key=plan')]);
+    state=sr.ok?(await sr.json()||{}):{};
+    const pd=pr.ok?await pr.json():null;
+    plan=(pd&&pd.phases)?pd:JSON.parse(JSON.stringify(DEFAULT_PLAN));
+    if(!plan.phaseConfigs) plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
+    if(!pd||!pd.phases) savePlanNow();
     setSyncStatus('ok','synced');
-  } catch(e) {
-    setSyncStatus('err','offline — changes saved locally');
-    try { state = JSON.parse(localStorage.getItem('edimsk_fallback')||'{}'); } catch(x) { state={}; }
+  }catch(e){
+    setSyncStatus('err','offline — using local cache');
+    try{state=JSON.parse(localStorage.getItem('edimsk_state')||'{}');}catch(x){state={};}
+    try{const lp=JSON.parse(localStorage.getItem('edimsk_plan')||'null');plan=lp||JSON.parse(JSON.stringify(DEFAULT_PLAN));}catch(x){plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));}
+    if(!plan.phaseConfigs) plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
   }
-  applyState();
-  updateStats();
+  renderAll();updateStats();updateTimeline();
+}
+async function saveStateNow(){
+  try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw new Error();setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}
+  catch(e){setSyncStatus('err','save failed — stored locally');}
+}
+async function savePlanNow(){
+  try{localStorage.setItem('edimsk_plan',JSON.stringify(plan));const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw new Error();setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}
+  catch(e){setSyncStatus('err','save failed — stored locally');}
+}
+function debouncedSaveState(){clearTimeout(saveStateTO);setSyncStatus('loading','saving...');saveStateTO=setTimeout(saveStateNow,800);}
+function debouncedSavePlan(){clearTimeout(savePlanTO);setSyncStatus('loading','saving...');savePlanTO=setTimeout(savePlanNow,800);}
+function setSyncStatus(t,l){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-label').textContent=l;}
+
+// ── Edit mode ────────────────────────────────────────────────────────────────
+function toggleEditMode(){
+  editMode=!editMode;
+  document.body.classList.toggle('edit-mode',editMode);
+  const btn=document.getElementById('edit-toggle-btn');
+  btn.classList.toggle('active',editMode);
+  btn.textContent=editMode?'Done editing':'Edit plan';
 }
 
-async function saveState() {
-  try {
-    localStorage.setItem('edimsk_fallback', JSON.stringify(state));
-    const res = await fetch('/state', {method:'POST', body:JSON.stringify(state), headers:{'Content-Type':'application/json'}});
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    setSyncStatus('ok','saved '+new Date().toLocaleTimeString());
-  } catch(e) {
-    setSyncStatus('err','save failed — stored locally');
+// ── Item helpers ─────────────────────────────────────────────────────────────
+function getItemDone(item){return state[item.id]!==undefined?state[item.id]:(item.done||false);}
+function findItem(id){for(const ph of plan.phases){const it=ph.items.find(i=>i.id===id);if(it)return it;}return null;}
+function findPhase(id){return plan.phases.find(p=>p.id===id);}
+function findPhaseOfItem(itemId){return plan.phases.find(ph=>ph.items.some(i=>i.id===itemId));}
+function phaseIndex(phaseId){return plan.phases.findIndex(p=>p.id===phaseId);}
+
+// ── Toggle item ──────────────────────────────────────────────────────────────
+function toggleItem(itemId){
+  const item=findItem(itemId);if(!item)return;
+  if(item.subs&&item.subs.length>0)return;
+  state[itemId]=!getItemDone(item);
+  refreshItem(item);updateStats();updateTimeline();debouncedSaveState();
+}
+function toggleSub(itemId,subId){
+  state['sub-'+subId]=!(state['sub-'+subId]||false);
+  const scb=document.getElementById('scb-'+subId);
+  if(scb)scb.classList.toggle('checked',state['sub-'+subId]);
+  const item=findItem(itemId);if(!item)return;
+  const allDone=item.subs.every(s=>state['sub-'+s.id]);
+  state[itemId]=allDone;
+  refreshItem(item);updateStats();updateTimeline();debouncedSaveState();
+}
+function saveSubNote(subId,val){
+  state['note-'+subId]=val;
+  const el=document.getElementById('snote-'+subId);
+  if(el)el.classList.toggle('has-value',!!val);
+  debouncedSaveState();
+}
+function saveSubHours(itemId,subId,val){
+  const item=findItem(itemId);if(!item)return;
+  const sub=item.subs.find(s=>s.id===subId);if(!sub)return;
+  sub.hours=parseFloat(val)||0;
+  const scb=document.getElementById('scb-'+subId);
+  if(scb){const row=scb.closest('.subitem');if(row){const d=row.querySelector('.sub-hours-display');if(d)d.textContent=sub.hours+'h';}}
+  refreshItemHours(item);updateStats();updateTimeline();updatePhaseBudgetDisplay(findPhaseOfItem(itemId));debouncedSavePlan();
+}
+
+// ── Phase config edits ───────────────────────────────────────────────────────
+function editPhaseConfig(phaseId,field,val){
+  const idx=phaseIndex(phaseId);if(idx<0)return;
+  if(!plan.phaseConfigs)plan.phaseConfigs=JSON.parse(JSON.stringify(DEFAULT_PHASE_CONFIGS));
+  plan.phaseConfigs[idx][field]=parseFloat(val)||0;
+  updatePhaseBudgetDisplay(findPhase(phaseId));
+  updateScheduleGrid();updateStats();updateTimeline();debouncedSavePlan();
+}
+
+// ── Edit actions ─────────────────────────────────────────────────────────────
+function editItemTitle(id,val){const it=findItem(id);if(it){it.title=val;debouncedSavePlan();}}
+function editItemNote(id,val){const it=findItem(id);if(it){it.note=val;debouncedSavePlan();}}
+function editItemLink(id,val){const it=findItem(id);if(it){it.link=val;debouncedSavePlan();}}
+function editItemHours(id,val){
+  const it=findItem(id);if(!it||it.subs&&it.subs.length>0)return;
+  it.hours=parseFloat(val)||0;
+  const el=document.getElementById('item-'+id);
+  const h=el?el.querySelector('.item-hours-display'):null;
+  if(h)h.textContent=it.hours+'h';
+  updateStats();updateTimeline();updatePhaseBudgetDisplay(findPhaseOfItem(id));debouncedSavePlan();
+}
+function deleteItem(itemId){
+  if(!confirm('Delete this item?'))return;
+  const ph=findPhaseOfItem(itemId);if(!ph)return;
+  ph.items=ph.items.filter(i=>i.id!==itemId);
+  renderAll();updateStats();updateTimeline();debouncedSavePlan();
+}
+function addItem(phaseId){
+  const ph=findPhase(phaseId);if(!ph)return;
+  ph.items.push({id:'item-'+uid(),title:'New item',hours:0,note:'',link:'',done:false,subs:[]});
+  renderAll();updateStats();debouncedSavePlan();
+}
+function moveItem(itemId,dir){
+  const ph=findPhaseOfItem(itemId);if(!ph)return;
+  const idx=ph.items.findIndex(i=>i.id===itemId);
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=ph.items.length)return;
+  [ph.items[idx],ph.items[newIdx]]=[ph.items[newIdx],ph.items[idx]];
+  renderAll();debouncedSavePlan();
+}
+function toggleItemSubs(itemId){
+  const it=findItem(itemId);if(!it)return;
+  if(it.subs&&it.subs.length>0){if(!confirm('Remove all subtasks?'))return;it.subs=[];}
+  else{const fh=it.hours||0;it.subs=[{id:itemId+'-s'+uid(),label:'S-01',note:'',hours:fh}];}
+  renderAll();updateStats();updateTimeline();debouncedSavePlan();
+}
+function addSub(itemId){
+  const it=findItem(itemId);if(!it)return;
+  const n=it.subs.length;
+  it.subs.push({id:itemId+'-s'+uid(),label:'S-'+String(n+1).padStart(2,'0'),note:'',hours:0});
+  renderAll();updateStats();updateTimeline();debouncedSavePlan();
+  const subEl=document.getElementById('subitems-'+itemId);
+  const tog=document.getElementById('expand-'+itemId);
+  if(subEl)subEl.classList.remove('collapsed');
+  if(tog)tog.textContent='[ − subtasks ]';
+}
+function deleteSub(itemId,subId){
+  const it=findItem(itemId);if(!it)return;
+  it.subs=it.subs.filter(s=>s.id!==subId);
+  renderAll();updateStats();updateTimeline();debouncedSavePlan();
+}
+function moveSub(itemId,subId,dir){
+  const it=findItem(itemId);if(!it)return;
+  const idx=it.subs.findIndex(s=>s.id===subId);
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=it.subs.length)return;
+  [it.subs[idx],it.subs[newIdx]]=[it.subs[newIdx],it.subs[idx]];
+  renderAll();debouncedSavePlan();
+  // re-open subitems panel
+  const subEl=document.getElementById('subitems-'+itemId);
+  const tog=document.getElementById('expand-'+itemId);
+  if(subEl)subEl.classList.remove('collapsed');
+  if(tog)tog.textContent='[ − subtasks ]';
+}
+
+// ── Refresh helpers (no full re-render) ──────────────────────────────────────
+function refreshItem(item){
+  const el=document.getElementById('item-'+item.id);if(!el)return;
+  const hasSubs=item.subs&&item.subs.length>0;
+  const isDone=getItemDone(item);
+  const cb=el.querySelector('.item-header>.cb');
+  const title=el.querySelector('.item-title');
+  if(hasSubs){
+    const doneSubs=item.subs.filter(s=>state['sub-'+s.id]).length;
+    const total=item.subs.length;
+    const all=doneSubs===total&&total>0;
+    const some=doneSubs>0&&!all;
+    if(cb){cb.classList.toggle('checked',all);cb.classList.toggle('partial',some);cb.innerHTML=all?CHECK_SVG:some?PART_SVG:'';}
+    if(title)title.style.textDecoration=(all?'line-through':'');
+    refreshSubProgress(item);
+  }else{
+    if(cb){cb.classList.toggle('checked',isDone);cb.classList.toggle('partial',false);cb.innerHTML=isDone?CHECK_SVG:'';}
+    if(title)title.style.textDecoration=(isDone?'line-through':'');
   }
 }
-
-function debouncedSave() {
-  clearTimeout(saveTimeout);
-  setSyncStatus('loading','saving...');
-  saveTimeout = setTimeout(saveState, 800);
+function refreshItemHours(item){
+  const el=document.getElementById('item-'+item.id);if(!el)return;
+  const hd=el.querySelector('.item-hours-display');
+  if(hd)hd.textContent=itemEffectiveHours(item)+'h';
+  refreshSubProgress(item);
+}
+function refreshSubProgress(item){
+  if(!item.subs||!item.subs.length)return;
+  const doneH=item.subs.filter(s=>state['sub-'+s.id]).reduce((a,s)=>a+(parseFloat(s.hours)||0),0);
+  const totalH=itemEffectiveHours(item);
+  const doneSubs=item.subs.filter(s=>state['sub-'+s.id]).length;
+  const lbl=document.getElementById('sbar-label-'+item.id);
+  const fill=document.getElementById('sbar-fill-'+item.id);
+  if(lbl)lbl.textContent=doneSubs+' / '+item.subs.length+' subtasks completed ('+Math.round(doneH*10)/10+'h / '+Math.round(totalH*10)/10+'h)';
+  if(fill)fill.style.width=(totalH>0?Math.round(doneH/totalH*100):0)+'%';
 }
 
-function setSyncStatus(type, label) {
-  document.getElementById('sync-dot').className = 'sync-dot '+type;
-  document.getElementById('sync-label').textContent = label;
+// ── Phase budget display ─────────────────────────────────────────────────────
+function updatePhaseBudgetDisplay(phase){
+  if(!phase)return;
+  const idx=phaseIndex(phase.id);
+  const el=document.getElementById('phase-budget-'+phase.id);if(!el)return;
+  const budget=phaseBudget(idx);
+  const used=Math.round(phase.items.reduce((a,i)=>a+itemEffectiveHours(i),0)*10)/10;
+  const free=Math.round((budget-used)*10)/10;
+  if(free>0){el.className='phase-budget ok';el.textContent=used+'h planned of '+budget+'h budget · '+free+'h free';}
+  else if(free===0){el.className='phase-budget ok';el.textContent=used+'h planned · budget fully allocated';}
+  else{el.className='phase-budget over';el.textContent=used+'h planned of '+budget+'h budget · '+Math.abs(free)+'h overbooked';}
 }
 
-function getItemDone(item) {
-  return state[item.id] !== undefined ? state[item.id] : item.done;
-}
-
-function applyState() {
-  PHASES.forEach(phase => {
-    phase.items.forEach(item => {
-      const el = document.getElementById('item-'+item.id);
-      if (!el) return;
-      const cb = el.querySelector('.item-header .cb');
-      const isDone = getItemDone(item);
-      isDone ? el.classList.add('done') : el.classList.remove('done');
-      isDone ? cb.classList.add('checked') : cb.classList.remove('checked');
-      if (item.videos) {
-        item.videos.forEach((v, i) => {
-          const sid = item.id+'-v'+i;
-          const scb = document.getElementById('scb-'+sid);
-          const snote = document.getElementById('snote-'+sid);
-          if (scb) {
-            const vdone = state[sid] || false;
-            vdone ? scb.classList.add('checked') : scb.classList.remove('checked');
-          }
-          if (snote) {
-            const txt = state['note-'+sid] || '';
-            snote.value = txt;
-            txt ? snote.classList.add('has-value') : snote.classList.remove('has-value');
-          }
-        });
-        updateVideoBar(item);
-      }
-    });
+// ── Stats ────────────────────────────────────────────────────────────────────
+function updateStats(){
+  const items=(plan.phases||[]).flatMap(p=>p.items);
+  const total=items.reduce((a,i)=>a+itemEffectiveHours(i),0);
+  const doneH=items.reduce((a,i)=>a+itemCompletedHours(i),0);
+  const doneItems=items.filter(i=>getItemDone(i)).length;
+  const rem=items.length-doneItems;
+  const unalloc=unallocatedHours();
+  const effectiveH=Math.round((doneH+unalloc)*10)/10;
+  const budgetTotal=totalBudget();
+  const pct=budgetTotal>0?Math.round(effectiveH/budgetTotal*100):0;
+  document.getElementById('s-total').textContent=Math.round(total*10)/10;
+  document.getElementById('s-done').textContent=Math.round(doneH*10)/10;
+  document.getElementById('s-items').textContent=rem+' items';
+  document.getElementById('s-pct').textContent=Math.max(0,pct)+'%';
+  document.getElementById('prog').style.width=Math.max(0,Math.min(pct,100))+'%';
+  document.getElementById('footer-stats').textContent=doneItems+' of '+items.length+' items · '+Math.round(doneH*10)/10+'h completed · '+unalloc+'h unallocated';
+  (plan.phases||[]).forEach((ph,i)=>{
+    const pd=ph.items.filter(it=>getItemDone(it)).length;
+    const m=document.getElementById('phase-meta-'+ph.id);
+    if(m)m.textContent=ph.period+' · '+pd+'/'+ph.items.length+' done';
+    updatePhaseBudgetDisplay(ph);
   });
-  const btn = document.getElementById('action-btn');
-  const banner = document.getElementById('action-banner');
-  if (state._action) { btn.classList.add('done'); btn.textContent='Done ✓'; banner.style.opacity='0.5'; }
-  else { btn.classList.remove('done'); btn.textContent='Mark done'; banner.style.opacity='1'; }
+}
+function toggleAction(){
+  state._action=!state._action;
+  const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
+  btn.classList.toggle('done',state._action);btn.textContent=state._action?'Done ✓':'Mark done';
+  banner.style.opacity=state._action?'0.5':'1';
+  debouncedSaveState();
+}
+function togglePhase(id){
+  const body=document.getElementById('phase-body-'+id),tog=document.getElementById('phase-toggle-'+id);
+  const c=body.classList.toggle('collapsed');tog.textContent=c?'[ + expand ]':'[ − collapse ]';
+}
+function toggleSubs(itemId){
+  const el=document.getElementById('subitems-'+itemId),tog=document.getElementById('expand-'+itemId);
+  if(!el)return;const c=el.classList.toggle('collapsed');tog.textContent=c?'[ + subtasks ]':'[ − subtasks ]';
 }
 
-function updateVideoBar(item) {
-  if (!item.videos) return;
-  const watched = item.videos.filter((_,i) => state[item.id+'-v'+i]).length;
-  const total = item.videos.length;
-  const labelEl = document.getElementById('vbar-label-'+item.id);
-  const fillEl = document.getElementById('vbar-fill-'+item.id);
-  if (labelEl) labelEl.textContent = watched+' / '+total+' videos watched';
-  if (fillEl) fillEl.style.width = (total > 0 ? Math.round(watched/total*100) : 0)+'%';
-}
-
-function toggleAction() {
-  state._action = !state._action;
-  applyState();
-  debouncedSave();
-}
-
-function toggleItem(id) {
-  const item = PHASES.flatMap(p=>p.items).find(i=>i.id===id);
-  state[id] = !getItemDone(item);
-  applyState();
-  updateStats();
-  debouncedSave();
-}
-
-function toggleSubitem(itemId, idx) {
-  const sid = itemId+'-v'+idx;
-  state[sid] = !(state[sid]||false);
-  const scb = document.getElementById('scb-'+sid);
-  state[sid] ? scb.classList.add('checked') : scb.classList.remove('checked');
-  const item = PHASES.flatMap(p=>p.items).find(i=>i.id===itemId);
-  updateVideoBar(item);
-  debouncedSave();
-}
-
-function saveNote(itemId, idx, val) {
-  const sid = 'note-'+itemId+'-v'+idx;
-  state[sid] = val;
-  const snote = document.getElementById('snote-'+itemId+'-v'+idx);
-  if (snote) val ? snote.classList.add('has-value') : snote.classList.remove('has-value');
-  debouncedSave();
-}
-
-function toggleSubitems(itemId) {
-  const el = document.getElementById('subitems-'+itemId);
-  const tog = document.getElementById('expand-'+itemId);
-  if (!el) return;
-  const collapsed = el.classList.toggle('collapsed');
-  tog.textContent = collapsed ? '[ + videos ]' : '[ − videos ]';
-}
-
-function updateStats() {
-  const items = PHASES.flatMap(p=>p.items);
-  const total = items.reduce((a,i)=>a+i.hours,0);
-  const doneItems = items.filter(i=>getItemDone(i));
-  const doneHours = doneItems.reduce((a,i)=>a+i.hours,0);
-  const remaining = items.length - doneItems.length;
-  const pct = total > 0 ? Math.round(doneHours/total*100) : 0;
-  document.getElementById('s-total').textContent = total;
-  document.getElementById('s-done').textContent = doneHours;
-  document.getElementById('s-items').textContent = remaining+' items';
-  document.getElementById('s-pct').textContent = pct+'%';
-  document.getElementById('prog').style.width = pct+'%';
-  document.getElementById('footer-stats').textContent = doneItems.length+' of '+items.length+' items · '+doneHours+' of '+total+' h';
-  PHASES.forEach(phase => {
-    const pd = phase.items.filter(i=>getItemDone(i)).length;
-    const m = document.getElementById('phase-meta-'+phase.id);
-    if (m) m.textContent = phase.period+' · '+pd+'/'+phase.items.length+' done';
+// ── Schedule grid ────────────────────────────────────────────────────────────
+function updateScheduleGrid(){
+  const grid=document.getElementById('schedule-grid');if(!grid)return;
+  grid.innerHTML='';
+  const labels=['Phase 1 · Q2 2026','Phase 2 · Q3 2026','Phase 3 · Oct–Nov 2026','Phase 4 · Dec–Mar 2027'];
+  PHASE_DATES.forEach((_,i)=>{
+    const cfg=phaseConfig(i);
+    const budget=phaseBudget(i);
+    const div=document.createElement('div');div.className='sched-block';
+    div.innerHTML=`<div class="sched-label">${labels[i]}</div><div class="sched-hours">~${budget}h</div><div class="sched-note">${cfg.hpw}h/week${cfg.dedicatedDays>0?' + '+cfg.dedicatedDays+' day(s)':''}</div>`;
+    grid.appendChild(div);
   });
 }
 
-function togglePhase(id) {
-  const body = document.getElementById('phase-body-'+id);
-  const tog = document.getElementById('phase-toggle-'+id);
-  const c = body.classList.toggle('collapsed');
-  tog.textContent = c ? '[ + expand ]' : '[ − collapse ]';
-}
+// ── Render ───────────────────────────────────────────────────────────────────
+const CHECK_SVG=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const PART_SVG=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="2" y1="5" x2="8" y2="5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+const SCHECK_SVG=`<svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-function renderPhases() {
-  const container = document.getElementById('phases-container');
-  PHASES.forEach(phase => {
-    const phaseEl = document.createElement('div');
-    phaseEl.className = 'phase';
-    const header = document.createElement('div');
-    header.className = 'phase-header';
-    header.onclick = () => togglePhase(phase.id);
-    header.innerHTML = `<span class="phase-num">${phase.num}</span><span class="phase-name">${phase.name}</span><span class="phase-meta" id="phase-meta-${phase.id}">${phase.period}</span><span class="phase-toggle" id="phase-toggle-${phase.id}">[ − collapse ]</span>`;
-    phaseEl.appendChild(header);
-    const body = document.createElement('div');
-    body.className = 'phase-body';
-    body.id = 'phase-body-'+phase.id;
-    phase.items.forEach(item => {
-      const el = document.createElement('div');
-      el.className = 'item'+(item.conditional?' conditional':'');
-      el.id = 'item-'+item.id;
-      const hasVideos = item.videos && item.videos.length > 0;
-      const headerDiv = document.createElement('div');
-      headerDiv.className = 'item-header';
-      headerDiv.innerHTML = `
-        <div class="cb" onclick="event.stopPropagation();toggleItem('${item.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="item-body">
-          <div class="item-title">${item.title}</div>
-          <div class="item-row">
-            <span class="item-hours">${item.hours}h</span>
-            <span class="tag ${item.conditional?'tag-optional':phase.tag}">${item.conditional?'optional':phase.tagLabel}</span>
-            ${item.conditional?'<span class="tag tag-optional">use if needed</span>':''}
-          </div>
-          ${item.note?`<div class="item-note">${item.note}</div>`:''}
-          ${item.link?`<a class="item-link" href="${item.link}" onclick="event.stopPropagation()" target="_blank">${item.link}</a>`:''}
-          ${hasVideos?`<div class="video-progress"><div class="video-progress-label" id="vbar-label-${item.id}">0 / ${item.videos.length} videos watched</div><div class="video-track"><div class="video-fill" id="vbar-fill-${item.id}" style="width:0%"></div></div></div>`:''}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function renderAll(){
+  const container=document.getElementById('phases-container');
+  container.innerHTML='';
+  updateScheduleGrid();
+  (plan.phases||[]).forEach((phase,phIdx)=>{
+    const cfg=phaseConfig(phIdx);
+    const phEl=document.createElement('div');phEl.className='phase';
+
+    // header
+    const hdr=document.createElement('div');hdr.className='phase-header';
+    hdr.onclick=()=>togglePhase(phase.id);
+    hdr.innerHTML=`<span class="phase-num">${phase.num}</span><span class="phase-name">${phase.name}</span><span class="phase-meta" id="phase-meta-${phase.id}">${phase.period}</span><span class="phase-toggle" id="phase-toggle-${phase.id}">[ − collapse ]</span>`;
+    phEl.appendChild(hdr);
+
+    // budget line
+    const budgetEl=document.createElement('div');budgetEl.id='phase-budget-'+phase.id;budgetEl.className='phase-budget';
+    phEl.appendChild(budgetEl);
+
+    // phase config editor (edit mode only)
+    const cfgEl=document.createElement('div');cfgEl.className='phase-config';
+    cfgEl.innerHTML=`
+      <div class="cfg-field"><span class="cfg-label">h/week</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hpw}" oninput="editPhaseConfig('${phase.id}','hpw',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">dedicated days</span><input class="cfg-input" type="number" min="0" step="1" value="${cfg.dedicatedDays}" oninput="editPhaseConfig('${phase.id}','dedicatedDays',this.value)"></div>
+      <div class="cfg-field"><span class="cfg-label">h/day</span><input class="cfg-input" type="number" min="0" step="0.5" value="${cfg.hoursPerDay}" oninput="editPhaseConfig('${phase.id}','hoursPerDay',this.value)"></div>
+      <span class="cfg-derived" id="cfg-budget-${phase.id}">= ${phaseBudget(phIdx)}h budget</span>
+    `;
+    phEl.appendChild(cfgEl);
+
+    // items
+    const body=document.createElement('div');body.className='phase-body';body.id='phase-body-'+phase.id;
+
+    phase.items.forEach((item,itemIdx)=>{
+      const hasSubs=item.subs&&item.subs.length>0;
+      const isDone=getItemDone(item);
+      const effH=itemEffectiveHours(item);
+      const doneSubs=hasSubs?item.subs.filter(s=>state['sub-'+s.id]).length:0;
+      const allDone=hasSubs&&doneSubs===item.subs.length&&item.subs.length>0;
+      const someDone=hasSubs&&doneSubs>0&&!allDone;
+      const tag=phase.tag||'tag-green';
+      const tagLabel=phase.tagLabel||phase.num;
+
+      const el=document.createElement('div');el.className='item';el.id='item-'+item.id;
+
+      const ih=document.createElement('div');ih.className='item-header';
+      if(!hasSubs)ih.onclick=()=>toggleItem(item.id);
+
+      const cbClass='cb'+(allDone||(!hasSubs&&isDone)?' checked':someDone?' partial':'');
+      const cbSvg=allDone||(!hasSubs&&isDone)?CHECK_SVG:someDone?PART_SVG:'';
+      const titleStyle=(allDone||(!hasSubs&&isDone))?'text-decoration:line-through;opacity:.6':'';
+
+      ih.innerHTML=`
+        <div class="order-btns">
+          <button class="order-btn" onclick="event.stopPropagation();moveItem('${item.id}',-1)" title="move up">▲</button>
+          <button class="order-btn" onclick="event.stopPropagation();moveItem('${item.id}',1)" title="move down">▼</button>
         </div>
-        ${hasVideos?`<span class="expand-toggle" id="expand-${item.id}" onclick="event.stopPropagation();toggleSubitems('${item.id}')">[ + videos ]</span>`:''}
+        <div class="${cbClass}" onclick="event.stopPropagation();toggleItem('${item.id}')">${cbSvg}</div>
+        <div class="item-body">
+          <div class="item-title field-display" style="${titleStyle}">${esc(item.title)}</div>
+          <input class="item-title-input field-input" value="${esc(item.title)}" placeholder="Item title" oninput="editItemTitle('${item.id}',this.value)">
+          <div class="item-row">
+            <span class="item-hours-display">${effH}h</span>
+            ${!hasSubs?`<input class="hours-input field-input" type="number" min="0" step="0.5" value="${item.hours}" oninput="editItemHours('${item.id}',this.value)">`:''}
+            <span class="tag ${tag}">${tagLabel}</span>
+          </div>
+          ${item.note?`<div class="item-note field-display">${esc(item.note)}</div>`:''}
+          <input class="item-note-input field-input" value="${esc(item.note||'')}" placeholder="Add a note..." oninput="editItemNote('${item.id}',this.value)">
+          ${item.link?`<a class="item-link field-display" href="${esc(item.link)}" onclick="event.stopPropagation()" target="_blank">${esc(item.link)}</a>`:''}
+          <input class="item-link-input field-input" value="${esc(item.link||'')}" placeholder="https://..." oninput="editItemLink('${item.id}',this.value)">
+          ${hasSubs?`<div class="sub-progress"><div class="sub-progress-label" id="sbar-label-${item.id}">0 / ${item.subs.length} subtasks completed</div><div class="sub-track"><div class="sub-fill" id="sbar-fill-${item.id}" style="width:0%"></div></div></div>`:''}
+          <div class="item-edit-controls">
+            <button class="edit-btn" onclick="event.stopPropagation();toggleItemSubs('${item.id}')">${hasSubs?'remove subtasks':'add subtasks'}</button>
+            <button class="edit-btn del" onclick="event.stopPropagation();deleteItem('${item.id}')">delete</button>
+          </div>
+        </div>
+        ${hasSubs?`<span class="expand-toggle" id="expand-${item.id}" onclick="event.stopPropagation();toggleSubs('${item.id}')">[ + subtasks ]</span>`:''}
       `;
-      if (!hasVideos) headerDiv.onclick = () => toggleItem(item.id);
-      el.appendChild(headerDiv);
-      if (hasVideos) {
-        const subDiv = document.createElement('div');
-        subDiv.className = 'subitems collapsed';
-        subDiv.id = 'subitems-'+item.id;
-        item.videos.forEach((v, i) => {
-          const sid = item.id+'-v'+i;
-          const row = document.createElement('div');
-          row.className = 'subitem';
-          row.innerHTML = `
-            <div class="sub-cb" id="scb-${sid}" onclick="toggleSubitem('${item.id}',${i})"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <span class="sub-label">${v.label}</span>
-            <input class="sub-note" id="snote-${sid}" type="text" placeholder="${v.title||'note the video you watched...'}" value="" onclick="event.stopPropagation()" onchange="saveNote('${item.id}',${i},this.value)" oninput="saveNote('${item.id}',${i},this.value)">
+      el.appendChild(ih);
+
+      if(hasSubs){
+        const subDiv=document.createElement('div');subDiv.className='subitems collapsed';subDiv.id='subitems-'+item.id;
+        item.subs.forEach((s,si)=>{
+          const isDoneS=state['sub-'+s.id]||false;
+          const noteVal=state['note-'+s.id]||'';
+          const ph=noteVal||s.note||'note...';
+          const row=document.createElement('div');row.className='subitem';
+          row.innerHTML=`
+            <div class="sub-order-btns">
+              <button class="sub-order-btn" onclick="moveSub('${item.id}','${s.id}',-1)">▲</button>
+              <button class="sub-order-btn" onclick="moveSub('${item.id}','${s.id}',1)">▼</button>
+            </div>
+            <div class="sub-cb ${isDoneS?'checked':''}" id="scb-${s.id}" onclick="toggleSub('${item.id}','${s.id}')">${SCHECK_SVG}</div>
+            <span class="sub-label">${esc(s.label)}</span>
+            <span class="sub-hours-display">${s.hours||0}h</span>
+            <input class="sub-hours-input" type="number" min="0" step="0.5" value="${s.hours||0}" onclick="event.stopPropagation()" oninput="saveSubHours('${item.id}','${s.id}',this.value)">
+            <input class="sub-note ${noteVal?'has-value':''}" id="snote-${s.id}" type="text" placeholder="${esc(ph)}" value="${esc(noteVal)}" onclick="event.stopPropagation()" oninput="saveSubNote('${s.id}',this.value)">
+            <button class="sub-del-btn" onclick="event.stopPropagation();deleteSub('${item.id}','${s.id}')">✕</button>
           `;
           subDiv.appendChild(row);
         });
+        const addBtn=document.createElement('button');addBtn.className='sub-add-btn';addBtn.textContent='+ add subtask';
+        addBtn.onclick=e=>{e.stopPropagation();addSub(item.id);};
+        subDiv.appendChild(addBtn);
         el.appendChild(subDiv);
+        refreshSubProgress(item);
       }
       body.appendChild(el);
     });
-    phaseEl.appendChild(body);
-    container.appendChild(phaseEl);
+
+    const addBtn=document.createElement('button');addBtn.className='phase-add-btn';
+    addBtn.textContent='+ add item to '+phase.num.toLowerCase();
+    addBtn.onclick=()=>addItem(phase.id);
+    body.appendChild(addBtn);
+    phEl.appendChild(body);
+    container.appendChild(phEl);
+    updatePhaseBudgetDisplay(phase);
   });
+
+  // action banner state
+  const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
+  if(btn){btn.classList.toggle('done',!!state._action);btn.textContent=state._action?'Done ✓':'Mark done';}
+  if(banner)banner.style.opacity=state._action?'0.5':'1';
 }
 
-renderPhases();
-loadState();
+loadAll();
 </script>
 </body>
 </html>
