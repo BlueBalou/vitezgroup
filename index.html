@@ -113,8 +113,8 @@
 
     .profile-img {
       display: block;
-      width: clamp(140px, 18vw, 250px);
-      height: clamp(280px, 36vw, 400px);
+      width: clamp(160px, 24vw, 250px);   /* floor up from 140px to match feel */
+      height: clamp(320px, 36vw, 500px);  /* double the height as before */
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
@@ -133,8 +133,8 @@
     }
 
     .tile {
-      width: clamp(100px, 14vw, 140px);
-      height: clamp(100px, 14vw, 140px);
+      width: clamp(130px, 14vw, 140px);  /* was clamp(100px, 14vw, 140px) */
+      height: clamp(130px, 14vw, 140px);
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: 10px;
