@@ -262,13 +262,30 @@
       }
       .spacer { display: none; }
     }
-    @media (max-width: 520px) and (orientation: landscape) {
-       .site-title {
-    margin-top: 0px;
-      }
-     /* .bar-outer {
-        margin-bottom: 80px;
-      }*/
+    @media (max-height: 500px) and (orientation: landscape) {
+  body {
+    justify-content: flex-start;
+    padding-top: 44px;
+  }
+  .site-title {
+    margin-top: 10px;      /* overrides the global 6vw */
+    margin-bottom: 0px;   /* tightens gap to bar */
+  }
+  .bar-outer {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    }
+    .bar {
+      min-height: 200px; /* or whatever you want the bar to be */
+    }
+    .profile-img-wrap {
+      left: 00px;
+     } 
+     .profile-img {
+      width: clamp(160px, 24vw, 275px);  
+      height: clamp(280px, 5vw, 400px);  /* double the height as before */
     }
   </style>
 </head>
