@@ -31,7 +31,7 @@
     /* ── Name above bar ── */
     .site-title {
       font-family: 'Stardos Stencil', serif;
-      font-size: 28px;
+      font-size: 40px;
       color: white;
       text-shadow: 0 2px 8px rgba(0,0,0,0.7);
       margin-bottom: 18px;
@@ -42,12 +42,13 @@
     .bar-outer {
       position: relative;
       width: min(860px, 92vw);
-      padding-top: 90px;
-      padding-bottom: 90px;
+      padding-top: 150px;
+      padding-bottom: 150px;
     }
 
     /* ── Horizontal bar ── */
     .bar {
+      min-height: 260px; /* or whatever you want the bar to be */
       position: relative;
       width: 100%;
       padding: 12px 40px;
@@ -96,6 +97,7 @@
 
     /* ── Content sits above animated layers ── */
     .bar-content {
+      padding-left: calc(clamp(160px, 24vw, 275px) + 32px); /* make room for absolute image */
       position: relative;
       z-index: 1;
       display: flex;
@@ -106,9 +108,11 @@
 
     /* ── Profile image wrapper — bleeds above and below the bar ── */
     .profile-img-wrap {
-      flex-shrink: 0;
-      margin-top: -120px;
-      margin-bottom: -120px;
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
     }
 
     .profile-img {
@@ -146,7 +150,7 @@
       text-decoration: none;
       color: white;
       font-family: 'Stardos Stencil', serif;
-      font-size: clamp(16px, 1.6vw, 22px);  /* replaces font-size: 12px */
+      font-size: clamp(16px, 1.6vw, 26px);  /* replaces font-size: 12px */
       text-align: center;
       padding: 10px;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -161,7 +165,7 @@
     }
 
     .tile-icon {
-      font-size: clamp(31px, 3.5vw, 45px);  /* replaces font-size: 28px */
+      font-size: clamp(31px, 3.5vw, 40px);  /* replaces font-size: 28px */
       line-height: 1;
     }
 
@@ -220,7 +224,7 @@
 
 <body>
 
-  <p class="site-title">- Steven Vitéz -</p>
+  <p class="site-title">- It's Steven. -</p>
 
   <div class="bar-outer">
     <div class="bar">
@@ -242,7 +246,7 @@
           <a class="tile" href="game.html">
             <span class="tile-icon">🕹️</span>
             Lander Deluxe
-            <span class="tile-sub">Play my early-2000s game</span>
+            <span class="tile-sub">My early-2000s game</span>
           </a>
           <a class="tile" href="https://wochenplan.vit3z.com">
             <span class="tile-icon">📅</span>
@@ -255,7 +259,7 @@
   </div>
 
   <footer>
-    © 2026 Steven Vitéz · <a href="impressum.html">Impressum</a>
+    © 2026 Steven Vitéz · <a href="impressum.html">Impressum</a> 
   </footer>
 
 </body>
