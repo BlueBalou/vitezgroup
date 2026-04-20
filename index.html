@@ -42,8 +42,8 @@
     .bar-outer {
       position: relative;
       width: min(860px, 92vw);
-      padding-top: 70px;
-      padding-bottom: 70px;
+      padding-top: 90px;
+      padding-bottom: 90px;
     }
 
     /* ── Horizontal bar ── */
@@ -107,13 +107,13 @@
     /* ── Profile image wrapper — bleeds above and below the bar ── */
     .profile-img-wrap {
       flex-shrink: 0;
-      margin-top: -90px;
-      margin-bottom: -90px;
+      margin-top: -120px;
+      margin-bottom: -120px;
     }
 
     .profile-img {
       display: block;
-      width: clamp(160px, 24vw, 250px);   /* floor up from 140px to match feel */
+      width: clamp(160px, 24vw, 275px);   /* floor up from 140px to match feel */
       height: clamp(320px, 36vw, 500px);  /* double the height as before */
       object-fit: cover;
       border-radius: 10px;
@@ -146,7 +146,7 @@
       text-decoration: none;
       color: white;
       font-family: 'Stardos Stencil', serif;
-      font-size: clamp(13px, 1.6vw, 15px);  /* replaces font-size: 12px */
+      font-size: clamp(16px, 1.6vw, 22px);  /* replaces font-size: 12px */
       text-align: center;
       padding: 10px;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -161,12 +161,13 @@
     }
 
     .tile-icon {
-      font-size: clamp(28px, 3.5vw, 36px);  /* replaces font-size: 28px */
+      font-size: clamp(31px, 3.5vw, 45px);  /* replaces font-size: 28px */
       line-height: 1;
     }
 
     .tile-sub {
-      font-size: clamp(11px, 1.2vw, 13px);  /* replaces font-size: 10px */
+      font-style: italic;
+      font-size: clamp(14px, 1.2vw, 16px);  /* replaces font-size: 10px */
       color: rgba(255,255,255,0.6);
       font-family: Arial, sans-serif;
       line-height: 1.3;
