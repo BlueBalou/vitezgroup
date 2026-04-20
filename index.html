@@ -50,7 +50,7 @@
     .bar {
       position: relative;
       width: 100%;
-      padding: 36px 40px;
+      padding: 0px 40px;
       background: rgba(20, 20, 20, 0.45);
       backdrop-filter: blur(2px);
       border: 1px solid rgba(255,255,255,0.12);
@@ -146,7 +146,7 @@
       text-decoration: none;
       color: white;
       font-family: 'Stardos Stencil', serif;
-      font-size: 12px;
+      font-size: clamp(13px, 1.6vw, 15px);  /* replaces font-size: 12px */
       text-align: center;
       padding: 10px;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -161,12 +161,12 @@
     }
 
     .tile-icon {
-      font-size: 28px;
+      font-size: clamp(28px, 3.5vw, 36px);  /* replaces font-size: 28px */
       line-height: 1;
     }
 
     .tile-sub {
-      font-size: 10px;
+      font-size: clamp(11px, 1.2vw, 13px);  /* replaces font-size: 10px */
       color: rgba(255,255,255,0.6);
       font-family: Arial, sans-serif;
       line-height: 1.3;
