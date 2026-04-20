@@ -2,7 +2,6 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -22,13 +21,14 @@
     }
 
     body {
+      padding-top: 50px;     /* slightly more than stripe height */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
       background: #2a2a2a url('bg.jpg') center center / cover no-repeat fixed;
-      position: relative;  /* just add this line */
+      position: relative;  
     }
 
     body::before,
@@ -56,6 +56,7 @@
       font-size: 40px;
       color: white;
       text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      margin-top: auto;  
       margin-bottom: 18px;
       letter-spacing: 2px;
     }
@@ -139,7 +140,7 @@
 
     .profile-img {
       display: block;
-      width: clamp(160px, 24vw, 275px);   /* floor up from 140px to match feel */
+      width: clamp(160px, 24vw, 275px);  
       height: clamp(320px, 36vw, 500px);  /* double the height as before */
       object-fit: cover;
       border-radius: 10px;
@@ -167,12 +168,14 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding-top: 50px;
+      padding-bottom: 50px;
       align-items: center;
       gap: 6px;
       text-decoration: none;
       color: white;
       font-family: 'Stardos Stencil', serif;
-      font-size: clamp(16px, 1.6vw, 22px);  /* replaces font-size: 12px */
+      font-size: clamp(16px, 1.6vw, 22px);  /* change font size here*/
       text-align: center;
       padding: 10px;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -187,13 +190,13 @@
     }
 
     .tile-icon {
-      font-size: clamp(31px, 3.5vw, 40px);  /* replaces font-size: 28px */
+      font-size: clamp(31px, 3.5vw, 40px);  /* change font size here*/
       line-height: 1;
     }
 
     .tile-sub {
       font-style: italic;
-      font-size: clamp(14px, 1.2vw, 16px);  /* replaces font-size: 10px */
+      font-size: clamp(14px, 1.2vw, 16px);  /* change font size here*/
       color: rgba(255,255,255,0.6);
       font-family: Arial, sans-serif;
       line-height: 1.3;
@@ -229,8 +232,10 @@
 
     /* ── Responsive: stack on small screens ── */
     @media (max-width: 520px) {
+      .site-title {
+        margin-top: auto;
+      }
       .bar-outer {
-        padding: 50px;
         padding-top: 0;
         padding-bottom: 0;
       }
@@ -265,8 +270,6 @@
         justify-content: center;
       }
       .tile {
-        width: 200px;
-        height: 140px;
         width: 240px;
         height: 240px;
       }
@@ -309,6 +312,8 @@
       </div>
     </div>
   </div>
+
+  <div style="flex-shrink: 0; height: 100px;"></div>
 
   <footer>
     © 2026 Steven Vitéz · <a href="impressum.html">Impressum</a> 
