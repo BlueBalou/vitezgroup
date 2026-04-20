@@ -28,6 +28,26 @@
       align-items: center;
       min-height: 100vh;
       background: #2a2a2a url('bg.jpg') center center / cover no-repeat fixed;
+      position: relative;  /* just add this line */
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: #2a2a2a;
+      z-index: 1;
+    }
+
+    body::before {
+      top: 0;
+    }
+
+    body::after {
+      bottom: 0;
     }
 
     /* ── Name above bar ── */
@@ -182,7 +202,16 @@
 
     /* ── Footer ── */
     footer {
-      margin-top: 18px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      margin: 0;
       font-size: 12px;
       color: rgba(255,255,255,0.55);
       font-family: Arial, sans-serif;
