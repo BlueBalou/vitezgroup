@@ -232,10 +232,8 @@
 
     /* ── Responsive: stack on small screens ── */
     @media (max-width: 520px) {
-      .site-title {
-        margin-top: auto;
-      }
       .bar-outer {
+        width: 60vw; 
         padding-top: 0;
         padding-bottom: 0;
       }
@@ -265,13 +263,11 @@
       .spacer { display: none; }
     }
     @media (max-width: 520px) and (orientation: landscape) {
-      .tiles {
-        flex-direction: row;
-        justify-content: center;
+       .site-title {
+    margin-top: auto;
       }
-      .tile {
-        width: 240px;
-        height: 240px;
+      .bar-outer {
+        margin-bottom: auto;
       }
     }
   </style>
