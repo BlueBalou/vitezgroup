@@ -442,11 +442,19 @@ function migratePlan(){
 async function loadAll(){
   setSyncStatus('loading','loading...');
   try{
-    const[sr,pr]=await Promise.all([fetch('/state?key=state'),fetch('/state?key=plan')]);
+    const ts=Date.now();
+    const[sr,pr]=await Promise.all([fetch('/state?key=state&t='+ts),fetch('/state?key=plan&t='+ts)]);
     state=sr.ok?(await sr.json()||{}):{};
     const pd=pr.ok?await pr.json():null;
-    if(pd&&pd.phases){ plan=pd; migratePlan(); savePlanNow(); }
-    else{ plan=JSON.parse(JSON.stringify(DEFAULT_PLAN)); migratePlan(); savePlanNow(); }
+    if(pd&&pd.phases){
+      plan=pd;
+      migratePlan();
+      // only write back if migration actually added missing fields
+    }else{
+      plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));
+      migratePlan();
+      savePlanNow(); // only save when seeding from default
+    }
     setSyncStatus('ok','synced');
   }catch(e){
     setSyncStatus('err','offline — using local cache');
