@@ -456,8 +456,6 @@ async function loadAll(){
   }
   applyMeta();renderAll();updateStats();updateTimeline();
 }
-  applyMeta();renderAll();updateStats();updateTimeline();
-}
 async function saveStateNow(){try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
 async function savePlanNow(){try{localStorage.setItem('edimsk_plan',JSON.stringify(plan));const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
 function debouncedSaveState(){clearTimeout(saveStateTO);setSyncStatus('loading','saving...');saveStateTO=setTimeout(saveStateNow,800);}
