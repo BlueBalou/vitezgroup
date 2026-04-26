@@ -449,23 +449,20 @@ async function loadAll(){
     if(pd&&pd.phases){
       plan=pd;
       migratePlan();
-      // only write back if migration actually added missing fields
+      setSyncStatus('ok','synced');
     }else{
-      plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));
-      migratePlan();
-      savePlanNow(); // only save when seeding from default
+      plan={phases:[]};
+      setSyncStatus('ok','no plan in KV — import a backup or add items');
     }
-    setSyncStatus('ok','synced');
   }catch(e){
-    setSyncStatus('err','offline — using local cache');
-    try{state=JSON.parse(localStorage.getItem('edimsk_state')||'{}');}catch(x){state={};}
-    try{const lp=JSON.parse(localStorage.getItem('edimsk_plan')||'null');plan=lp||JSON.parse(JSON.stringify(DEFAULT_PLAN));}catch(x){plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));}
-    migratePlan();
+    plan={phases:[]};
+    state={};
+    setSyncStatus('err','offline — KV unavailable');
   }
   applyMeta();renderAll();updateStats();updateTimeline();
 }
-async function saveStateNow(){try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
-async function savePlanNow(){try{localStorage.setItem('edimsk_plan',JSON.stringify(plan));const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
+async function saveStateNow(){try{const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
+async function savePlanNow(){try{const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
 function debouncedSaveState(){clearTimeout(saveStateTO);setSyncStatus('loading','saving...');saveStateTO=setTimeout(saveStateNow,800);}
 function debouncedSavePlan(){clearTimeout(savePlanTO);setSyncStatus('loading','saving...');savePlanTO=setTimeout(savePlanNow,800);}
 function setSyncStatus(t,l){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-label').textContent=l;}
