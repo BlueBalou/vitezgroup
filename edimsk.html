@@ -171,15 +171,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
-<div class="float-edit">
-  <button class="float-edit-btn" id="float-edit-btn" onclick="toggleEditMode()">Edit plan</button>
-  <span class="float-edit-hint" id="float-edit-hint">Ctrl+Shift+E</span>
-  <button class="float-edit-btn" id="theme-btn" onclick="toggleTheme()" style="margin-top:4px">Light</button>
-  <div style="height:1px;background:var(--border);margin:4px 0"></div>
-  <button class="float-edit-btn" onclick="exportBackup()">Export backup</button>
-  <button class="float-edit-btn" onclick="document.getElementById('import-file').click()">Import backup</button>
-  <input type="file" id="import-file" style="display:none" accept=".json" onchange="importBackup(this)">
-</div>
+
 <div class="page">
 
 <div class="masthead">
@@ -235,7 +227,15 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </div>
 
 <div id="phases-container"></div>
-<div class="footer"><span id="footer-date">Last updated: April 2026</span><span id="footer-stats"></span></div>
+<div class="footer">
+  <span id="footer-date">Last updated: April 2026</span>
+  <span id="footer-stats"></span>
+  <div style="width:100%; margin-top:0.5rem; display:flex; gap:0.5rem;">
+    <button class="float-edit-btn" onclick="exportBackup()">Export backup</button>
+    <button class="float-edit-btn" onclick="document.getElementById('import-file').click()">Import backup</button>
+  </div>
+  <input type="file" id="import-file" style="display:none" accept=".json" onchange="importBackup(this)">
+</div>
 </div>
 
 <script>
@@ -539,7 +539,14 @@ function toggleEditMode(){
     btn.classList.toggle('active',editMode);
     btn.textContent=editMode?'Save & exit':'Edit plan';
   });
-  if(!editMode){saveStateNow();savePlanNow();}
+  if(!editMode){
+    // Clear pending debounced saves and save immediately
+    if(savePlanTO){clearTimeout(savePlanTO);savePlanTO=null;}
+    if(saveStateTO){clearTimeout(saveStateTO);saveStateTO=null;}
+    savePlanNow();
+    saveStateNow();
+    renderAll();  // Re-render to show saved changes
+  }
 }
 
 // keyboard shortcut Cmd/Ctrl+Shift+E
