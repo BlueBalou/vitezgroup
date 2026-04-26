@@ -175,6 +175,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <button class="float-edit-btn" id="float-edit-btn" onclick="toggleEditMode()">Edit plan</button>
   <span class="float-edit-hint" id="float-edit-hint">Ctrl+Shift+E</span>
   <button class="float-edit-btn" id="theme-btn" onclick="toggleTheme()" style="margin-top:4px">Light</button>
+  <div style="height:1px;background:var(--border);margin:4px 0"></div>
+  <button class="float-edit-btn" onclick="exportBackup()">Export backup</button>
+  <button class="float-edit-btn" onclick="document.getElementById('import-file').click()">Import backup</button>
+  <input type="file" id="import-file" style="display:none" accept=".json" onchange="importBackup(this)">
 </div>
 <div class="page">
 
@@ -437,16 +441,12 @@ function migratePlan(){
 // ── Persistence ──────────────────────────────────────────────────────────────
 async function loadAll(){
   setSyncStatus('loading','loading...');
-  let needsSave=false;
   try{
     const[sr,pr]=await Promise.all([fetch('/state?key=state'),fetch('/state?key=plan')]);
     state=sr.ok?(await sr.json()||{}):{};
     const pd=pr.ok?await pr.json():null;
-    if(pd&&pd.phases){ plan=pd; }
-    else{ plan=JSON.parse(JSON.stringify(DEFAULT_PLAN)); needsSave=true; }
-    migratePlan();
-    // if migration added fields, save the upgraded plan back
-    if(needsSave||JSON.stringify(pd)!==JSON.stringify(plan)) savePlanNow();
+    if(pd&&pd.phases){ plan=pd; migratePlan(); savePlanNow(); }
+    else{ plan=JSON.parse(JSON.stringify(DEFAULT_PLAN)); migratePlan(); savePlanNow(); }
     setSyncStatus('ok','synced');
   }catch(e){
     setSyncStatus('err','offline — using local cache');
@@ -454,6 +454,8 @@ async function loadAll(){
     try{const lp=JSON.parse(localStorage.getItem('edimsk_plan')||'null');plan=lp||JSON.parse(JSON.stringify(DEFAULT_PLAN));}catch(x){plan=JSON.parse(JSON.stringify(DEFAULT_PLAN));}
     migratePlan();
   }
+  applyMeta();renderAll();updateStats();updateTimeline();
+}
   applyMeta();renderAll();updateStats();updateTimeline();
 }
 async function saveStateNow(){try{localStorage.setItem('edimsk_state',JSON.stringify(state));const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
@@ -497,6 +499,33 @@ function editMeta(field,val){
   debouncedSavePlan();
 }
 
+// ── Backup export / import ────────────────────────────────────────────────────
+function exportBackup(){
+  const backup={plan,state,exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='edimsk-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();URL.revokeObjectURL(url);
+}
+function importBackup(input){
+  const file=input.files[0];if(!file)return;
+  if(!confirm('This will overwrite your current plan and state. Are you sure?')){input.value='';return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const backup=JSON.parse(e.target.result);
+      if(backup.plan&&backup.plan.phases)plan=backup.plan;
+      if(backup.state)state=backup.state;
+      migratePlan();savePlanNow();saveStateNow();
+      applyMeta();renderAll();updateStats();updateTimeline();
+      setSyncStatus('ok','backup loaded & saved');
+    }catch(err){alert('Invalid backup file.');}
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
 // ── Edit mode ────────────────────────────────────────────────────────────────
 function toggleEditMode(){
   editMode=!editMode;
@@ -505,8 +534,9 @@ function toggleEditMode(){
     const btn=document.getElementById(id);
     if(!btn)return;
     btn.classList.toggle('active',editMode);
-    btn.textContent=editMode?'Done editing':'Edit plan';
+    btn.textContent=editMode?'Save & exit':'Edit plan';
   });
+  if(!editMode){saveStateNow();savePlanNow();}
 }
 
 // keyboard shortcut Cmd/Ctrl+Shift+E

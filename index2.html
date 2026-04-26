@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <title>Steven Vitéz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+    }
+
+    body {
+      padding-top: 50px;     /* slightly more than stripe height */
+      padding-bottom: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 100vh;
+      background: #2a2a2a url('bg.jpg') center center / cover no-repeat fixed;
+      position: relative;  
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: #2a2a2a;
+      z-index: 1;
+    }
+
+    body::before {
+      top: 0;
+    }
+
+    body::after {
+      bottom: 0;
+    }
+
+    /* ── Name above bar ── */
+    .site-title {
+      font-family: 'Stardos Stencil', serif;
+      font-size: 40px;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      margin-top: auto;  
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+    }
+
+    /* ── Outer wrapper gives the bleeding photo room ── */
+    .bar-outer {
+      position: relative;
+      width: min(1100px, 92vw); 
+      padding-top: 80px;
+      padding-bottom: 150px;
+    }
+
+    /* ── Horizontal bar ── */
+    .bar {
+      min-height: 260px; /* or whatever you want the bar to be */
+      position: relative;
+      width: 100%;
+      padding: 0 40px; /* changed from 0 40px*/
+      background: rgba(20, 20, 20, 0.45);
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      overflow: visible;           /* allows photo to bleed out */
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* ── Animated diagonal layers, clipped separately ── */
+    .bar-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-layer {
+      animation: slide 12s ease-in-out infinite alternate;
+      background-image: linear-gradient(-65deg, rgba(46,45,42,0.6) 50%, rgba(67,67,67,0.6) 50%);
+      position: absolute;
+      inset: 0;
+      left: -50%;
+      right: -50%;
+    }
+
+    .bg-layer2 {
+      animation-direction: alternate-reverse;
+      animation-duration: 16s;
+    }
+
+    .bg-layer3 {
+      animation-duration: 25s;
+    }
+
+    @keyframes slide {
+      0%   { transform: translateX(-25%); }
+      100% { transform: translateX(25%); }
+    }
+
+    /* ── Content sits above animated layers ── */
+    .bar-content {
+      padding-left: calc(clamp(160px, 24vw, 275px) + 32px); /* make room for absolute image */
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      width: 100%;
+    }
+
+    /* ── Profile image wrapper — bleeds above and below the bar ── */
+    .profile-img-wrap {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+    }
+
+    .profile-img {
+      display: block;
+      width: clamp(160px, 24vw, 275px);  
+      height: clamp(320px, 36vw, 500px);  /* double the height as before */
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    /* ── Spacer pushes tiles right of center ── */
+    .spacer {
+      flex: 1;
+    }
+
+    /* ── Tile grid ── */
+    .tiles {
+      display: flex;
+      gap: 16px;
+      
+    }
+
+    .tile {
+      width: clamp(130px, 18vw, 220px);
+      height: clamp(130px, 18vw, 220px);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: white;
+      font-family: 'Stardos Stencil', serif;
+      font-size: clamp(16px, 1.6vw, 22px);  /* change font size here*/
+      text-align: center;
+      padding: 10px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      line-height: 1.3;
+    }
+
+    .tile:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .tile-icon {
+      font-size: clamp(31px, 3.5vw, 40px);  /* change font size here*/
+      line-height: 1;
+    }
+
+    .tile-sub {
+      font-style: italic;
+      font-size: clamp(14px, 1.2vw, 16px);  /* change font size here*/
+      color: rgba(255,255,255,0.6);
+      font-family: Arial, sans-serif;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-family: Arial, sans-serif;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      margin-left: 5px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Responsive: stack on small screens ── */
+    @media (max-width: 520px) {
+      .bar-outer {
+        width: 60vw; 
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      .bar-content {
+        flex-direction: column;
+        padding-left: 0;          /* remove the space reserved for absolute image */
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+      .profile-img-wrap {
+        position: static;          /* cancel the absolute positioning */
+        transform: none;
+      }
+      .profile-img {
+        width: 100%;
+        height: 200px;
+      }
+      .tiles {
+        flex-direction: column;    /* stack tiles vertically */
+        align-items: center;
+        width: 100%;
+      }
+      .tile {
+        width: 200px;
+        height: 200px;
+      }
+      .spacer { display: none; }
+    }
+    @media (max-width: 520px) and (orientation: landscape) {
+       .site-title {
+    margin-top: auto;
+      }
+      .bar-outer {
+        margin-bottom: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <p class="site-title">- It's Steven. -</p>
+
+  <div class="bar-outer">
+    <div class="bar">
+      <!-- Animated diagonal layers, clipped to bar -->
+      <div class="bar-bg">
+        <div class="bg-layer"></div>
+        <div class="bg-layer bg-layer2"></div>
+        <div class="bg-layer bg-layer3"></div>
+      </div>
+
+      <div class="bar-content">
+        <div class="profile-img-wrap">
+          <img class="profile-img" src="image.jpg" alt="Steven Vitéz">
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="tiles">
+          <a class="tile" href="game.html">
+            <span class="tile-icon">🕹️</span>
+            Lander Deluxe
+            <span class="tile-sub">My early-2000s game</span>
+          </a>
+          <a class="tile" href="https://wochenplan.vit3z.com">
+            <span class="tile-icon">📅</span>
+            Wochenplan Scheduler
+            <span class="tile-sub">Plan your week</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Steven Vitéz · <a href="impressum.html">Impressum</a> 
+  </footer>
+
+</body>
+</html>
