@@ -171,7 +171,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
-
+<div class="float-edit">
+  <button class="float-edit-btn" id="float-edit-btn" onclick="toggleEditMode()">Edit plan</button>
+  <span class="float-edit-hint" id="float-edit-hint">Ctrl+Shift+E</span>
+  <button class="float-edit-btn" id="theme-btn" onclick="toggleTheme()" style="margin-top:4px">Light</button>
+</div>
 <div class="page">
 
 <div class="masthead">
