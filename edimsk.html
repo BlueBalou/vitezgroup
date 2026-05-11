@@ -345,6 +345,7 @@ const DEFAULT_PLAN = {
 // ── State ────────────────────────────────────────────────────────────────────
 let plan={}, state={}, editMode=false;
 let saveStateTO=null, savePlanTO=null;
+let isRendering=false;
 function uid(){return Math.random().toString(36).slice(2,8);}
 
 // ── Config accessors ─────────────────────────────────────────────────────────
@@ -496,6 +497,7 @@ function applyBgImage(url){
   document.body.style.backgroundImage=url?'url('+JSON.stringify(url)+')':'';
 }
 function editMeta(field,val){
+  if(isRendering)return;
   if(!plan.meta)plan.meta=JSON.parse(JSON.stringify(DEFAULT_META));
   plan.meta[field]=val;
   if(field==='title'){document.getElementById('mast-title').textContent=val;document.title=val;}
@@ -600,8 +602,9 @@ function toggleSub(itemId,subId){
 }
 
 // ── Note / hours ─────────────────────────────────────────────────────────────
-function saveSubNote(subId,val){state['note-'+subId]=val;const el=document.getElementById('snote-'+subId);if(el)el.classList.toggle('has-value',!!val);debouncedSaveState();}
+function saveSubNote(subId,val){if(isRendering)return;state['note-'+subId]=val;const el=document.getElementById('snote-'+subId);if(el)el.classList.toggle('has-value',!!val);debouncedSaveState();}
 function saveSubHours(itemId,subId,val){
+  if(isRendering)return;
   const item=findItem(itemId);if(!item)return;
   const sub=item.subs.find(s=>s.id===subId);if(!sub)return;
   sub.hours=parseFloat(val)||0;
@@ -609,10 +612,11 @@ function saveSubHours(itemId,subId,val){
   if(scb){const row=scb.closest('.subitem');if(row){const d=row.querySelector('.sub-hours-display');if(d)d.textContent=sub.hours+'h';}}
   refreshItemHours(item);updateStats();updateTimeline();updatePhaseBudgetEl(findPhaseOfItem(itemId));debouncedSavePlan();
 }
-function editItemTitle(id,val){const it=findItem(id);if(it){it.title=val;debouncedSavePlan();}}
-function editItemNote(id,val){const it=findItem(id);if(it){it.note=val;debouncedSavePlan();}}
-function editItemLink(id,val){const it=findItem(id);if(it){it.link=val;debouncedSavePlan();}}
+function editItemTitle(id,val){if(isRendering)return;const it=findItem(id);if(it){it.title=val;debouncedSavePlan();}}
+function editItemNote(id,val){if(isRendering)return;const it=findItem(id);if(it){it.note=val;debouncedSavePlan();}}
+function editItemLink(id,val){if(isRendering)return;const it=findItem(id);if(it){it.link=val;debouncedSavePlan();}}
 function editItemHours(id,val){
+  if(isRendering)return;
   const it=findItem(id);if(!it||it.subs&&it.subs.length)return;
   it.hours=parseFloat(val)||0;
   const el=document.getElementById('item-'+id);
@@ -622,6 +626,7 @@ function editItemHours(id,val){
 
 // ── Phase config edits ────────────────────────────────────────────────────────
 function editPhaseConfig(phaseId,field,val){
+  if(isRendering)return;
   const i=phaseIdx(phaseId);if(i<0)return;
   if(field==='start'||field==='end'){plan.phaseConfigs[i][field]=val;}
   else{plan.phaseConfigs[i][field]=parseFloat(val)||0;}
@@ -630,6 +635,7 @@ function editPhaseConfig(phaseId,field,val){
   updateScheduleGrid();updateStats();updateTimeline();debouncedSavePlan();
 }
 function editPhaseName(phaseId,val){
+  if(isRendering)return;
   const i=phaseIdx(phaseId);if(i<0)return;
   plan.phaseConfigs[i].name=val;
   debouncedSavePlan();
@@ -785,7 +791,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'
 
 const PHASE_TAGS=['tag-green','tag-blue','tag-amber','tag-red'];
 
-function renderAll(){
+function renderAll(){isRendering=true;
   const container=document.getElementById('phases-container');
   container.innerHTML='';
   updateScheduleGrid();
@@ -909,6 +915,7 @@ function renderAll(){
   const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
   if(btn){btn.classList.toggle('done',!!state._action);btn.textContent=state._action?'Done ✓':'Mark done';}
   if(banner)banner.style.opacity=state._action?'0.5':'1';
+  isRendering=false;
 }
 
 loadAll();
