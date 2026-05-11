@@ -444,17 +444,34 @@ function migratePlan(){
 }
 
 // ── Persistence ──────────────────────────────────────────────────────────────
+// Keys that belong in plan only
+const PLAN_KEYS=new Set(['meta','phaseConfigs','phases']);
+// Strip any non-plan keys from a raw object loaded from KV
+function extractPlan(raw){
+  if(!raw)return null;
+  const out={};
+  PLAN_KEYS.forEach(k=>{if(raw[k]!==undefined)out[k]=raw[k];});
+  return out.phases?out:null;
+}
+// Strip plan-structure keys from a raw object, leaving only state keys
+function extractState(raw){
+  if(!raw)return{};
+  const out={};
+  Object.keys(raw).forEach(k=>{if(!PLAN_KEYS.has(k))out[k]=raw[k];});
+  return out;
+}
+
 async function loadAll(){
   setSyncStatus('loading','loading...');
   try{
     const ts=Date.now();
     const[sr,pr]=await Promise.all([fetch('/state?key=state&t='+ts),fetch('/state?key=plan&t='+ts)]);
     const rawState=sr.ok?(await sr.json()||{}):{};
-    // Strip any plan structure that may have leaked into the state key
-    const {phases:_p,meta:_m,phaseConfigs:_c,...cleanState}=rawState;
-    state=cleanState;
-    const pd=pr.ok?await pr.json():null;
-    if(pd&&pd.phases){
+    const rawPlan=pr.ok?(await pr.json()||{}):null;
+    state=extractState(rawState);
+    // Plan may be in ?key=plan, or if that's missing/broken, fall back to ?key=state
+    const pd=extractPlan(rawPlan)||extractPlan(rawState);
+    if(pd){
       plan=pd;
       migratePlan();
       setSyncStatus('ok','synced');
@@ -469,8 +486,22 @@ async function loadAll(){
   }
   applyMeta();renderAll();updateStats();updateTimeline();
 }
-async function saveStateNow(){try{const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
-async function savePlanNow(){try{const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(plan),headers:{'Content-Type':'application/json'}});if(!r.ok)throw 0;setSyncStatus('ok','saved '+new Date().toLocaleTimeString());}catch(e){setSyncStatus('err','save failed');}}
+async function saveStateNow(){
+  try{
+    const r=await fetch('/state?key=state',{method:'POST',body:JSON.stringify(state),headers:{'Content-Type':'application/json'}});
+    if(!r.ok)throw 0;
+    setSyncStatus('ok','saved '+new Date().toLocaleTimeString());
+  }catch(e){setSyncStatus('err','save failed');}
+}
+async function savePlanNow(){
+  // Only save the three plan keys — never leak state keys into ?key=plan
+  const cleanPlan={meta:plan.meta,phaseConfigs:plan.phaseConfigs,phases:plan.phases};
+  try{
+    const r=await fetch('/state?key=plan',{method:'POST',body:JSON.stringify(cleanPlan),headers:{'Content-Type':'application/json'}});
+    if(!r.ok)throw 0;
+    setSyncStatus('ok','saved '+new Date().toLocaleTimeString());
+  }catch(e){setSyncStatus('err','save failed');}
+}
 function debouncedSaveState(){clearTimeout(saveStateTO);setSyncStatus('loading','saving...');saveStateTO=setTimeout(saveStateNow,800);}
 function debouncedSavePlan(){clearTimeout(savePlanTO);setSyncStatus('loading','saving...');savePlanTO=setTimeout(savePlanNow,800);}
 function setSyncStatus(t,l){document.getElementById('sync-dot').className='sync-dot '+t;document.getElementById('sync-label').textContent=l;}
@@ -513,7 +544,8 @@ function editMeta(field,val){
 
 // ── Backup export / import ────────────────────────────────────────────────────
 function exportBackup(){
-  const backup={plan,state,exportedAt:new Date().toISOString()};
+  const cleanPlan={meta:plan.meta,phaseConfigs:plan.phaseConfigs,phases:plan.phases};
+  const backup={plan:cleanPlan,state,exportedAt:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
@@ -527,8 +559,12 @@ function importBackup(input){
   reader.onload=e=>{
     try{
       const backup=JSON.parse(e.target.result);
-      if(backup.plan&&backup.plan.phases)plan=backup.plan;
-      if(backup.state)state=backup.state;
+      // Support both clean backups and old corrupted ones where state was inside plan
+      const rawPlan=backup.plan||{};
+      const pd=extractPlan(rawPlan)||extractPlan(rawPlan);
+      if(pd)plan=pd;
+      // State: use backup.state if present, otherwise extract from plan blob
+      state=backup.state?extractState(backup.state):extractState(rawPlan);
       migratePlan();savePlanNow();saveStateNow();
       applyMeta();renderAll();updateStats();updateTimeline();
       setSyncStatus('ok','backup loaded & saved');
