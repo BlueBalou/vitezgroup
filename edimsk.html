@@ -449,7 +449,10 @@ async function loadAll(){
   try{
     const ts=Date.now();
     const[sr,pr]=await Promise.all([fetch('/state?key=state&t='+ts),fetch('/state?key=plan&t='+ts)]);
-    state=sr.ok?(await sr.json()||{}):{};
+    const rawState=sr.ok?(await sr.json()||{}):{};
+    // Strip any plan structure that may have leaked into the state key
+    const {phases:_p,meta:_m,phaseConfigs:_c,...cleanState}=rawState;
+    state=cleanState;
     const pd=pr.ok?await pr.json():null;
     if(pd&&pd.phases){
       plan=pd;
@@ -792,6 +795,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'
 const PHASE_TAGS=['tag-green','tag-blue','tag-amber','tag-red'];
 
 function renderAll(){isRendering=true;
+try{
   const container=document.getElementById('phases-container');
   container.innerHTML='';
   updateScheduleGrid();
@@ -915,7 +919,7 @@ function renderAll(){isRendering=true;
   const btn=document.getElementById('action-btn'),banner=document.getElementById('action-banner');
   if(btn){btn.classList.toggle('done',!!state._action);btn.textContent=state._action?'Done ✓':'Mark done';}
   if(banner)banner.style.opacity=state._action?'0.5':'1';
-  isRendering=false;
+}finally{isRendering=false;}
 }
 
 loadAll();
